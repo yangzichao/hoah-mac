@@ -5,7 +5,9 @@ class CursorPaster {
 
     static func pasteAtCursor(_ text: String, preserveClipboardOverride: Bool? = nil) {
         let pasteboard = NSPasteboard.general
-        // Read from UserDefaults (synced by AppSettingsStore)
+        // Read from the legacy key (synced by AppSettingsStore).
+        // This class is intentionally static because it is called from low-level paste flows,
+        // so we bridge through UserDefaults until that call chain can take injected state.
         // Default to true if not set, to prevent data loss on paste failure
         let preserveTranscript = preserveClipboardOverride
             ?? (UserDefaults.hoah.object(forKey: "preserveTranscriptInClipboard") as? Bool ?? true)

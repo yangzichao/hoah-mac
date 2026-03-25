@@ -400,6 +400,9 @@ enum DoubaoModelGroup: String, CaseIterable {
 
 // AI Provider settings are managed by AppSettingsStore.
 // Runtime state (apiKey, isAPIKeyValid) remains here.
+// Note: request execution has already been split into provider-specific modules under
+// Services/AIEnhancement/Providers, but provider metadata and configuration bridging
+// still live here so the UI and migration paths share a single catalog during rollout.
 @MainActor
 class AIService: ObservableObject {
     @Published private(set) var apiKey: String = ""
