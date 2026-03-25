@@ -19,6 +19,7 @@ struct SettingsView: View {
     @State private var isCustomSoundsExpanded = false
 
     private let durationOptions: [Int] = [30, 60, 90, 0]
+    private let visibleUIThemes: [UITheme] = UITheme.allCases.filter { $0 != .liquidGlass }
     
     private func label(for minutes: Int) -> String {
         if minutes == 0 { return NSLocalizedString("No limit", comment: "No recording time limit") }
@@ -313,7 +314,7 @@ struct SettingsView: View {
                             Text(LocalizedStringKey("ui_theme_title"))
                                 .font(theme.typography.headline)
                             Picker("", selection: $appSettings.uiTheme) {
-                                ForEach(UITheme.allCases, id: \.self) { theme in
+                                ForEach(visibleUIThemes, id: \.self) { theme in
                                     Text(theme.displayNameKey).tag(theme.rawValue)
                                 }
                             }
@@ -340,6 +341,9 @@ struct SettingsView: View {
         .background(theme.controlBackground)
         .onAppear {
             isCustomCancelEnabled = KeyboardShortcuts.getShortcut(for: .cancelRecorder) != nil
+            if appSettings.uiTheme == UITheme.liquidGlass.rawValue {
+                appSettings.uiTheme = UITheme.vintage.rawValue
+            }
         }
     }
 }
