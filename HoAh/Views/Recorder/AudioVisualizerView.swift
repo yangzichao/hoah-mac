@@ -4,7 +4,8 @@ struct AudioVisualizer: View {
     let audioMeter: AudioMeter
     let color: Color
     let isActive: Bool
-    @Environment(\.theme) private var theme
+    let spec: ThemeVisualizerSpec
+    let showsFill: Bool
     
     // State to hold bar heights
     @State private var barHeights: [CGFloat] = []
@@ -12,19 +13,24 @@ struct AudioVisualizer: View {
     
     // Sensitivity multipliers for each bar
     @State private var sensitivityMultipliers: [Double] = []
+    @State private var initializedSpec: ThemeVisualizerSpec?
     
     // Animation phase for dynamic waveforms
     @State private var phase: Double = 0
     
     // Initialize with default empty state
-    init(audioMeter: AudioMeter, color: Color, isActive: Bool) {
+    init(
+        audioMeter: AudioMeter,
+        color: Color,
+        isActive: Bool,
+        spec: ThemeVisualizerSpec,
+        showsFill: Bool = true
+    ) {
         self.audioMeter = audioMeter
         self.color = color
         self.isActive = isActive
-    }
-    
-    private var spec: ThemeVisualizerSpec {
-        theme.visualizer
+        self.spec = spec
+        self.showsFill = showsFill
     }
     
     var body: some View {
@@ -43,15 +49,16 @@ struct AudioVisualizer: View {
                 WaveformShape(heights: barHeights, spacing: spec.barSpacing + spec.barWidth, phase: phase)
                     .stroke(color, style: StrokeStyle(lineWidth: 1.5, lineCap: .round, lineJoin: .round))
                     .frame(height: spec.maxHeight)
-                    // Add a faint fill for "cyberpunk" feel if desired, or just the line
-                    .background(
-                        WaveformShape(heights: barHeights, spacing: spec.barSpacing + spec.barWidth, phase: phase)
-                            .fill(LinearGradient(
-                                colors: [color.opacity(0.3), color.opacity(0.0)],
-                                startPoint: .top,
-                                endPoint: .bottom
-                            ))
-                    )
+                    .background {
+                        if showsFill {
+                            WaveformShape(heights: barHeights, spacing: spec.barSpacing + spec.barWidth, phase: phase)
+                                .fill(LinearGradient(
+                                    colors: [color.opacity(0.3), color.opacity(0.0)],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                ))
+                        }
+                    }
             }
         }
         .onAppear {
@@ -75,24 +82,24 @@ struct AudioVisualizer: View {
     }
     
     private func initializeBars() {
-        // Re-initialize arrays if spec changes
-        if barHeights.count != spec.barCount {
-            var generator = SeededGenerator(seed: spec.sensitivitySeed)
-            sensitivityMultipliers = (0..<spec.barCount).map { _ in
-                Double.random(in: 0.2...1.9, using: &generator)
-            }
-            barHeights = Array(repeating: spec.minHeight, count: spec.barCount)
-            targetHeights = Array(repeating: spec.minHeight, count: spec.barCount)
+        guard initializedSpec != spec || barHeights.count != spec.barCount else { return }
+
+        var generator = SeededGenerator(seed: spec.sensitivitySeed)
+        sensitivityMultipliers = (0..<spec.barCount).map { _ in
+            Double.random(in: 0.2...1.9, using: &generator)
         }
+        barHeights = Array(repeating: spec.minHeight, count: spec.barCount)
+        targetHeights = Array(repeating: spec.minHeight, count: spec.barCount)
+        initializedSpec = spec
+        phase = 0
     }
     
     private func updateBars(with audioLevel: Float) {
         // Ensure initialized
         if barHeights.isEmpty { initializeBars() }
         
-        // Increment phase to animate the wave over time
-        // We use a modest increment so it flows smoothly 60fps
-        phase += 0.15
+        // Increment phase to keep motion traveling through the visualizer.
+        phase += spec.phaseStep
         
         let rawLevel = max(0, min(1, Double(audioLevel)))
         let hardThreshold: Double = 0.3
@@ -110,14 +117,22 @@ struct AudioVisualizer: View {
             // Use randomized sensitivity
             let baseSensitivity = i < sensitivityMultipliers.count ? sensitivityMultipliers[i] : 1.0
             
-            // Note: We removed the complex modulation here because we are now doing it 
-            // directly in the Shape using the phase. This keeps barHeights as pure "Amplitude"
-            // and lets the Shape decide the "Direction" (up/down).
             let finalSensitivity = baseSensitivity
-            
-            let sensitivityAdjustedLevel = adjustedLevel * positionMultiplier * finalSensitivity * spec.amplitudeBoost
-            
-            let targetHeight = spec.minHeight + CGFloat(sensitivityAdjustedLevel) * range
+            let baseLevel = adjustedLevel * positionMultiplier * finalSensitivity * spec.amplitudeBoost
+
+            // Bars keep their original silhouette, but a stronger traveling crest now redistributes
+            // energy across the row so the motion reads as left-to-right flow instead of simple jumps.
+            let signedFlow = sin(Double(i) * spec.flowFrequency + phase)
+            let crest = pow((signedFlow + 1.0) / 2.0, 1.35)
+            let combinedLevel: Double
+            if spec.style == .bars {
+                let carriedEnergy = adjustedLevel * spec.flowIntensity * (0.3 + 0.7 * crest)
+                let redistributedBase = baseLevel * (1.0 - spec.flowIntensity * 0.45 + spec.flowIntensity * signedFlow)
+                combinedLevel = max(0, min(1.0, redistributedBase + carriedEnergy))
+            } else {
+                combinedLevel = min(1.0, baseLevel)
+            }
+            let targetHeight = spec.minHeight + CGFloat(combinedLevel) * range
             
             let isDecaying = targetHeight < targetHeights[i]
             let smoothingFactor: CGFloat = isDecaying ? 0.6 : 0.3
@@ -224,10 +239,16 @@ struct WaveformShape: Shape {
 
 struct StaticVisualizer: View {
     let color: Color
-    @Environment(\.theme) private var theme
+    let spec: ThemeVisualizerSpec
+    let showsFill: Bool
+
+    init(color: Color, spec: ThemeVisualizerSpec, showsFill: Bool = true) {
+        self.color = color
+        self.spec = spec
+        self.showsFill = showsFill
+    }
     
     var body: some View {
-        let spec = theme.visualizer
         Group {
             switch spec.style {
             case .bars:
@@ -249,6 +270,18 @@ struct StaticVisualizer: View {
                     path.addLine(to: CGPoint(x: totalWidth, y: spec.minHeight/2))
                 }
                 .stroke(color.opacity(0.5), lineWidth: 1)
+                .background {
+                    if showsFill {
+                        Path { path in
+                            let spacing = spec.barSpacing + spec.barWidth
+                            let totalWidth = CGFloat(spec.barCount - 1) * spacing
+                            let midY = spec.minHeight / 2
+                            path.move(to: CGPoint(x: 0, y: midY))
+                            path.addLine(to: CGPoint(x: totalWidth, y: midY))
+                        }
+                        .stroke(color.opacity(0.15), lineWidth: 2)
+                    }
+                }
                 .frame(width: CGFloat(spec.barCount) * (spec.barSpacing + spec.barWidth), height: spec.minHeight)
             }
         }
