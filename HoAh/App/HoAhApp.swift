@@ -356,6 +356,8 @@ struct HoAhApp: App {
             .preferredColorScheme(appSettings.uiTheme == "cyberpunk" ? .dark : (appSettings.uiTheme == "liquidGlass" || appSettings.uiTheme == "vintage") ? .light : nil)
             .modelContainer(container)
             .onAppear {
+                appDelegate.whisperState = whisperState
+
                 // Configure audio services with centralized settings
                 SoundManager.shared.configure(with: appSettings)
                 MediaController.shared.configure(with: appSettings)
