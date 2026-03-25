@@ -1,0 +1,100 @@
+import SwiftUI
+import SwiftData
+import AppKit
+
+@MainActor
+class NotchWindowManager: ObservableObject {
+    @Published var isVisible = false
+    private var windowController: NSWindowController?
+     var notchPanel: NotchRecorderPanel?
+    private let whisperState: WhisperState
+    private let recorder: Recorder
+    private let appSettings: AppSettingsStore
+    
+    init(whisperState: WhisperState, recorder: Recorder, appSettings: AppSettingsStore) {
+        self.whisperState = whisperState
+        self.recorder = recorder
+        self.appSettings = appSettings
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleHideNotification),
+            name: NSNotification.Name("HideNotchRecorder"),
+            object: nil
+        )
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func handleHideNotification() {
+        hide()
+    }
+    
+    func show() {
+        if isVisible { return }
+        
+        // Get the active screen from the key window or fallback to main screen
+        let activeScreen = NSApp.keyWindow?.screen ?? NSScreen.main ?? NSScreen.screens[0]
+        
+        initializeWindow(screen: activeScreen)
+        self.isVisible = true
+        notchPanel?.show()
+    }
+    
+    func hide() {
+        guard isVisible else { return }
+
+        self.isVisible = false
+
+        self.notchPanel?.hide { [weak self] in
+            guard let self = self else { return }
+            self.deinitializeWindow()
+        }
+    }
+    
+    private func initializeWindow(screen: NSScreen) {
+        deinitializeWindow()
+        
+        let metrics = NotchRecorderPanel.calculateWindowMetrics()
+        let panel = NotchRecorderPanel(contentRect: metrics.frame)
+        
+        guard let enhancementService = whisperState.enhancementService else {
+            whisperState.logger.error("Missing enhancementService while creating NotchRecorderView")
+            return
+        }
+        
+        let currentTheme = ThemePalette.theme(for: appSettings.uiTheme)
+        
+        let notchRecorderView = NotchRecorderView(whisperState: whisperState, recorder: recorder)
+            .environmentObject(self)
+            .environmentObject(appSettings)
+            .environmentObject(enhancementService)
+            .environment(\.theme, currentTheme)
+            .modelContext(whisperState.modelContext)
+        
+        let hostingController = NotchRecorderHostingController(rootView: notchRecorderView)
+        panel.contentView = hostingController.view
+        
+        self.notchPanel = panel
+        self.windowController = NSWindowController(window: panel)
+        
+        panel.orderFrontRegardless()
+    }
+    
+    private func deinitializeWindow() {
+        notchPanel?.orderOut(nil)
+        windowController?.close()
+        windowController = nil
+        notchPanel = nil
+    }
+    
+    func toggle() {
+        if isVisible {
+            hide()
+        } else {
+            show()
+        }
+    }
+} 

@@ -1,0 +1,85 @@
+name: Build for Mac App Store
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version number (e.g., 3.1.3)'
+        required: true
+        default: '3.1.3'
+
+jobs:
+  build-mas:
+    name: Build Mac App Store Package
+    runs-on: macos-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: |
+          brew install graphicsmagick imagemagick
+          mkdir -p ~/HoAh-Dependencies
+
+      - name: Build Whisper Framework
+        run: make whisper
+
+      - name: Sync Version Files
+        run: |
+          scripts/release/bump_version.sh "${{ github.event.inputs.version }}"
+
+      - name: Import Mac App Store Certificate
+        uses: apple-actions/import-codesign-certs@v3
+        with:
+          p12-file-base64: ${{ secrets.MAS_CERTIFICATE_P12 }}
+          p12-password: ${{ secrets.MAS_CERTIFICATE_PASSWORD }}
+
+      - name: Build Mac App Store Archive
+        env:
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+          MAS_SIGN_IDENTITY: ${{ secrets.MAS_SIGN_IDENTITY }}
+          MAS_PROVISIONING_PROFILE: ${{ secrets.MAS_PROVISIONING_PROFILE }}
+        run: |
+          make archive-mas MAS_VERSION=${{ github.event.inputs.version }}
+
+      - name: Export Mac App Store Package
+        env:
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+          MAS_PROVISIONING_PROFILE: ${{ secrets.MAS_PROVISIONING_PROFILE }}
+        run: make export-mas
+
+      - name: Upload Archive Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: HoAh-MAS-Archive
+          path: build/HoAh-MAS.xcarchive
+
+      - name: Upload Package Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: HoAh-MAS-Package
+          path: build/MAS-Export/HoAh.pkg
+
+      - name: Create Release Notes
+        run: |
+          echo "# Mac App Store Build" > mas-release-notes.md
+          echo "" >> mas-release-notes.md
+          echo "Version: ${{ github.event.inputs.version }}" >> mas-release-notes.md
+          echo "Build Date: $(date)" >> mas-release-notes.md
+          echo "" >> mas-release-notes.md
+          echo "## Next Steps" >> mas-release-notes.md
+          echo "1. Download the HoAh.pkg artifact" >> mas-release-notes.md
+          echo "2. Validate: \`xcrun altool --validate-app -f HoAh.pkg -t macos -u YOUR_APPLE_ID\`" >> mas-release-notes.md
+          echo "3. Upload: \`xcrun altool --upload-app -f HoAh.pkg -t macos -u YOUR_APPLE_ID\`" >> mas-release-notes.md
+          echo "4. Or use Transporter app for submission" >> mas-release-notes.md
+
+      - name: Upload Release Notes
+        uses: actions/upload-artifact@v4
+        with:
+          name: MAS-Release-Notes
+          path: mas-release-notes.md

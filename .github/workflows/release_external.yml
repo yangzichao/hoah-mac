@@ -1,0 +1,169 @@
+name: Release to External Repo
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (defaults to Config/Info.plist version)'
+        required: false
+        type: string
+
+jobs:
+  release:
+    name: Build and Push to Release Repo
+    runs-on: macos-26
+    env:
+      RELEASE_REPO_OWNER: yangzichao
+      RELEASE_REPO_NAME: hoah-release
+      RELEASE_REPO_BRANCH: main
+      SECRET_P12_BASE64: ${{ secrets.CERTIFICATE_P12 }}
+
+    steps:
+      - name: Checkout Source Code (Private)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          path: source
+
+      - name: Checkout Release Repo (Public)
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.RELEASE_REPO_OWNER }}/${{ env.RELEASE_REPO_NAME }}
+          token: ${{ secrets.RELEASE_TOKEN }}
+          path: release_repo
+
+      - name: Extract Version Info
+        id: version
+        run: |
+          INTERNAL_VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" source/Config/Info.plist)
+          SHORT_VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" source/Config/Info.plist)
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+            if [ -z "$VERSION" ]; then
+              VERSION="$SHORT_VERSION"
+            fi
+            TAG="v$VERSION"
+          else
+            TAG=${GITHUB_REF#refs/tags/}
+            VERSION=${TAG#v}
+          fi
+
+          if [ "$SHORT_VERSION" != "$VERSION" ]; then
+            echo "Error: tag version ($VERSION) does not match CFBundleShortVersionString ($SHORT_VERSION)"
+            exit 1
+          fi
+          
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "internal_version=$INTERNAL_VERSION" >> $GITHUB_OUTPUT
+          
+          echo "Release Target: $VERSION ($INTERNAL_VERSION)"
+
+      - name: Install Dependencies
+        run: |
+          brew install graphicsmagick imagemagick
+          mkdir -p ~/HoAh-Dependencies
+
+      - name: Import Signing Certificate
+        if: env.SECRET_P12_BASE64 != ''
+        uses: apple-actions/import-codesign-certs@v3
+        with:
+          p12-file-base64: ${{ secrets.CERTIFICATE_P12 }}
+          p12-password: ${{ secrets.CERTIFICATE_PASSWORD }}
+
+      - name: Build Whisper Framework
+        working-directory: source
+        run: make whisper
+
+      - name: Build Application
+        working-directory: source
+        env:
+          SIGN_IDENTITY: ${{ secrets.SIGN_IDENTITY }}
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+        run: make ci-release
+
+      - name: Package DMG (Signed & Notarized)
+        if: env.SECRET_P12_BASE64 != ''
+        working-directory: source
+        env:
+          SIGN_IDENTITY: ${{ secrets.SIGN_IDENTITY }}
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+          NOTARY_PROFILE: ${{ secrets.NOTARY_PROFILE }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+        run: |
+          make release-dmg DMG_VERSION=${{ steps.version.outputs.version }}
+
+      - name: Package DMG (Unsigned Fallback)
+        if: env.SECRET_P12_BASE64 == ''
+        working-directory: source
+        run: |
+          echo "No certificate found, building unsigned DMG..."
+          make dmg DMG_VERSION=${{ steps.version.outputs.version }}
+
+      # --- Deployment Steps ---
+
+      - name: Prepare Release Assets
+        run: |
+          mkdir -p assets
+          mv source/build/HoAh-${{ steps.version.outputs.version }}.dmg assets/
+
+      - name: Initialize Appcast if Missing
+        run: |
+          if [ ! -f "release_repo/appcast.xml" ]; then
+            echo "appcast.xml not found in release repo. Initializing from source..."
+            cp source/appcast.xml release_repo/appcast.xml
+          else
+            echo "appcast.xml found in release repo."
+          fi
+          
+      - name: Update Appcast in Release Repo
+        run: |
+          # Define URL
+          DMG_FILENAME="HoAh-${{ steps.version.outputs.version }}.dmg"
+          DOWNLOAD_URL="https://github.com/${{ env.RELEASE_REPO_OWNER }}/${{ env.RELEASE_REPO_NAME }}/releases/download/${{ steps.version.outputs.tag }}/$DMG_FILENAME"
+          
+          # Use the python script to update appcast.xml
+          # Python script args: <appcast_path> <internal_version> <short_version> <dmg_url> <release_notes_file>
+          
+          python3 source/scripts/update_remote_appcast.py \
+            "release_repo/appcast.xml" \
+            "${{ steps.version.outputs.internal_version }}" \
+            "${{ steps.version.outputs.version }}" \
+            "$DOWNLOAD_URL" \
+            "source/RELEASE_NOTES.md"
+            
+          # Display change for debugging
+          cat release_repo/appcast.xml | head -n 30
+
+      - name: Commit and Push Appcast
+        working-directory: release_repo
+        run: |
+          git config user.name "HoAh Auto Releaser"
+          git config user.email "bot@hoah.app"
+          git add appcast.xml
+          
+          # Only commit if changed
+          if git diff --staged --quiet; then
+            echo "No changes to appcast.xml"
+          else
+            git commit -m "Update appcast for version ${{ steps.version.outputs.version }}"
+            git push
+          fi
+
+      - name: Upload Release to Public Repo
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.RELEASE_TOKEN }}
+          repository: ${{ env.RELEASE_REPO_OWNER }}/${{ env.RELEASE_REPO_NAME }}
+          tag_name: ${{ steps.version.outputs.tag }}
+          target_commitish: ${{ env.RELEASE_REPO_BRANCH }}
+          name: ${{ steps.version.outputs.version }}
+          body_path: source/RELEASE_NOTES.md
+          files: assets/*.dmg
+          draft: false
+          prerelease: false

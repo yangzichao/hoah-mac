@@ -1,0 +1,1802 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>%d hr</key>
+	<string>%d 小时</string>
+	<key>%d hr %d min</key>
+	<string>%d 小时 %d 分钟</string>
+	<key>%d min</key>
+	<string>%d 分钟</string>
+	<key>1 day</key>
+	<string>1 天</string>
+	<key>1 hour</key>
+	<string>1 小时</string>
+	<key>14 days</key>
+	<string>14 天</string>
+	<key>3 days</key>
+	<string>3 天</string>
+	<key>30 days</key>
+	<string>30 天</string>
+	<key>30s - 2min</key>
+	<string>30秒 - 2分钟</string>
+	<key>7 days</key>
+	<string>7 天</string>
+	<key>: </key>
+	<string>：</string>
+	<key>A New Way to Type</key>
+	<string>一种全新的输入方式</string>
+	<key>HoAh is the cleanest, not-for-profit speech-to-text tool.</key>
+	<string>吼蛙（HoAh）是最干净、不以盈利为目的的语音转文字工具</string>
+	<key>Multilingual support · Fun AI transcription enhancements</key>
+	<string>多语言支持 · 有趣的 AI 转写增强</string>
+	<key>Multilingual support · Fun AI transcription enhancements · Bring Your Own Key (BYOK)</key>
+	<string>多语言支持 · 有趣的 AI 转写增强 · 自带 Key（BYOK）</string>
+	<key>A friendly name for this configuration</key>
+	<string>此配置的友好名称</string>
+	<key>AI Action failed: %@</key>
+	<string>AI 指令失败：%@</string>
+	<key>AI Config: %@</key>
+	<string>AI 配置：%@</string>
+	<key>AI Configurations</key>
+	<string>AI 配置</string>
+	<key>AI Enhancement</key>
+	<string>AI 指令</string>
+	<key>AI Enhancement Provider</key>
+	<string>AI 服务提供商</string>
+	<key>AI Enhancement Provider Configuration</key>
+	<string>AI 服务提供商配置</string>
+	<key>AI Enhancement Provider Integration</key>
+	<string>AI 服务提供商集成</string>
+	<key>AI Enhancement is off. Turn it on and use this configuration?</key>
+	<string>AI 指令已关闭，是否开启并使用此配置？</string>
+	<key>AI Enhancement needs at least one valid configuration before it can be turned on.</key>
+	<string>启用 AI 指令前，需要至少一个有效的配置。</string>
+	<key>AI Enhancement: Off</key>
+	<string>AI 指令：已关闭</string>
+	<key>AI Enhancement: On</key>
+	<string>AI 指令：已开启</string>
+	<key>AI Mode</key>
+	<string>AI 指令</string>
+	<key>AI Action</key>
+	<string>AI 指令</string>
+	<key>ai_action_description</key>
+	<string>使用 AI 增强、翻译或转换你的转录结果，支持自定义指令。</string>
+	<key>AI Model</key>
+	<string>AI 模型</string>
+	<key>AI Model: %@</key>
+	<string>AI 模型：%@</string>
+	<key>AI Models</key>
+	<string>听写模型</string>
+	<key>Dictation Models</key>
+	<string>听写模型</string>
+	<key>dictation_models_description</key>
+	<string>选择语音转文字模型，将你的声音转换为文字。本地模型完全在设备上运行，保护隐私；云端模型准确度更高。</string>
+	<key>AI Provider</key>
+	<string>AI 提供商</string>
+	<key>AI Provider Integration</key>
+	<string>AI 服务提供商</string>
+	<key>AI Provider: %@</key>
+	<string>AI 提供商：%@</string>
+	<key>AI enhancement lets you pass the transcribed audio through LLMS to post-process using different prompts suitable for different use cases like e-mails, summary, writing, etc.</key>
+	<string>AI 指令允许您利用大语言模型对转录文本进行后处理，例如：生成邮件、摘要、润色文章等。</string>
+	<key>AI enhancement lets you pass the transcribed audio through LLMs to post-process using different prompts suitable for different use cases like e-mails, summary, writing, etc.</key>
+	<string>AI 指令允许你将转录文本交给大模型，根据不同指令进行后处理，适用于邮件、摘要、写作等场景。</string>
+	<key>API Endpoint URL</key>
+	<string>API 端点 URL</string>
+	<key>API Endpoint URL (e.g., https://api.example.com/v1/chat/completions)</key>
+	<string>API 端点 URL（例如：https://api.example.com/v1/chat/completions）</string>
+	<key>API Key</key>
+	<string>API 密钥</string>
+	<key>API Key (ABSKQmVkcm9ja0FQSUtleS1...)</key>
+	<string>API 密钥（ABSKQmVkcm9ja0FQSUtleS1...）</string>
+	<key>API Key Configuration</key>
+	<string>API 密钥配置</string>
+	<key>API Key verified and saved successfully!</key>
+	<string>API 密钥验证并保存成功！</string>
+	<key>API Keys</key>
+	<string>API 密钥</string>
+	<key>API key verified successfully!</key>
+	<string>API 密钥验证成功！</string>
+	<key>AWS Bedrock Configuration</key>
+	<string>AWS Bedrock 配置</string>
+	<key>AWS Profile</key>
+	<string>AWS Profile</string>
+	<key>AWS Profile '%@' has incomplete credentials</key>
+	<string>AWS Profile「%@」的凭证不完整</string>
+	<key>AWS Profile '%@' not found in ~/.aws/credentials</key>
+	<string>在 ~/.aws/credentials 中未找到 AWS Profile「%@」</string>
+	<key>Access Key ID</key>
+	<string>Access Key ID</string>
+	<key>Access denied. Check your AWS permissions for Bedrock.</key>
+	<string>访问被拒绝。请检查您的 AWS Bedrock 权限。</string>
+	<key>Access denied. Ensure your IAM policy includes bedrock:ListFoundationModels permission.</key>
+	<string>访问被拒绝。请确保您的 IAM 策略包含 bedrock:ListFoundationModels 权限。</string>
+	<key>Accessibility Access</key>
+	<string>辅助功能权限</string>
+	<key>Accuracy</key>
+	<string>准确度</string>
+	<key>Activation Delay</key>
+	<string>激活延迟</string>
+	<key>Active</key>
+	<string>启用</string>
+	<key>Add</key>
+	<string>添加</string>
+	<key>Add Another API Key</key>
+	<string>添加其他 API 密钥</string>
+	<key>Add App</key>
+	<string>添加应用</string>
+	<key>Add Configuration</key>
+	<string>添加配置</string>
+	<key>Add Emoji</key>
+	<string>添加表情</string>
+	<key>Add New</key>
+	<string>新增</string>
+	<key>Add New API Key</key>
+	<string>添加新的 API 密钥</string>
+	<key>Add a brief description of what this prompt does</key>
+	<string>添加一段简短描述，说明此指令的作用</string>
+	<key>Add a configuration to enable.</key>
+	<string>添加配置以启用。</string>
+	<key>Add an AI configuration to get started.</key>
+	<string>添加一个 AI 配置以开始使用。</string>
+	<key>Add another hotkey</key>
+	<string>添加其他快捷键</string>
+	<key>Add custom emoji</key>
+	<string>添加自定义表情</string>
+	<key>Add multiple words that can activate this prompt</key>
+	<string>添加多个可触发此指令的关键词</string>
+	<key>Add new prompt</key>
+	<string>添加新指令</string>
+	<key>Add space after paste</key>
+	<string>粘贴后自动添加空格</string>
+	<key>Add trigger word</key>
+	<string>添加触发词</string>
+	<key>Additional</key>
+	<string>更多</string>
+	<key>Additional shortcuts for HoAh</key>
+	<string>吼蛙的其他快捷操作</string>
+	<key>Advanced</key>
+	<string>高级选项</string>
+	<key>Advanced Triggers</key>
+	<string>高级触发</string>
+	<key>All durations</key>
+	<string>全部时长</string>
+	<key>All time</key>
+	<string>全部</string>
+	<key>Allow HoAh to paste transcribed text directly at your cursor position</key>
+	<string>允许 吼蛙 在光标位置直接粘贴转录文本</string>
+	<key>Allow HoAh to record your voice for transcription</key>
+	<string>允许 吼蛙 录制你的声音进行转录</string>
+	<key>Analyze</key>
+	<string>分析</string>
+	<key>Analyzing...</key>
+	<string>正在分析...</string>
+	<key>App Permissions</key>
+	<string>应用权限</string>
+	<key>Appearance, startup, and updates</key>
+	<string>外观、启动与更新</string>
+	<key>Applications</key>
+	<string>应用程序</string>
+	<key>Applies to the active API key above</key>
+	<string>应用于上方正在使用的 API 密钥</string>
+	<key>Are you sure you want to delete "%@"?</key>
+	<string>确定要删除「%@」吗？</string>
+	<key>Are you sure you want to delete the custom model '%@'?</key>
+	<string>确定要删除自定义模型“%@”吗？</string>
+	<key>Are you sure you want to delete the model '%@'?</key>
+	<string>确定要删除模型“%@”吗？</string>
+	<key>Audio Cleanup</key>
+	<string>音频清理</string>
+	<key>Audio Duration</key>
+	<string>音频时长</string>
+	<key>Audio Input</key>
+	<string>音频输入</string>
+	<key>Audio files older than the selected period will be automatically deleted, while keeping the text transcripts intact.</key>
+	<string>早于所选保留期限的音频文件将自动删除，文本转录会被保留。</string>
+	<key>Authentication</key>
+	<string>认证方式</string>
+	<key>Auto Enhancement Modes</key>
+	<string>自动指令</string>
+	<key>Auto Send</key>
+	<string>自动发送</string>
+	<key>Auto enhancement is off, so triggers are inactive until you turn it on.</key>
+	<string>AI 指令已关闭，触发器在重新开启前不会生效。</string>
+	<key>Auto-Restore Preferences</key>
+	<string>自动恢复偏好设置</string>
+	<key>Autodetected</key>
+	<string>自动检测</string>
+	<key>Automate your workflows with context-aware configurations.</key>
+	<string>使用具备上下文感知的配置自动化你的工作流程。</string>
+	<key>Automatic Text Formatting</key>
+	<string>自动文本格式化</string>
+	<key>Automatic text formatting</key>
+	<string>自动文本格式化</string>
+	<key>Automatically apply AI-powered enhancement after each transcription</key>
+	<string>在每次转录后自动执行 AI 指令</string>
+	<key>Automatically delete transcript history</key>
+	<string>自动删除转录历史</string>
+	<key>Automatically mute system audio when recording starts and restore when recording stops</key>
+	<string>开始录音时自动静音系统音频，停止时恢复</string>
+	<key>Automatically pause active media playback during recordings and resume afterward.</key>
+	<string>录音期间自动暂停媒体播放，并在录音结束后恢复。</string>
+	<key>Automatically switch prompts when specific words are detected.</key>
+	<string>检测到特定词语时自动切换指令。</string>
+	<key>Available Devices</key>
+	<string>可用设备</string>
+	<key>Avg. Audio</key>
+	<string>平均音频时长</string>
+	<key>Avg. Enhancement Time</key>
+	<string>平均 AI 指令耗时</string>
+	<key>Avg. Process Time</key>
+	<string>平均处理时间</string>
+	<key>Base URL</key>
+	<string>基础 URL</string>
+	<key>Bearer Token</key>
+	<string>Bearer Token</string>
+	<key>Before Copy</key>
+	<string>复制前</string>
+	<key>Built-in</key>
+	<string>内置</string>
+	<key>Built-in prompt</key>
+	<string>内置指令</string>
+	<key>Cancel</key>
+	<string>取消</string>
+	<key>Cancel Shortcut</key>
+	<string>取消快捷键</string>
+	<key>Cannot retry: Audio file not found</key>
+	<string>无法重试：音频文件未找到</string>
+	<key>Check Update</key>
+	<string>检查更新</string>
+	<key>Check for Updates…</key>
+	<string>检查更新…</string>
+	<key>Choose File</key>
+	<string>选择文件</string>
+	<key>Choose how text is pasted</key>
+	<string>选择文本的粘贴方式</string>
+	<key>Choose how you want to trigger HoAh</key>
+	<string>选择触发吼蛙的方式</string>
+	<key>Choose your preferred recorder interface</key>
+	<string>选择你偏好的录音界面</string>
+	<key>Cleanup Complete</key>
+	<string>清理完成</string>
+	<key>Cleanup triggered. Old transcripts are cleaned up according to your retention setting.</key>
+	<string>已触发清理。旧转录将根据你的保留设置被删除。</string>
+	<key>Clear</key>
+	<string>清除</string>
+	<key>Click here and start speaking...</key>
+	<string>点击这里开始说话...</string>
+	<key>Clipboard Context</key>
+	<string>剪贴板上下文</string>
+	<key>Cloud</key>
+	<string>云端</string>
+	<key>Cloud Batch</key>
+	<string>云端批处理</string>
+	<key>Cloud Realtime</key>
+	<string>云端流式</string>
+	<key>Cloud Streaming</key>
+	<string>云端实时</string>
+	<key>Cloud Model</key>
+	<string>云端模型</string>
+	<key>Cloud Batch Model</key>
+	<string>云端批处理模型</string>
+	<key>Cloud Realtime Model</key>
+	<string>云端流式模型</string>
+	<key>Cloud Streaming Model</key>
+	<string>云端实时模型</string>
+	<key>For cloud realtime</key>
+	<string>用于云端流式</string>
+	<key>Realtime</key>
+	<string>实时</string>
+	<key>Streaming</key>
+	<string>实时</string>
+	<key>Multilingual</key>
+	<string>多语言</string>
+	<key>English-only</key>
+	<string>仅英语</string>
+	<key>Uses the native Apple Speech framework for transcription. Requires macOS 26.</key>
+	<string>使用 Apple 原生 Speech 框架进行转写。需要 macOS 26。</string>
+	<key>Base model, good balance between speed and accuracy, supports multiple languages</key>
+	<string>基础模型，在速度和准确度之间取得良好平衡，支持多语言。</string>
+	<key>Large model v3, very slow but most accurate</key>
+	<string>Large v3 模型，速度较慢，但准确度最高。</string>
+	<key>Large model v3 Turbo, faster than v3 with similar accuracy</key>
+	<string>Large v3 Turbo 模型，比 v3 更快，同时保持接近的准确度。</string>
+	<key>Quantized version of Large v3 Turbo, faster with slightly lower accuracy</key>
+	<string>Large v3 Turbo 的量化版本，速度更快，但准确度略低。</string>
+	<key>Whisper Large v3 Turbo model with Groq's lightning-speed inference</key>
+	<string>Whisper Large v3 Turbo 模型，结合 Groq 的超高速推理。</string>
+	<key>ElevenLabs' realtime speech-to-text model with low-latency partial transcripts.</key>
+	<string>ElevenLabs 的实时语音转文字模型，具备低延迟的部分转写输出。</string>
+	<key>ElevenLabs' Scribe v2 batch transcription model for the most accurate file-based transcription.</key>
+	<string>ElevenLabs 的 Scribe v2 批处理转写模型，适合追求最高准确度的文件转写。</string>
+	<key>OpenAI's realtime transcription model with low-latency partials and multilingual dictation support.</key>
+	<string>OpenAI 的实时转写模型，支持低延迟部分结果和多语言听写。</string>
+	<key>Amazon Transcribe's realtime streaming transcription with partial results and stabilization.</key>
+	<string>Amazon Transcribe 的实时流式转写，支持部分结果和稳定化输出。</string>
+	<key>Cloud Model Description</key>
+	<string>最高准确度，需要 API 密钥和网络连接</string>
+	<key>Complete Setup</key>
+	<string>完成设置</string>
+	<key>Complete the setup to get started</key>
+	<string>完成设置即可开始使用</string>
+	<key>Configure</key>
+	<string>配置</string>
+	<key>Configure LLM providers for post-processing transcribed text. For transcription models, use the AI Models tab.</key>
+	<string>配置用于转录后处理的 LLM 提供商。听写模型请在“AI 模型”标签页配置。</string>
+	<key>Configure Shortcut</key>
+	<string>配置快捷键</string>
+	<key>Configure Shortcuts</key>
+	<string>配置快捷键</string>
+	<key>Configure your AI provider settings</key>
+	<string>配置您的 AI 提供商设置</string>
+	<key>Configure your microphone preferences</key>
+	<string>配置你的麦克风偏好设置</string>
+	<key>Configured</key>
+	<string>已配置</string>
+	<key>Connect an audio input device to get started</key>
+	<string>连接音频输入设备即可开始</string>
+	<key>Connected</key>
+	<string>已连接</string>
+	<key>Connected to</key>
+	<string>已连接到</string>
+	<key>Connected to %@</key>
+	<string>已连接到 %@</string>
+	<key>Connection failed.</key>
+	<string>连接失败。</string>
+	<key>Connection successful! Configuration saved.</key>
+	<string>连接成功！配置已保存。</string>
+	<key>Context Awareness</key>
+	<string>上下文感知</string>
+	<key>Control how HoAh handles your transcription data and audio recordings for privacy and storage management.</key>
+	<string>控制吼蛙如何处理转录数据和音频录音，以满足隐私与存储管理需求。</string>
+	<key>Control transcript history and storage</key>
+	<string>控制转录历史与存储</string>
+	<key>Copied to clipboard</key>
+	<string>已复制到剪贴板</string>
+	<key>Copied!</key>
+	<string>已复制！</string>
+	<key>Copy Enhanced</key>
+	<string>复制增强版</string>
+	<key>Copy Last Transcription</key>
+	<string>复制上次转录</string>
+	<key>Copy Original</key>
+	<string>复制原始文本</string>
+	<key>Copy System Info</key>
+	<string>复制系统信息</string>
+	<key>Could not add emoji.</key>
+	<string>无法添加表情。</string>
+	<key>Cross-Region</key>
+	<string>跨区域</string>
+	<key>Current Configuration</key>
+	<string>当前配置</string>
+	<key>Current model: %@</key>
+	<string>当前模型：%@</string>
+	<key>Current model: \(currentModel.displayName)</key>
+	<string>当前模型：\(currentModel.displayName)</string>
+	<key>Custom</key>
+	<string>自定义</string>
+	<key>Custom Cancel Shortcut</key>
+	<string>自定义取消快捷键</string>
+	<key>Custom Provider</key>
+	<string>自定义服务商</string>
+	<key>Custom Provider Configuration</key>
+	<string>自定义服务商配置</string>
+	<key>Customize app &amp; system feedback</key>
+	<string>自定义应用和系统反馈</string>
+	<key>Customize recorder behavior and feedback</key>
+	<string>自定义录音行为和反馈</string>
+	<key>Custom…</key>
+	<string>自定义…</string>
+	<key>Dashboard</key>
+	<string>仪表盘</string>
+	<key>Data &amp; Privacy</key>
+	<string>数据与隐私</string>
+	<key>Data Management</key>
+	<string>数据管理</string>
+	<key>Default</key>
+	<string>默认</string>
+	<key>Default Auto-Enhancement</key>
+	<string>默认指令</string>
+	<key>Default Dictation Model</key>
+	<string>默认听写模型</string>
+	<key>Default Model</key>
+	<string>默认模型</string>
+	<key>Default Transcription Model</key>
+	<string>当前听写模型</string>
+	<key>Default and other built-in prompts can be edited but not deleted. Reset anytime to restore the original text and trigger words.</key>
+	<string>默认和其他内置指令可以编辑但不能删除。如需恢复原始文本和触发词，可随时重置。</string>
+	<key>Define how AI should enhance your transcriptions</key>
+	<string>定义 AI 应如何增强你的转录结果</string>
+	<key>Delay:</key>
+	<string>延迟：</string>
+	<key>Delete</key>
+	<string>删除</string>
+	<key>Delete %lld Files</key>
+	<string>删除 %lld 个文件</string>
+	<key>Delete Configuration</key>
+	<string>删除配置</string>
+	<key>Delete Custom Model</key>
+	<string>删除自定义模型</string>
+	<key>Delete Model</key>
+	<string>删除模型</string>
+	<key>Delete Selected Items?</key>
+	<string>删除所选项目？</string>
+	<key>Delete transcripts older than</key>
+	<string>删除早于此时间的转录</string>
+	<key>Description</key>
+	<string>描述</string>
+	<key>Deselect All</key>
+	<string>取消全选</string>
+	<key>Devices will be used in order of priority. If a device is unavailable, the next one will be tried. If no prioritized device is available, the system default microphone will be used.</key>
+	<string>设备将按优先级顺序使用。如果某个设备不可用，将尝试下一个；若没有任何优先设备可用，将使用系统默认麦克风。</string>
+	<key>Dictation Model: %@</key>
+	<string>听写模型：%@</string>
+	<key>Disabled</key>
+	<string>已禁用</string>
+	<key>Dismiss</key>
+	<string>知道了</string>
+	<key>Dismiss Recording</key>
+	<string>取消录音</string>
+	<key>Done</key>
+	<string>完成</string>
+	<key>Double-click to edit • Right-click for more options</key>
+	<string>双击进行编辑 • 右键查看更多选项</string>
+	<key>Download AI Model</key>
+	<string>下载 AI 模型</string>
+	<key>Download Model</key>
+	<string>下载模型</string>
+	<key>Downloaded</key>
+	<string>已下载</string>
+	<key>Duration: %@</key>
+	<string>时长：%@</string>
+	<key>Edit</key>
+	<string>编辑</string>
+	<key>Edit AI Configuration</key>
+	<string>编辑 AI 配置</string>
+	<key>Edit Configuration</key>
+	<string>编辑配置</string>
+	<key>Edit Built-in Prompt</key>
+	<string>编辑内置指令</string>
+	<key>Edit Model</key>
+	<string>编辑模型</string>
+	<key>Edit Prompt</key>
+	<string>编辑指令</string>
+	<key>Edit an existing configuration or add a new one to enable AI Enhancement.</key>
+	<string>编辑现有配置或添加新配置以启用 AI 指令。</string>
+	<key>Emoji already exists!</key>
+	<string>表情已存在！</string>
+	<key>Emoji cannot be empty.</key>
+	<string>表情不能为空。</string>
+	<key>Emoji in Use</key>
+	<string>表情正被使用</string>
+	<key>Enable</key>
+	<string>开启</string>
+	<key>Enable AI Enhancement</key>
+	<string>启用 AI 指令</string>
+	<key>Enable AI Enhancement?</key>
+	<string>启用 AI 指令？</string>
+	<key>Enable Accessibility</key>
+	<string>启用辅助功能</string>
+	<key>Enable Auto Enhancement</key>
+	<string>启用 AI 指令</string>
+	<key>Enable Cross-Region Inference</key>
+	<string>启用跨区域推理</string>
+	<key>Enable Middle-Click Toggle</key>
+	<string>启用中键切换</string>
+	<key>Enable Prompt Triggers</key>
+	<string>启用指令触发器</string>
+	<key>Enable automatic audio cleanup</key>
+	<string>启用自动音频清理</string>
+	<key>English</key>
+	<string>英语</string>
+	<key>Enhancement Model</key>
+	<string>AI 指令模型</string>
+	<key>Enhancement Models</key>
+	<string>AI 指令模型</string>
+	<key>Enhancement Prompt</key>
+	<string>AI 指令</string>
+	<key>Enhancement Shortcuts</key>
+	<string>AI 指令快捷键</string>
+	<key>Enhancement Time</key>
+	<string>AI 指令耗时</string>
+	<key>Enhancement shortcuts are available only when the recorder is visible and HoAh is running.</key>
+	<string>AI 指令快捷键仅在录音窗可见且吼蛙正在运行时可用。</string>
+	<key>AI Action shortcuts work while the recorder is visible. On this page, ⌘1–⌘0 also works when the HoAh window is focused.</key>
+	<string>AI 指令快捷键在录音窗可见时可用；在当前页面中，当 HoAh 窗口处于焦点时，⌘1–⌘0 也可以直接切换。</string>
+	<key>Enhancing</key>
+	<string>正在执行指令…</string>
+	<key>Enter a description</key>
+	<string>输入描述</string>
+	<key>Enter a short, descriptive title</key>
+	<string>输入简短且具描述性的标题</string>
+	<key>Enter model name</key>
+	<string>输入模型名称</string>
+	<key>Enter region (e.g., us-west-2)</key>
+	<string>输入区域（例如 us-west-2）</string>
+	<key>Enter website URL (e.g., google.com)</key>
+	<string>输入网站 URL（例如：google.com）</string>
+	<key>Enter your API Key</key>
+	<string>输入你的 API 密钥</string>
+	<key>Enter your API key</key>
+	<string>输入你的 API 密钥</string>
+	<key>Error</key>
+	<string>错误</string>
+	<key>Essentials</key>
+	<string>基本信息</string>
+	<key>Experimental</key>
+	<string>实验性功能</string>
+	<key>Experimental Features</key>
+	<string>实验性功能</string>
+	<key>Experimental features that might be unstable &amp; bit buggy.</key>
+	<string>这些是可能不稳定、略带 Bug 的实验性功能。</string>
+	<key>No experimental features currently available.</key>
+	<string>当前暂无可用的实验性功能。</string>
+	<key>Export</key>
+	<string>导出</string>
+	<key>Export CSV (Single File)</key>
+	<string>导出 CSV (单文件)</string>
+	<key>Export Canceled</key>
+	<string>导出已取消</string>
+	<key>Export Daily Markdown (Folder)</key>
+	<string>导出每日 Markdown (文件夹)</string>
+	<key>Export Error</key>
+	<string>导出错误</string>
+	<key>Export Filtered</key>
+	<string>导出筛选结果</string>
+	<key>Export Here</key>
+	<string>导出到这里</string>
+	<key>Export Settings...</key>
+	<string>导出设置...</string>
+	<key>Export Successful</key>
+	<string>导出成功</string>
+	<key>Export your custom prompts, word replacements, keyboard shortcuts, and app preferences to a backup file. API keys are not included in the export.</key>
+	<string>导出您的自定义指令、替换词、键盘快捷键和应用偏好设置。导出文件不包含 API 密钥。</string>
+	<key>Failed to copy transcription</key>
+	<string>复制转录失败</string>
+	<key>Failed to read credentials for AWS Profile '%@': %@</key>
+	<string>读取 AWS Profile「%@」的凭证失败：%@</string>
+	<key>Failed to resolve credentials for AWS Profile '%@': %@</key>
+	<string>无法解析 AWS Profile '%@' 的凭证：%@</string>
+	<key>Failed to sign request: %@</key>
+	<string>请求签名失败：%@</string>
+	<key>Faster than Real-time</key>
+	<string>快于实时</string>
+	<key>Fn</key>
+	<string>Fn</string>
+	<key>Follow System</key>
+	<string>跟随系统</string>
+	<key>For best results, using your Mac's built-in microphone is recommended.</key>
+	<string>为了获得最佳效果，建议使用 Mac 内置麦克风。</string>
+	<key>For cloud processing</key>
+	<string>如需云端处理</string>
+	<key>For local processing</key>
+	<string>如需本地处理</string>
+	<key>Free</key>
+	<string>免费</string>
+	<key>From ~/.aws/credentials or ~/.aws/config</key>
+	<string>来自 ~/.aws/credentials 或 ~/.aws/config</string>
+	<key>General</key>
+	<string>通用</string>
+	<key>Generating waveform...</key>
+	<string>正在生成波形...</string>
+	<key>Get API Key</key>
+	<string>获取 API 密钥</string>
+	<key>Get Started</key>
+	<string>开始使用</string>
+	<key>Got it</key>
+	<string>明白了</string>
+	<key>Help</key>
+	<string>帮助</string>
+	<key>Hide Dock Icon</key>
+	<string>隐藏 Dock 图标</string>
+	<key>Hide Dock Icon (Menu Bar Only)</key>
+	<string>隐藏 Dock 图标（仅菜单栏模式）</string>
+	<key>History</key>
+	<string>历史记录</string>
+	<key>HoAh</key>
+	<string>吼蛙</string>
+	<key>HoAh Homepage</key>
+	<string>吼蛙主页</string>
+	<key>HoAh Shortcuts</key>
+	<string>吼蛙快捷键</string>
+	<key>HoAh checks for updates automatically at launch. You can also check manually for new versions.</key>
+	<string>吼蛙会在启动时自动检查更新。您也可以手动检查新版本。</string>
+	<key>HoAh checks for updates once at launch. Click the button above anytime to manually check for a new version.</key>
+	<string>吼蛙 会在启动时自动检查一次更新。如需手动检查新版本，可随时点击上方按钮。</string>
+	<key>HoAh requires the following permissions to function properly</key>
+	<string>吼蛙 需要以下权限才能正常运行</string>
+	<key>HoAh sessions completed</key>
+	<string>已完成的吼蛙会话</string>
+	<key>HoAh uses Accessibility permissions to paste the transcribed text directly into other applications at your cursor's position. This allows for a seamless dictation experience across your Mac.</key>
+	<string>吼蛙 使用辅助功能权限将转录文本直接粘贴到其他应用程序的光标位置。这样可以在你的 Mac 上实现无缝的听写体验。</string>
+	<key>HoAh vs. typing by hand</key>
+	<string>吼蛙 vs. 手动输入</string>
+	<key>Hotkey 1</key>
+	<string>快捷键 1</string>
+	<key>Hotkey 2</key>
+	<string>快捷键 2</string>
+	<key>Hotkey: %@</key>
+	<string>快捷键：%@</string>
+	<key>How to get a free API Key?</key>
+	<string>小白必读：如何免费获取 API Key？</string>
+	<key>Icon</key>
+	<string>图标</string>
+	<key>If enabled, your instructions are combined with a general-purpose template to improve transcription quality.
+
+Disable for full control over the AI's system prompt (for advanced users).</key>
+	<string>启用后，你的指令将与通用模板组合以提高转录质量。
+
+禁用此选项可完全控制 AI 的系统指令（高级用户适用）。</string>
+	<key>Immediately</key>
+	<string>立即</string>
+	<key>Import Canceled</key>
+	<string>导入已取消</string>
+	<key>Import Error</key>
+	<string>导入错误</string>
+	<key>Import Settings...</key>
+	<string>导入设置...</string>
+	<key>Import or export your settings</key>
+	<string>导入或导出你的设置</string>
+	<key>Imported</key>
+	<string>已导入</string>
+	<key>Imported local model</key>
+	<string>已导入的本地模型</string>
+	<key>Input Mode</key>
+	<string>输入模式</string>
+	<key>Interface Language</key>
+	<string>界面语言</string>
+	<key>Invalid AWS credentials. Please check your profile configuration.</key>
+	<string>AWS 凭证无效。请检查您的配置文件设置。</string>
+	<key>Invalid Bedrock URL</key>
+	<string>无效的 Bedrock URL</string>
+	<key>Invalid emoji character.</key>
+	<string>无效的表情字符。</string>
+	<key>Invalid emoji.</key>
+	<string>无效的表情符号。</string>
+	<key>Invalid response from Bedrock</key>
+	<string>Bedrock 返回无效响应</string>
+	<key>Keep audio files for</key>
+	<string>保留音频文件时长</string>
+	<key>Keep enhancement prompts handy</key>
+	<string>随时保留指令</string>
+	<key>Keep the transcribed text in clipboard instead of restoring the original clipboard content</key>
+	<string>在剪贴板中保留转录文本，而不是恢复剪贴板原始内容。</string>
+	<key>Keyboard Shortcut</key>
+	<string>键盘快捷键</string>
+	<key>Keyboard Shortcuts</key>
+	<string>键盘快捷键</string>
+	<key>Keystrokes Saved</key>
+	<string>节省按键次数</string>
+	<key>Language</key>
+	<string>语言</string>
+	<key>Language: %@</key>
+	<string>语言：%@</string>
+	<key>Language: Autodetected</key>
+	<string>语言：自动检测</string>
+	<key>Language: English</key>
+	<string>语言：英语</string>
+	<key>Language: English (only)</key>
+	<string>语言：仅限英语</string>
+	<key>Language: \(currentLanguageDisplayName())</key>
+	<string>语言：\(currentLanguageDisplayName())</string>
+	<key>Large v3 Turbo</key>
+	<string>Large v3 Turbo</string>
+	<key>Last 24 hours</key>
+	<string>最近 24 小时</string>
+	<key>Last transcription copied</key>
+	<string>上次转录已复制</string>
+	<key>Last used %@</key>
+	<string>上次使用 %@</string>
+	<key>Last used \(relativeDate(lastUsed))</key>
+	<string>上次使用 \(relativeDate(lastUsed))</string>
+	<key>Launch at Login</key>
+	<string>登录时启动</string>
+	<key>Learn more</key>
+	<string>了解更多</string>
+	<key>Learn what is on the screen to understand the context</key>
+	<string>了解屏幕上的内容，以理解上下文</string>
+	<key>Left Control (⌃)</key>
+	<string>左 Control (⌃)</string>
+	<key>Left Option (⌥)</key>
+	<string>左 Option (⌥)</string>
+	<key>Let's test your HoAh setup.</key>
+	<string>来测试一下你的吼蛙配置。</string>
+	<key>Load More</key>
+	<string>加载更多</string>
+	<key>Loading...</key>
+	<string>正在加载…</string>
+	<key>Local</key>
+	<string>本地</string>
+	<key>Local Model Description</key>
+	<string>速度与准确度的最佳平衡，完全在本地设备运行</string>
+	<key>Manage API Keys</key>
+	<string>管理 API 密钥</string>
+	<key>Manage Configurations...</key>
+	<string>管理配置...</string>
+	<key>Manage Models</key>
+	<string>管理模型</string>
+	<key>Manage keyboard shortcuts and triggers</key>
+	<string>管理键盘快捷键和触发方式</string>
+	<key>Maximum recording duration</key>
+	<string>最大录音时长</string>
+	<key>Microphone Access</key>
+	<string>麦克风权限</string>
+	<key>Microphone Selection</key>
+	<string>麦克风选择</string>
+	<key>Middle Button</key>
+	<string>中键</string>
+	<key>Middle-Click Toggle</key>
+	<string>中键切换</string>
+	<key>Mini Recorder</key>
+	<string>迷你录音窗</string>
+	<key>Model</key>
+	<string>模型</string>
+	<key>Model &amp; Capabilities</key>
+	<string>模型与能力</string>
+	<key>Model ID (e.g., anthropic.claude-3-5-sonnet-20241022-v2:0)</key>
+	<string>模型 ID（例如：anthropic.claude-3-5-sonnet-20241022-v2:0）</string>
+	<key>Model Name (e.g., gpt-4o-mini, claude-3-5-sonnet-20240620)</key>
+	<string>模型名称（例如：gpt-4o-mini、claude-3-5-sonnet-20240620）</string>
+	<key>Multilingual Model</key>
+	<string>多语言模型</string>
+	<key>Mute system audio during recording</key>
+	<string>录音时静音系统音频</string>
+	<key>Name</key>
+	<string>名称</string>
+	<key>Native Apple</key>
+	<string>原生 Apple</string>
+	<key>Need help? Check the Help menu for support options</key>
+	<string>需要帮助？请在“帮助”菜单中查看支持选项</string>
+	<key>New AI Configuration</key>
+	<string>新建 AI 配置</string>
+	<key>New Prompt</key>
+	<string>新建指令</string>
+	<key>Next Key</key>
+	<string>下一个密钥</string>
+	<key>No AI Model Selected</key>
+	<string>未选择 AI 模型</string>
+	<key>No API keys added yet. Add one below.</key>
+	<string>还没有添加 API 密钥。请在下方添加。</string>
+	<key>No AWS profiles found in ~/.aws/credentials</key>
+	<string>在 ~/.aws/credentials 中未找到 AWS Profile</string>
+	<key>No AWS profiles found in ~/.aws/credentials or ~/.aws/config</key>
+	<string>在 ~/.aws/credentials 或 ~/.aws/config 中未找到 AWS 配置文件</string>
+	<key>No Audio Devices</key>
+	<string>没有音频设备</string>
+	<key>No Transcriptions Yet</key>
+	<string>还没有转录记录</string>
+	<key>No additional devices available</key>
+	<string>没有额外可用设备</string>
+	<key>No applications added</key>
+	<string>未添加应用程序</string>
+	<key>No audio files found that are older than %lld days.</key>
+	<string>未找到早于 %lld 天的音频文件。</string>
+	<key>No configurations available</key>
+	<string>暂无可用配置</string>
+	<key>No configurations. Click + to add one.</key>
+	<string>暂无配置，点击 + 添加一个。</string>
+	<key>No devices available</key>
+	<string>无可用设备</string>
+	<key>No input devices found</key>
+	<string>未找到输入设备</string>
+	<key>No keys added yet for %@. Add one below.</key>
+	<string>尚未为 %@ 添加 API Key，请在下方添加。</string>
+	<key>No keys added yet for \(aiService.selectedProvider.rawValue). Add one below.</key>
+	<string>尚未为 \(aiService.selectedProvider.rawValue) 添加 API Key，请在下方添加。</string>
+	<key>No limit</key>
+	<string>无限制</string>
+	<key>No microphones found</key>
+	<string>未找到麦克风</string>
+	<key>No model selected</key>
+	<string>未选择模型</string>
+	<key>No models available</key>
+	<string>无可用模型</string>
+	<key>No models loaded</key>
+	<string>未加载模型</string>
+	<key>No prioritized devices</key>
+	<string>没有优先设备</string>
+	<key>No prompts available</key>
+	<string>暂无指令</string>
+	<key>No providers connected</key>
+	<string>未连接提供商</string>
+	<key>No transcription available</key>
+	<string>无转录内容可用</string>
+	<key>No transcription model selected</key>
+	<string>未选择听写模型</string>
+	<key>No transcription models available. Please connect to a cloud service or download a local model in the AI Models tab.</key>
+	<string>暂无可用听写模型。请连接云服务或在“AI 模型”标签页中下载本地模型。</string>
+	<key>No transcriptions found</key>
+	<string>未找到转录记录</string>
+	<key>No valid configurations available.</key>
+	<string>无可用的有效配置。</string>
+	<key>No websites added</key>
+	<string>未添加网站</string>
+	<key>None</key>
+	<string>无</string>
+	<key>Not Set</key>
+	<string>未设置</string>
+	<key>Notch Recorder</key>
+	<string>刘海录音窗</string>
+	<key>Note: Selecting a device here will override your Mac's system-wide default microphone.</key>
+	<string>注意：在此选择设备会覆盖你 Mac 的系统级默认麦克风。</string>
+	<key>OK</key>
+	<string>确定</string>
+	<key>Older transcripts will be deleted automatically based on your selection.</key>
+	<string>旧的转录会根据你选择的策略自动删除。</string>
+	<key>On-Device</key>
+	<string>本机</string>
+	<key>Only OpenAI-compatible transcription APIs are supported</key>
+	<string>仅支持与 OpenAI 兼容的转录 API</string>
+	<key>Open System Settings</key>
+	<string>打开系统设置</string>
+	<key>OpenAI Compatible</key>
+	<string>兼容 OpenAI</string>
+	<key>Optimizing model for your device...</key>
+	<string>正在为你的设备优化模型...</string>
+	<key>Optional: Add context about yourself (name, role, industry, tech stack, etc.) to help AI provide more relevant responses.</key>
+	<string>可选：添加关于您自己的信息（姓名、职位、行业、技术栈等），帮助 AI 提供更相关的回复。</string>
+	<key>Optional: Override AI provider/model</key>
+	<string>可选：覆盖 AI 服务商/模型</string>
+	<key>Other App Shortcuts</key>
+	<string>其他应用快捷键</string>
+	<key>Our Recommendations</key>
+	<string>我们的推荐</string>
+	<key>Output Format</key>
+	<string>输出格式</string>
+	<key>Output Format Guide</key>
+	<string>输出格式指南</string>
+	<key>Over 2min</key>
+	<string>2分钟以上</string>
+	<key>PRO</key>
+	<string>PRO</string>
+	<key>Paid</key>
+	<string>付费</string>
+	<key>Past year</key>
+	<string>最近一年</string>
+	<key>Paste Last Transcript(Enhanced)</key>
+	<string>粘贴上次转录（增强版）</string>
+	<key>Paste Last Transcript(Original)</key>
+	<string>粘贴上次转录（原始）</string>
+	<key>Paste Method</key>
+	<string>粘贴方式</string>
+	<key>Pastes the enhanced transcript if available, otherwise falls back to the original.</key>
+	<string>如果可用则粘贴增强后的转录，否则回退到原始转录。</string>
+	<key>Pause Media during recording</key>
+	<string>录音时暂停媒体播放</string>
+	<key>Performance Analysis</key>
+	<string>性能分析</string>
+	<key>Permission required for HoAh to function properly</key>
+	<string>吼蛙需要相应权限才能正常工作</string>
+	<key>Permissions</key>
+	<string>权限</string>
+	<key>Please add and select an API key first.</key>
+	<string>请先添加并选择一个 API 密钥。</string>
+	<key>Please configure AI in Settings → Enhancement</key>
+	<string>请在设置 → AI 指令中配置 AI</string>
+	<key>Please fix the validation errors before saving.</key>
+	<string>请先修复校验错误后再保存。</string>
+	<key>Preserve transcript in clipboard</key>
+	<string>在剪贴板中保留转录结果</string>
+	<key>Press Shortcut</key>
+	<string>按下快捷键</string>
+	<key>Prioritized Devices</key>
+	<string>优先设备</string>
+	<key>Prompt Instructions</key>
+	<string>指令内容</string>
+	<key>Prompt Triggers</key>
+	<string>指令触发器</string>
+	<key>Prompt Used</key>
+	<string>使用的指令</string>
+	<key>Prompt:</key>
+	<string>指令：</string>
+	<key>Prompt: %@</key>
+	<string>指令：%@</string>
+	<key>Provide optional context about yourself to help AI better tailor responses. This information will be included in all enhancement requests.</key>
+	<string>提供关于您自己的可选信息，帮助 AI 更好地定制回复。此信息将包含在所有 AI 指令请求中。</string>
+	<key>Provider</key>
+	<string>提供商</string>
+	<key>Quick reference for all HoAh shortcuts</key>
+	<string>快速查看所有吼蛙快捷键</string>
+	<key>Quick tap to start hands-free recording (tap again to stop). Press and hold for push-to-talk (release to stop recording).</key>
+	<string>轻点一次开始免提录音（再次轻点停止）。按住则为按住说话（松开停止录音）。</string>
+	<key>Quick tap to start/stop, hold for push-to-talk.</key>
+	<string>轻按开始/停止，长按按住说话。</string>
+	<key>Quickly enable or disable AI Action while recording.</key>
+	<string>录音时快速启用或关闭 AI 指令。</string>
+	<key>Quit HoAh</key>
+	<string>退出吼蛙</string>
+	<key>RAM</key>
+	<string>内存</string>
+	<key>Re-transcribe the last recorded audio using the current model and copy the result.</key>
+	<string>使用当前模型重新转录上次录制的音频并复制结果。</string>
+	<key>Recommended</key>
+	<string>推荐</string>
+	<key>Record Shortcut</key>
+	<string>录制快捷键</string>
+	<key>Recorder Style</key>
+	<string>录音窗口样式</string>
+	<key>Recording</key>
+	<string>录音中</string>
+	<key>Recording Feedback</key>
+	<string>录音反馈</string>
+	<key>Recording Settings</key>
+	<string>录音设置</string>
+	<key>Recording failed to start</key>
+	<string>录音启动失败</string>
+	<key>Recording stops automatically when this limit is reached to avoid unintended long sessions.</key>
+	<string>达到该时长后录音会自动停止，防止意外长时间录制。</string>
+	<key>Refresh</key>
+	<string>刷新</string>
+	<key>Refresh models</key>
+	<string>刷新模型列表</string>
+	<key>Region</key>
+	<string>区域</string>
+	<key>Region (e.g., us-east-1)</key>
+	<string>区域（例如：us-east-1）</string>
+	<key>Remove API Key</key>
+	<string>移除 API 密钥</string>
+	<key>Remove All</key>
+	<string>全部移除</string>
+	<key>Remove Key</key>
+	<string>移除密钥</string>
+	<key>Remove word</key>
+	<string>删除词条</string>
+	<key>Reorder</key>
+	<string>排序</string>
+	<key>Request Permission</key>
+	<string>请求权限</string>
+	<key>Requires OpenAI-compatible API endpoint</key>
+	<string>需要与 OpenAI 兼容的 API 端点</string>
+	<key>Reset</key>
+	<string>重置</string>
+	<key>Reset Built-in Prompts</key>
+	<string>重置内置指令</string>
+	<key>Reset System Settings</key>
+	<string>重置系统设置</string>
+	<key>Reset System Settings?</key>
+	<string>确定要重置系统设置吗？</string>
+	<key>Reset all system settings (appearance, behavior, audio) to default values. Your AI settings (API keys, models, prompts, profile) and custom shortcuts will be preserved.</key>
+	<string>将系统设置（如界面、行为、声音）恢复为默认值。
+
+您的 AI 设置（API Key、模型、指令）以及自定义快捷键将被完整保留。</string>
+	<key>Reset to Default</key>
+	<string>重置为默认</string>
+	<key>Retranscription successful</key>
+	<string>重新转录成功</string>
+	<key>Retry Last Transcription</key>
+	<string>重试上次转录</string>
+	<key>Retry failed: %@</key>
+	<string>重试失败：%@</string>
+	<key>Right Command (⌘)</key>
+	<string>右 Command (⌘)</string>
+	<key>Right Control (⌃)</key>
+	<string>右 Control (⌃)</string>
+	<key>Right Option (⌥)</key>
+	<string>右 Option (⌥)</string>
+	<key>Right Shift (⇧)</key>
+	<string>右 Shift (⇧)</string>
+	<key>Run Cleanup Now</key>
+	<string>立即运行清理</string>
+	<key>Run Transcript Cleanup Now</key>
+	<string>立即执行转录清理</string>
+	<key>Save</key>
+	<string>保存</string>
+	<key>Save Anyway</key>
+	<string>仍要保存</string>
+	<key>Save Button Preview</key>
+	<string>保存按钮预览</string>
+	<key>Save Changes</key>
+	<string>保存更改</string>
+	<key>Save as MD</key>
+	<string>保存为 Markdown</string>
+	<key>Save as TXT</key>
+	<string>保存为 TXT</string>
+	<key>Scribe v2 (ElevenLabs)</key>
+	<string>Scribe v2（ElevenLabs）</string>
+	<key>Search applications...</key>
+	<string>搜索应用...</string>
+	<key>Search transcriptions</key>
+	<string>搜索转录</string>
+	<key>Secret Access Key</key>
+	<string>Secret Access Key</string>
+	<key>Secret Key</key>
+	<string>Secret Key</string>
+	<key>Select All</key>
+	<string>全选</string>
+	<key>Select Applications</key>
+	<string>选择应用</string>
+	<key>Select Device</key>
+	<string>选择设备</string>
+	<key>Select Language</key>
+	<string>选择语言</string>
+	<key>Select Model</key>
+	<string>选择模型</string>
+	<key>Select Profile</key>
+	<string>选择配置文件</string>
+	<key>Select a folder to export daily Markdown files</key>
+	<string>选择导出每日 Markdown 文件的文件夹</string>
+	<key>Select a view</key>
+	<string>选择一个视图</string>
+	<key>Select how you want the recorder to appear on your screen.</key>
+	<string>选择录音窗口在屏幕上的展示方式。</string>
+	<key>Select the default AI behavior applied to every dictation.</key>
+	<string>选择每次听写默认执行的指令。</string>
+	<key>Select the method used to paste text. Use AppleScript if you have a non-standard keyboard layout.</key>
+	<string>选择粘贴文本的方式。若键盘布局非标准，请使用 AppleScript 粘贴。</string>
+	<key>Selected Text Context</key>
+	<string>选定文本上下文</string>
+	<key>Server URL</key>
+	<string>服务器 URL</string>
+	<key>Sessions Recorded</key>
+	<string>录音会话次数</string>
+	<key>Set Keyboard Shortcut</key>
+	<string>设置键盘快捷键</string>
+	<key>Set as Active</key>
+	<string>设为当前使用</string>
+	<key>Set as Default</key>
+	<string>设为默认</string>
+	<key>Set up a keyboard shortcut to use HoAh anywhere</key>
+	<string>设置键盘快捷键以在任何地方使用 吼蛙</string>
+	<key>Settings</key>
+	<string>设置</string>
+	<key>Settings Management</key>
+	<string>设置管理</string>
+	<key>Setup Required</key>
+	<string>需要设置</string>
+	<key>Shortcut for cancelling the current recording session. Default: double-tap Escape.</key>
+	<string>取消当前录音会话的快捷键。默认：双击 Escape。</string>
+	<key>Shortcut for pasting the most recent transcription.</key>
+	<string>粘贴最新转录内容的快捷键。</string>
+	<key>Shortcut:</key>
+	<string>快捷键：</string>
+	<key>Shortcuts</key>
+	<string>快捷键</string>
+	<key>Show Dock Icon</key>
+	<string>显示 Dock 图标</string>
+	<key>Show in Finder</key>
+	<string>在 Finder 中显示</string>
+	<key>Sound feedback</key>
+	<string>声音反馈</string>
+	<key>Speed</key>
+	<string>速度</string>
+	<key>Start with a Predefined Template</key>
+	<string>从预设模板开始</string>
+	<key>Start your first recording to unlock value insights.</key>
+	<string>开始第一次录音以查看数据洞察。</string>
+	<key>Successfully deleted %lld audio files.</key>
+	<string>成功删除了 %lld 个音频文件。</string>
+	<key>Successfully deleted %lld audio files. Failed to delete %lld files.</key>
+	<string>成功删除了 %1$lld 个音频文件。%2$lld 个文件删除失败。</string>
+	<key>Switch Action</key>
+	<string>切换指令</string>
+	<key>Switch HoAh's interface language. Changes take effect immediately on supported screens; untranslated items will fall back to English.</key>
+	<string>切换吼蛙的界面语言。支持的界面会立即生效，未翻译的内容将回退为英文。</string>
+	<key>Switch between your saved actions without touching the UI. Use ⌘1–⌘0 to activate the corresponding action in the order they are saved.</key>
+	<string>无需打开界面即可在已保存的指令之间切换。使用 ⌘1–⌘0 按保存顺序启用对应指令。</string>
+	<key>Switch between your saved actions with ⌘1–⌘0. The shortcut works while the recorder is visible, and also on this page when the HoAh window is focused.</key>
+	<string>使用 ⌘1–⌘0 快速切换已保存的指令。这组快捷键在录音窗可见时可用，在当前页面里当 HoAh 窗口处于焦点时也同样生效。</string>
+	<key>System Information</key>
+	<string>系统信息</string>
+	<key>System Instructions</key>
+	<string>系统指令</string>
+	<key>System Prompt</key>
+	<string>系统指令</string>
+	<key>Tap any card below to enable or disable it.</key>
+	<string>点按下方卡片以启用或禁用。</string>
+	<key>Test Connection</key>
+	<string>测试连接</string>
+	<key>Testing...</key>
+	<string>正在测试...</string>
+	<key>The AI service backend</key>
+	<string>AI 服务后端</string>
+	<key>The same API key works across all regions and models</key>
+	<string>同一个 API 密钥可用于所有区域和模型。</string>
+	<key>The specific model version to use</key>
+	<string>要使用的具体模型版本</string>
+	<key>The text transcripts will be preserved.</key>
+	<string>文本转录将会保留。</string>
+	<key>The transcription language is automatically detected by the model.</key>
+	<string>该模型会自动检测转录语言。</string>
+	<key>This action cannot be undone. Are you sure you want to delete %lld item%@?</key>
+	<string>此操作无法撤销。确定要删除 %lld 个项目%@吗？</string>
+	<key>This is an English-optimized model and only supports English transcription.</key>
+	<string>这是一个针对英语优化的模型，仅支持英文转录。</string>
+	<key>This model supports multiple languages. Select a specific language or auto-detect(if available)</key>
+	<string>该模型支持多语言。可选择特定语言，或使用自动检测（如可用）。</string>
+	<key>This will delete %lld audio files older than %lld days.</key>
+	<string>这将删除 %2$lld 天前的 %1$lld 个音频文件。</string>
+	<key>This will revert interface and recording settings to their defaults. Your API keys, AI models, and shortcuts will NOT be affected.</key>
+	<string>此操作不可撤销。它将把界面语言、录音样式等恢复为出厂设置。
+
+放心，您的 AI 资产和快捷键设置绝对安全。</string>
+	<key>Time Range</key>
+	<string>时间范围</string>
+	<key>Tip: Use ⌃⌘Space for emoji picker.</key>
+	<string>提示：使用 ⌃⌘Space 打开表情选择器。</string>
+	<key>Title</key>
+	<string>标题</string>
+	<key>Toggle AI Action</key>
+	<string>开/关 AI 指令</string>
+	<key>Toggle Menu Bar Only</key>
+	<string>仅菜单栏模式切换</string>
+	<key>Toggle Recording</key>
+	<string>切换录音状态</string>
+	<key>Total size to be freed: %@</key>
+	<string>预计释放空间：%@</string>
+	<key>Trailing Space</key>
+	<string>尾随空格</string>
+	<key>Transcribing</key>
+	<string>正在转录</string>
+	<key>Transcript Cleanup</key>
+	<string>转录清理</string>
+	<key>Transcription</key>
+	<string>转录</string>
+	<key>Transcription Language</key>
+	<string>转录语言</string>
+	<key>Transcription Model</key>
+	<string>听写模型</string>
+	<key>Transcription Model: %@</key>
+	<string>听写模型：%@</string>
+	<key>Transcription Models</key>
+	<string>听写模型</string>
+	<key>Transcription Result</key>
+	<string>转录结果</string>
+	<key>transcription_tab_original</key>
+	<string>原文</string>
+	<key>transcription_tab_enhanced</key>
+	<string>优化</string>
+	<key>transcription_tab_ai_request</key>
+	<string>AI 请求</string>
+	<key>Transcription Time</key>
+	<string>转录时间</string>
+	<key>Trigger HoAh</key>
+	<string>唤醒吼蛙</string>
+	<key>Trigger Words</key>
+	<string>触发词</string>
+	<key>Try It Out!</key>
+	<string>试试看！</string>
+	<key>Turn it on to apply your configuration.</key>
+	<string>开启后应用当前配置。</string>
+	<key>Unavailable</key>
+	<string>不可用</string>
+	<key>Under 30s</key>
+	<string>30秒以内</string>
+	<key>Unknown error</key>
+	<string>未知错误</string>
+	<key>Updates</key>
+	<string>更新</string>
+	<key>Updates are managed manually for this fork. Grab new builds from your own distribution channel when you're ready.</key>
+	<string>此分支的更新需手动管理。准备好时请从你的分发渠道获取新版本。</string>
+	<key>Use</key>
+	<string>使用</string>
+	<key>Use AppleScript Paste Method</key>
+	<string>使用 AppleScript 粘贴方式</string>
+	<key>Use System Instructions</key>
+	<string>使用系统默认说明</string>
+	<key>Use currently selected text to understand the context</key>
+	<string>使用当前选中的文本辅助理解上下文</string>
+	<key>Use middle mouse button to toggle HoAh recording.</key>
+	<string>使用鼠标中键切换吼蛙录音状态。</string>
+	<key>Use text from clipboard to understand the context</key>
+	<string>利用剪贴板内容辅助理解上下文</string>
+	<key>User Message</key>
+	<string>用户消息</string>
+	<key>User Profile</key>
+	<string>用户画像</string>
+	<key>Uses current AI provider/model unless you override below.</key>
+	<string>默认使用当前 AI 服务商/模型，除非在下方覆盖。</string>
+	<key>Uses current app setting</key>
+	<string>使用当前应用设置</string>
+	<key>Uses your current transcription settings</key>
+	<string>使用当前的转录设置</string>
+	<key>Using %@</key>
+	<string>使用 %@</string>
+	<key>Validation Errors</key>
+	<string>校验错误</string>
+	<key>Verification Failed</key>
+	<string>验证失败</string>
+	<key>Verification failed</key>
+	<string>验证失败</string>
+	<key>Verification failed. Please check your API key and try again.</key>
+	<string>验证失败。请检查您的 API 密钥并重试。</string>
+	<key>Verify &amp; Save</key>
+	<string>验证并保存</string>
+	<key>Verify and Save</key>
+	<string>验证并保存</string>
+	<key>Verifying...</key>
+	<string>验证中...</string>
+	<key>Version %@</key>
+	<string>版本 %@</string>
+	<key>Version Mismatch</key>
+	<string>版本不匹配</string>
+	<key>Voice Activity Detection</key>
+	<string>语音活动检测</string>
+	<key>Voice Activity Detection (VAD)</key>
+	<string>语音活动检测（VAD）</string>
+	<key>Warning: Using a prioritized device will override your Mac's system-wide default microphone if it becomes active.</key>
+	<string>警告：使用优先设备会在其激活时覆盖你 Mac 的系统级默认麦克风。</string>
+	<key>We'll download the optimized model to get you started.</key>
+	<string>我们会下载优化后的模型，帮助你快速上手。</string>
+	<key>Website</key>
+	<string>官网</string>
+	<key>Websites</key>
+	<string>网站</string>
+	<key>Welcome to HoAh</key>
+	<string>欢迎使用吼蛙</string>
+	<key>Welcome to the Future of Typing</key>
+	<string>欢迎来到输入的未来</string>
+	<key>Speech to Text, Made Simple</key>
+	<string>语音转文字，从此更简单</string>
+	<key>When enabled, these prompts auto-activate if their trigger words are present in your text.</key>
+	<string>启用后，若文本中包含触发词，对应指令将自动激活。</string>
+	<key>When to Trigger</key>
+	<string>触发条件</string>
+	<key>Words Dictated</key>
+	<string>口述词数</string>
+	<key>Words Per Minute</key>
+	<string>每分钟字数</string>
+	<key>Your Shortcut</key>
+	<string>你的快捷键</string>
+	<key>Your history will appear here</key>
+	<string>你的历史记录将显示在这里</string>
+	<key>add_prompt_button_title</key>
+	<string>添加指令</string>
+	<key>ai_enhancement_auto_prompt_hint</key>
+	<string>同一时间只会执行一个指令；开启 AI 指令后会自动应用到每次转录。当前：</string>
+	<key>ai_provider_configure_prompt</key>
+	<string>无法开启：请先在下方“AI 服务提供商”中配置有效的 API 密钥。</string>
+	<key>auto_export_description</key>
+	<string>自动将每条转录保存到每日 Markdown 日志文件。</string>
+	<key>auto_export_enable_hint</key>
+	<string>每条转录将追加到每日日志文件中。</string>
+	<key>auto_export_enable_toggle</key>
+	<string>启用自动导出</string>
+	<key>auto_export_folder_label</key>
+	<string>导出文件夹</string>
+	<key>auto_export_no_folder</key>
+	<string>未选择文件夹</string>
+	<key>auto_export_select_folder</key>
+	<string>选择文件夹</string>
+	<key>auto_export_reauthorize</key>
+	<string>重新授权</string>
+	<key>auto_export_status_active</key>
+	<string>自动导出已启用</string>
+	<key>auto_export_status_no_folder</key>
+	<string>请选择导出文件夹</string>
+	<key>auto_export_status_off</key>
+	<string>已关闭</string>
+	<key>auto_export_status_on</key>
+	<string>已开启</string>
+	<key>auto_export_status_needs_permission</key>
+	<string>需要授权导出目录</string>
+	<key>auto_export_title</key>
+	<string>自动每日导出</string>
+	<key>auto_export_permission_required</key>
+	<string>导出目录权限失效，请重新选择导出文件夹。</string>
+	<key>e.g. My Gemini Config</key>
+	<string>例如：我的 Gemini 配置</string>
+	<key>e.g., My AI configuration</key>
+	<string>例如：我的 AI 配置</string>
+	<key>fewer keystrokes</key>
+	<string>减少的按键数</string>
+	<key>help_api_guide_desc</key>
+	<string>小白必读：免费获取 Key，解锁 AI 指令增强功能。</string>
+	<key>help_api_guide_title</key>
+	<string>AI 设置与 Key 获取</string>
+	<key>help_cancel_button</key>
+	<string>取消</string>
+	<key>help_check_now</key>
+	<string>立即检查</string>
+	<key>help_check_updates</key>
+	<string>检查更新</string>
+	<key>help_update_schedule</key>
+	<string>系统会在本地时区的周一中午前后自动检查更新。如果当时 HoAh 未运行，会在下次启动时补检一次。</string>
+	<key>help_current_version</key>
+	<string>当前版本：</string>
+	<key>help_documentation_desc</key>
+	<string>查看更新日志与更多信息。</string>
+	<key>help_documentation_title</key>
+	<string>官方网站</string>
+	<key>help_reset_button</key>
+	<string>重置</string>
+	<key>help_reset_confirm_message</key>
+	<string>将所有系统设置（外观、行为、音频）恢复为默认值。您的 AI 设置（API 密钥、模型、指令、个人资料）和自定义快捷键将被保留。</string>
+	<key>help_reset_confirm_title</key>
+	<string>重置系统设置？</string>
+	<key>help_reset_defaults_button</key>
+	<string>恢复默认</string>
+	<key>help_reset_flow_button</key>
+	<string>重置流程</string>
+	<key>help_reset_onboarding_desc</key>
+	<string>再次显示欢迎教程。</string>
+	<key>help_reset_onboarding_title</key>
+	<string>重置新用户引导</string>
+	<key>help_reset_prefs_desc</key>
+	<string>恢复外观和行为默认值。</string>
+	<key>help_reset_prefs_title</key>
+	<string>重置偏好设置</string>
+	<key>help_resources_title</key>
+	<string>资源</string>
+	<key>help_restart_app_desc</key>
+	<string>重新启动应用程序。</string>
+	<key>help_restart_app_title</key>
+	<string>重启 HoAh</string>
+	<key>help_restart_button</key>
+	<string>重启应用</string>
+	<key>help_troubleshooting_title</key>
+	<string>故障排除</string>
+	<key>help_troubleshooting_desc</key>
+	<string>重置偏好设置或重新启动应用。</string>
+	<key>help_user_guide_desc</key>
+	<string>1 分钟玩转 HoAh。</string>
+	<key>help_user_guide_title</key>
+	<string>用户指南</string>
+	<key>macOS 26+</key>
+	<string>macOS 26+</string>
+	<key>menu_check_for_updates</key>
+	<string>检查更新…</string>
+	<key>ms</key>
+	<string>毫秒</string>
+	<key>onboarding_continue</key>
+	<string>继续</string>
+	<key>onboarding_feature_free</key>
+	<string>永久免费</string>
+	<key>onboarding_feature_minimal</key>
+	<string>轻量极简</string>
+	<key>onboarding_feature_no_ads</key>
+	<string>无广告</string>
+	<key>onboarding_feature_no_signup</key>
+	<string>无需注册</string>
+	<key>onboarding_feature_opensource</key>
+	<string>没有数据收集</string>
+	<key>onboarding_feature_private</key>
+	<string>本地优先，可选云端</string>
+	<key>onboarding_hotkey_sheet_desc</key>
+	<string>如果与系统或菜单快捷键冲突，会提示你。</string>
+	<key>onboarding_hotkey_sheet_done</key>
+	<string>完成</string>
+	<key>onboarding_hotkey_sheet_title</key>
+	<string>设置自定义快捷键</string>
+	<key>onboarding_hotkey_test_custom_button</key>
+	<string>设置自定义快捷键</string>
+	<key>onboarding_hotkey_test_custom_note</key>
+	<string>如果与系统或菜单快捷键冲突，会提示你。</string>
+	<key>onboarding_hotkey_test_help</key>
+	<string>如果热键没反应，可设置自定义快捷键（会自动检测冲突）。</string>
+	<key>onboarding_hotkey_test_pending</key>
+	<string>热键测试：等待按下…</string>
+	<key>onboarding_hotkey_test_success</key>
+	<string>热键测试：已检测到</string>
+	<key>onboarding_language_en_subtitle</key>
+	<string>Interface and dictation in English</string>
+	<key>onboarding_language_en_title</key>
+	<string>English</string>
+	<key>onboarding_language_follow_system_subtitle</key>
+	<string>自动跟随 macOS 的语言设置</string>
+	<key>onboarding_language_follow_system_title</key>
+	<string>跟随系统</string>
+	<key>onboarding_language_subtitle</key>
+	<string>这会同时设置界面语言和默认听写语言。之后可以在设置中随时更改。</string>
+	<key>onboarding_language_title</key>
+	<string>选择界面与听写语言</string>
+	<key>onboarding_language_zh_subtitle</key>
+	<string>界面和听写默认使用中文</string>
+	<key>onboarding_language_zh_title</key>
+	<string>中文（简体）</string>
+	<key>onboarding_model_apple_body</key>
+	<string>无需下载即可使用，但在长篇或中英混合的场景下，准确率通常低于 Whisper 或 Scribe。</string>
+	<key>onboarding_model_apple_note</key>
+	<string>如果你长期只打算使用 Apple 听写，其实直接使用 macOS 自带听写即可。吼蛙 中更推荐使用 Whisper 或 Scribe，获得更好的体验。</string>
+	<key>onboarding_model_apple_title</key>
+	<string>不推荐 · Apple 听写（仅用于快速试用）</string>
+	<key>onboarding_model_apple_use_anyway</key>
+	<string>仍然使用 Apple 听写</string>
+	<key>onboarding_model_scribe_body</key>
+	<string>目前效果最好的云端听写模型，适合追求极致准确和长时间录音。</string>
+	<key>onboarding_model_scribe_later</key>
+	<string>稍后在「听写模型」中了解 Scribe v2</string>
+	<key>onboarding_model_scribe_note</key>
+	<string>需要 ElevenLabs 账号和 API Key。你可以稍后在「听写模型」页面中启用 Scribe v2。</string>
+	<key>onboarding_model_scribe_title</key>
+	<string>强烈推荐 · Scribe v2（ElevenLabs）</string>
+	<key>onboarding_model_subtitle</key>
+	<string>HoAh 会在你的设备上本地处理语音。下载一个模型后即可继续。</string>
+	<key>onboarding_model_tag_best_quality</key>
+	<string>最佳效果</string>
+	<key>onboarding_model_tag_best_value</key>
+	<string>性价比高</string>
+	<key>onboarding_model_title</key>
+	<string>选择语音模型</string>
+	<key>onboarding_model_whisper_body</key>
+	<string>大多数用户的首选方案。高准确率，适合中文、英文以及中英混合场景。</string>
+	<key>onboarding_model_whisper_download_and_use</key>
+	<string>下载并使用（推荐）</string>
+	<key>onboarding_model_whisper_note</key>
+	<string>大约 %@ 下载一次，之后完全在本机运行，音频不会上传到云端。</string>
+	<key>onboarding_model_whisper_title</key>
+	<string>强烈推荐 · 本地 Whisper Large v3 Turbo（量化版）</string>
+	<key>onboarding_model_whisper_use</key>
+	<string>使用此模型</string>
+	<key>onboarding_permissions_accessibility_authorized_restart</key>
+	<string>我确认我已经授权了，同意重启</string>
+	<key>onboarding_permissions_accessibility_confirm_or_skip</key>
+	<string>我已完成设置 / 暂时跳过</string>
+	<key>onboarding_permissions_accessibility_description</key>
+	<string>在系统设置中为 吼蛙 打开「辅助功能」权限，这样它才能在任何应用里帮你输入文字。打开后回到这里，再继续下一步。</string>
+	<key>onboarding_permissions_accessibility_restart_hint</key>
+	<string>授予「辅助功能」后，需要重启 吼蛙 权限才会生效。</string>
+	<key>onboarding_permissions_accessibility_title</key>
+	<string>辅助功能权限</string>
+	<key>onboarding_permissions_button_continue</key>
+	<string>已设置好，继续</string>
+	<key>onboarding_permissions_button_enable</key>
+	<string>去设置</string>
+	<key>onboarding_permissions_button_keyboard_continue</key>
+	<string>已设置好，继续</string>
+	<key>onboarding_permissions_button_keyboard_setup</key>
+	<string>设置快捷键</string>
+	<key>onboarding_permissions_device_description</key>
+	<string>选择你希望 吼蛙 使用的麦克风设备，推荐使用 Mac 内置麦克风。</string>
+	<key>onboarding_permissions_device_title</key>
+	<string>选择麦克风设备</string>
+	<key>onboarding_permissions_keyboard_description</key>
+	<string>为 吼蛙 选择一个快捷键（推荐右侧 Option 键），这样你可以随时一键开始和结束说话。</string>
+	<key>onboarding_permissions_keyboard_title</key>
+	<string>键盘快捷键</string>
+	<key>onboarding_permissions_microphone_description</key>
+	<string>允许 吼蛙 访问麦克风，这样你才能开始说话并把语音实时转成文字。</string>
+	<key>onboarding_permissions_microphone_title</key>
+	<string>麦克风权限</string>
+	<key>onboarding_permissions_open_settings</key>
+	<string>打开系统设置</string>
+	<key>onboarding_permissions_skip_for_now</key>
+	<string>暂时跳过</string>
+	<key>onboarding_restart_now</key>
+	<string>立即重启</string>
+	<key>onboarding_restart_required_message</key>
+	<string>HoAh 需要重启以应用辅助功能权限。</string>
+	<key>onboarding_restart_required_title</key>
+	<string>需要重启</string>
+	<key>onboarding_tagline</key>
+	<string>为你而生，不为盈利。</string>
+	<key>onboarding_try_instruction</key>
+	<string>按下右 Option 开始，再按一下结束</string>
+	<key>onboarding_try_instruction_alt</key>
+	<string>或按住说话，松开发送</string>
+	<key>onboarding_try_instruction_dynamic</key>
+	<string>按下 %@ 开始，再按一下结束</string>
+	<key>onboarding_try_it_placeholder</key>
+	<string>转录结果将显示在这里...</string>
+	<key>onboarding_try_it_title</key>
+	<string>来试试吧！</string>
+	<key>onboarding_tutorial_ai_footer</key>
+	<string>随时通过菜单栏或设置切换指令。</string>
+	<key>onboarding_tutorial_ai_intro</key>
+	<string>如果你愿意提供自己的 API Key（例如 OpenAI、Groq 等），吼蛙 可以：</string>
+	<key>onboarding_tutorial_ai_point1</key>
+	<string>• 把口语化内容润色成更清晰、书面化的文本。</string>
+	<key>onboarding_tutorial_ai_point2</key>
+	<string>• 在中英文之间智能翻译，并尽量保持语气和术语。</string>
+	<key>onboarding_tutorial_ai_point3</key>
+	<string>• 把长时间录音整理成摘要和待办清单。</string>
+	<key>onboarding_tutorial_ai_setup_bullet1</key>
+	<string>• 在 AI 指令 标签页中添加 API Key</string>
+	<key>onboarding_tutorial_ai_setup_bullet2</key>
+	<string>• Groq、Cerebras、Gemini 都有免费额度</string>
+	<key>onboarding_tutorial_ai_setup_bullet3</key>
+	<string>• 即使付费 API，每天也不到 2 分钱</string>
+	<key>onboarding_tutorial_ai_setup_bullet4</key>
+	<string>• 可通过菜单栏或录音时快速切换指令</string>
+	<key>onboarding_tutorial_ai_setup_title</key>
+	<string>AI 指令需要设置 API Key</string>
+	<key>onboarding_tutorial_ai_subtitle</key>
+	<string>即时润色、翻译你的语音。</string>
+	<key>onboarding_tutorial_ai_title</key>
+	<string>AI 超能力</string>
+	<key>onboarding_tutorial_back</key>
+	<string>返回</string>
+	<key>onboarding_tutorial_basics_subtitle</key>
+	<string>一键即可开始听写。</string>
+	<key>onboarding_tutorial_basics_title</key>
+	<string>掌握基础</string>
+	<key>onboarding_tutorial_clipboard_tip</key>
+	<string>录音结束后，文本会自动复制到剪贴板，随时粘贴。</string>
+	<key>onboarding_tutorial_complete</key>
+	<string>完成设置</string>
+	<key>onboarding_tutorial_escape_tip</key>
+	<string>双击 Escape 可立即取消录音。</string>
+	<key>onboarding_tutorial_example_ai_title</key>
+	<string>3. AI 指令示例</string>
+	<key>onboarding_tutorial_example_base_label</key>
+	<string>· 基础清理模式：</string>
+	<key>onboarding_tutorial_example_polish_label</key>
+	<string>· 润色模式：</string>
+	<key>onboarding_tutorial_example_raw_title</key>
+	<string>1. 你的语音（原始口语）</string>
+	<key>onboarding_tutorial_example_title</key>
+	<string>示例：推迟会议（中英混合）</string>
+	<key>onboarding_tutorial_example_transcript_title</key>
+	<string>2. 基础转录（Whisper，本地模型）</string>
+	<key>onboarding_tutorial_hold</key>
+	<string>按住</string>
+	<key>onboarding_tutorial_hold_to_speak</key>
+	<string>按住说话，松开发送。</string>
+	<key>onboarding_tutorial_hotkey_tip</key>
+	<string>你可以随时在设置或菜单栏里更改这个快捷键。</string>
+	<key>onboarding_tutorial_minimalist_description</key>
+	<string>静静运行在菜单栏，需要时才出现。</string>
+	<key>onboarding_tutorial_minimalist_title</key>
+	<string>极简</string>
+	<key>onboarding_tutorial_next</key>
+	<string>下一步</string>
+	<key>onboarding_tutorial_polish_description</key>
+	<string>将零散的想法变成专业文本。修正语法，去除口头禅，以及更多。</string>
+	<key>onboarding_tutorial_polish_title</key>
+	<string>润色</string>
+	<key>onboarding_tutorial_privacy_subtitle</key>
+	<string>强大，却无形。</string>
+	<key>onboarding_tutorial_privacy_title</key>
+	<string>隐私与设计</string>
+	<key>onboarding_tutorial_private_description</key>
+	<string>Whisper 100% 本地运行，音频永不离开你的 Mac。</string>
+	<key>onboarding_tutorial_private_title</key>
+	<string>私密本地</string>
+	<key>onboarding_tutorial_right_option</key>
+	<string>右 Option</string>
+	<key>onboarding_tutorial_shortcut_label</key>
+	<string>你的快捷键：</string>
+	<key>onboarding_tutorial_speak</key>
+	<string>说话</string>
+	<key>onboarding_tutorial_start_button</key>
+	<string>开始使用吼蛙</string>
+	<key>onboarding_tutorial_step1</key>
+	<string>在任何时候按下右侧 Option 键，就会开始听你说话。</string>
+	<key>onboarding_tutorial_step2</key>
+	<string>说完你想表达的内容后，再按一次右侧 Option 键结束。</string>
+	<key>onboarding_tutorial_step3</key>
+	<string>如果光标在输入框里，吼蛙 会直接帮你打字；否则结果会复制到剪贴板，随时粘贴到任意应用。</string>
+	<key>onboarding_tutorial_subtitle</key>
+	<string>下面介绍如何开始说话，以及 AI 如何帮你润色结果。</string>
+	<key>onboarding_tutorial_title</key>
+	<string>开始使用 吼蛙</string>
+	<key>onboarding_tutorial_translate_description</key>
+	<string>支持混合语言听写，输出为英文、简体中文、西班牙语、克林贡语、摩斯电码、形式逻辑、Python、🐶、🐱，等等。</string>
+	<key>onboarding_tutorial_translate_title</key>
+	<string>翻译</string>
+	<key>open_hoah_dashboard</key>
+	<string>打开吼蛙</string>
+	<key>or</key>
+	<string>或</string>
+	<key>polish_combined_mode_active</key>
+	<string>高情商正式写作已启用</string>
+	<key>polish_enhancement_recommendation</key>
+	<string>提示：大多数情况下建议保持关闭。仅在需要更强增强效果时启用。</string>
+	<key>polish_formal_writing_hint</key>
+	<string>改写为正式、简洁、礼貌的书面风格，适合专业沟通。</string>
+	<key>polish_formal_writing_toggle</key>
+	<string>写作模式</string>
+	<key>polish_professional_hint</key>
+	<string>转换为委婉、圆融、高情商的职场沟通方式。</string>
+	<key>polish_professional_toggle</key>
+	<string>高情商模式</string>
+	<key>second_translation_toggle_hint</key>
+	<string>显示第二个翻译选项，可设置不同的目标语言。</string>
+	<key>second_translation_toggle_title</key>
+	<string>启用第二翻译</string>
+	<key>prompt_basic_description</key>
+	<string>基础清理：只去口癖/结巴/明显误听，尽量不改写句子结构与措辞（不翻译）。</string>
+	<key>prompt_basic_title</key>
+	<string>基础</string>
+	<key>prompt_email_description</key>
+	<string>礼貌简洁的邮件，按上下文纠错，信息原样保留。</string>
+	<key>prompt_email_title</key>
+	<string>邮件草稿</string>
+	<key>prompt_formal_description</key>
+	<string>正式书面化：礼貌精简，修正同音/ASR 误听，保留英文专有名词等细节。</string>
+	<key>prompt_formal_title</key>
+	<string>写作</string>
+	<key>prompt_polish_description</key>
+	<string>润色：提升清晰与流畅，修正明显 ASR/语法/标点，可轻微改写以更通顺；保留多语言混排与技术细节（不翻译）。</string>
+	<key>prompt_polish_title</key>
+	<string>润色</string>
+	<key>prompt_professional_description</key>
+	<string>职场高情商沟通：将批评转化为建设性反馈，委婉圆融，注重面子和和谐。</string>
+	<key>prompt_professional_title</key>
+	<string>高情商</string>
+	<key>prompt_qna_description</key>
+	<string>问答：直接回答问题；需要时用步骤/代码块结构化输出，少废话。</string>
+	<key>prompt_qna_title</key>
+	<string>问答</string>
+	<key>prompt_summarize_description</key>
+	<string>精炼要点，按上下文纠错，保留关键信息。</string>
+	<key>prompt_summarize_title</key>
+	<string>总结</string>
+	<key>prompt_terminal_description</key>
+	<string>从语音生成安全、简洁的英文终端命令。</string>
+	<key>prompt_terminal_title</key>
+	<string>终端</string>
+	<key>prompt_todo_description</key>
+	<string>把语音转成可执行的任务要点；取消的内容不要列出。</string>
+	<key>prompt_todo_title</key>
+	<string>待办清单</string>
+	<key>prompt_translate_description</key>
+	<string>稍作润色后将语音内容翻译成目标语言，仅输出翻译文本，不添加额外内容。</string>
+	<key>prompt_translate_title</key>
+	<string>翻译</string>
+	<key>prompt_translate2_description</key>
+	<string>第二翻译选项，无需来回切换即可进行双向面对面对话翻译。</string>
+	<key>prompt_translate2_title</key>
+	<string>翻译 2</string>
+	<key>provider_status_not_configured</key>
+	<string>未配置</string>
+	<key>provider_status_ready</key>
+	<string>已就绪</string>
+	<key>provider_status_with_name</key>
+	<string>%@（%@）</string>
+	<key>qa_output_heading_answer</key>
+	<string>回答：</string>
+	<key>qa_output_heading_question</key>
+	<string>问题：</string>
+	<key>qa_show_original_hint</key>
+	<string>在 Q&amp;A 输出顶部附上提问，再给出答案。</string>
+	<key>qa_show_original_toggle</key>
+	<string>在回答前显示原始问题</string>
+	<key>recorder_recent_copied</key>
+	<string>已复制到剪贴板</string>
+	<key>recorder_recent_copy_action</key>
+	<string>复制并关闭</string>
+	<key>recorder_recent_copy_failed</key>
+	<string>复制失败</string>
+	<key>recorder_recent_copy_latest</key>
+	<string>复制最新</string>
+	<key>recorder_recent_empty</key>
+	<string>暂无历史记录</string>
+	<key>recorder_recent_header</key>
+	<string>最近 3 条记录</string>
+	<key>translation_language_arabic</key>
+	<string>阿拉伯语</string>
+	<key>translation_language_custom</key>
+	<string>自定义…</string>
+	<key>translation_language_english</key>
+	<string>英文</string>
+	<key>translation_language_french</key>
+	<string>法语</string>
+	<key>translation_language_german</key>
+	<string>德语</string>
+	<key>translation_language_japanese</key>
+	<string>日语</string>
+	<key>translation_language_korean</key>
+	<string>韩语</string>
+	<key>translation_language_portuguese</key>
+	<string>葡萄牙语</string>
+	<key>translation_language_russian</key>
+	<string>俄语</string>
+	<key>translation_language_simplified_chinese</key>
+	<string>简体中文</string>
+	<key>translation_language_spanish</key>
+	<string>西班牙语</string>
+	<key>translation_output_heading_original</key>
+	<string>原文：</string>
+	<key>translation_show_original_hint</key>
+	<string>在翻译结果下方附上原始转录，方便对照。</string>
+	<key>translation_show_original_toggle</key>
+	<string>在输出中显示原文</string>
+	<key>translation_target_custom_hint</key>
+	<string>输入任何想翻译成的语言。模型不支持会跳过；支持的话按你填写的翻译。</string>
+	<key>translation_target_custom_placeholder</key>
+	<string>输入语言名称（如：葡萄牙语（巴西））</string>
+	<key>translation_target_description</key>
+	<string>翻译模式生效时会把你的语音直接翻译成此语言。</string>
+	<key>translation_target_explore_creative</key>
+	<string>探索脑洞大开的目标语言</string>
+	<key>translation_target_picker_label</key>
+	<string>选择语言</string>
+	<key>translation_target_title</key>
+	<string>目标语言</string>
+	<key>ui_theme_basic</key>
+	<string>基础</string>
+	<key>ui_theme_cyberpunk</key>
+	<string>赛博朋克</string>
+	<key>ui_theme_desc</key>
+	<string>切换界面风格，无需重启。</string>
+	<key>ui_theme_liquid_glass</key>
+	<string>毛玻璃</string>
+	<key>ui_theme_title</key>
+	<string>界面主题</string>
+	<key>ui_theme_vintage</key>
+	<string>复古纸张</string>
+	<key>user_profile_character_count</key>
+	<string>%d / 500</string>
+	<key>user_profile_placeholder</key>
+	<string>姓名：张三
+职位：软件工程师
+行业：科技
+技术栈：Swift、Python、JavaScript
+沟通风格：简洁直接
+语言：中文、英语</string>
+	<key>words generated</key>
+	<string>生成的字数</string>
+	<key>|</key>
+	<string>|</string>
+	<key>•</key>
+	<string>•</string>
+	<key>➕</key>
+	<string>➕</string>
+	<!-- 音频输入模式 -->
+	<key>audio_input_mode_system_default_title</key>
+	<string>系统默认</string>
+	<key>audio_input_mode_custom_title</key>
+	<string>自定义设备</string>
+	<key>audio_input_mode_prioritized_title</key>
+	<string>优先级</string>
+	<key>audio_input_mode_system_default_desc</key>
+	<string>使用系统默认输入设备</string>
+	<key>audio_input_mode_custom_desc</key>
+	<string>选择特定输入设备</string>
+	<key>audio_input_mode_prioritized_desc</key>
+	<string>设置设备优先级顺序</string>
+	<key>简体中文</key>
+	<string>简体中文</string>
+	<key>🌍 Current Configuration</key>
+	<string>🌍 当前配置</string>
+	<key>🔑 API Keys</key>
+	<string>🔑 API Key</string>
+	<key>mode_settings_title</key>
+	<string>模式设置</string>
+	<key>Only Doubao Seed is supported here. The app will auto-resolve a working Model ID.</key>
+	<string>这里只支持豆包 Seed。应用会自动解析可用的模型 ID。</string>
+	<key>Resolved Model ID: %@</key>
+	<string>已解析模型 ID：%@</string>
+	<key>Only API Key required. The app will try valid Model IDs automatically.</key>
+	<string>只需填写 API Key。应用会自动尝试可用的模型 ID。</string>
+	<key>Open Ark Console</key>
+	<string>打开方舟控制台</string>
+	<key>Tip: Auto-resolve may fail if your project doesn’t have a matching Model ID. Check Ark Console → Model list and ensure the API Key belongs to the same project.</key>
+	<string>提示：如果你的项目下没有匹配的模型 ID，自动解析可能会失败。请在方舟控制台的模型列表中确认模型 ID，并确保 API Key 属于同一个项目。</string>
+	<key>Doubao Seed (Auto)</key>
+	<string>豆包 Seed（自动）</string>
+	<key>Doubao Pro 32K (Auto)</key>
+	<string>豆包 Pro 32K（自动）</string>
+	<key>Doubao Pro 128K (Auto)</key>
+	<string>豆包 Pro 128K（自动）</string>
+	<key>Doubao Lite 32K (Auto)</key>
+	<string>豆包 Lite 32K（自动）</string>
+	<key>Doubao Lite 128K (Auto)</key>
+	<string>豆包 Lite 128K（自动）</string>
+	<key>Finishing</key>
+	<string>收尾中</string>
+	<key>Another clipboard AI Action is still running</key>
+	<string>另一个剪贴板 AI 指令仍在运行中</string>
+	<key>Clipboard is empty</key>
+	<string>剪贴板为空</string>
+	<key>Clipboard Action</key>
+	<string>Clipboard Action</string>
+	<key>Customize Clipboard Action Shortcuts</key>
+	<string>自定义 Clipboard Action 快捷键</string>
+	<key>Default is Option + Shift + number. Record a new shortcut for any action if you want a different mapping.</key>
+	<string>默认使用 Option + Shift + 数字。你可以为任意指令录制新的快捷键映射。</string>
+	<key>Default shortcuts use ⌥⇧1–0. You can customize each slot below.</key>
+	<string>默认快捷键使用 ⌥⇧1–0。你也可以在下方自定义每个槽位。</string>
+	<key>Applying AI Action: %@</key>
+	<string>正在应用 AI 指令：%@</string>
+	<key>Action %d</key>
+	<string>指令 %d</string>
+	<key>Shortcut Slot %d</key>
+	<string>快捷键槽位 %d</string>
+	<key>No matching AI Action yet</key>
+	<string>当前还没有对应的 AI 指令</string>
+	<key>Please add a valid AI configuration first</key>
+	<string>请先添加一个可用的 AI 配置</string>
+	<key>Run the current clipboard text through an AI Action and paste the result into the focused input.</key>
+	<string>将当前剪贴板文本交给 AI 指令处理，并将结果粘贴到当前聚焦的输入框。</string>
+	<key>No AI Action assigned to shortcut %@</key>
+	<string>快捷键 %@ 没有对应的 AI 指令</string>
+	<key>This feature is disabled by default. Once enabled, the shortcut works globally while HoAh is running.</key>
+	<string>此功能默认关闭。开启后，只要 HoAh 正在运行，快捷键就会全局生效。</string>
+	<key>Source</key>
+	<string>来源</string>
+	<key>Clipboard AI Action</key>
+	<string>剪贴板 AI 指令</string>
+</dict>
+</plist>

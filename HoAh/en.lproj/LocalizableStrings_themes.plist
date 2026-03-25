@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>ui_theme_basic</key>
+    <string>Basic</string>
+    <key>ui_theme_liquid_glass</key>
+    <string>Frosted Glass</string>
+    <key>ui_theme_cyberpunk</key>
+    <string>Cyberpunk</string>
+    <key>ui_theme_vintage</key>
+    <string>Vintage</string>
+</dict>
+</plist>

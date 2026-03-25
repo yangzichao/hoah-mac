@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>HoAh</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>wav</string>
+				<string>mp3</string>
+				<string>m4a</string>
+				<string>aiff</string>
+				<string>mp4</string>
+				<string>mov</string>
+				<string>aac</string>
+				<string>flac</string>
+				<string>caf</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Audio/Video File</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.audio</string>
+				<string>public.movie</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleShortVersionString</key>
+	<string>3.6.7</string>
+	<key>CFBundleVersion</key>
+	<string>367</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>LSUIElement</key>
+	<false/>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>HoAh needs to interact with your browser to detect the current website for applying website-specific configurations.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>HoAh needs access to your microphone to record audio for transcription.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+</dict>
+</plist>

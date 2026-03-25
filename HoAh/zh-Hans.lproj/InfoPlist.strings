@@ -1,0 +1,6 @@
+/* Localized versions of Info.plist keys */
+
+CFBundleDisplayName = "吼蛙";
+CFBundleName = "吼蛙";
+NSMicrophoneUsageDescription = "吼蛙需要访问你的麦克风以录制音频进行转录。";
+NSAppleEventsUsageDescription = "吼蛙需要与你的浏览器交互以检测当前网站，从而应用特定网站的配置。";
