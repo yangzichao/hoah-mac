@@ -169,6 +169,7 @@ private struct KeyChip: View {
 struct ClipboardActionShortcutsSection: View {
     @EnvironmentObject private var appSettings: AppSettingsStore
     @Environment(\.theme) private var theme
+    @State private var isExpanded = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -201,19 +202,26 @@ struct ClipboardActionShortcutsSection: View {
 
                 Spacer()
 
-                Toggle("", isOn: $appSettings.isClipboardEnhancementShortcutsEnabled)
-                    .toggleStyle(ThemedSwitchToggleStyle(theme: theme))
-                    .labelsHidden()
-            }
+                HStack(spacing: 10) {
+                    Button {
+                        withAnimation(.spring(response: 0.35, dampingFraction: 0.88)) {
+                            isExpanded.toggle()
+                        }
+                    } label: {
+                        Image(systemName: "chevron.down")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(theme.textSecondary)
+                            .rotationEffect(.degrees(isExpanded ? 0 : -90))
+                            .frame(width: 28, height: 28)
+                            .background(theme.controlBackground.opacity(0.55))
+                            .clipShape(Circle())
+                    }
+                    .buttonStyle(.plain)
 
-            VStack(alignment: .leading, spacing: 6) {
-                Text(LocalizedStringKey("This feature is disabled by default. Once enabled, the shortcut works globally while HoAh is running."))
-                    .font(theme.typography.caption)
-                    .foregroundColor(theme.textSecondary)
-
-                Text(LocalizedStringKey("Default shortcuts use ⌥⇧1–0. You can customize each slot below."))
-                    .font(theme.typography.caption)
-                    .foregroundColor(theme.textSecondary)
+                    Toggle("", isOn: $appSettings.isClipboardEnhancementShortcutsEnabled)
+                        .toggleStyle(ThemedSwitchToggleStyle(theme: theme))
+                        .labelsHidden()
+                }
             }
 
             HStack(spacing: 8) {
@@ -222,12 +230,33 @@ struct ClipboardActionShortcutsSection: View {
                 KeyChip(label: "1 – 0", isActive: appSettings.isClipboardEnhancementShortcutsEnabled)
             }
 
-            if appSettings.isClipboardEnhancementShortcutsEnabled {
-                ClipboardActionShortcutEditor()
+            if isExpanded {
+                VStack(alignment: .leading, spacing: 14) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(LocalizedStringKey("This feature is disabled by default. Once enabled, the shortcut works globally while HoAh is running."))
+                            .font(theme.typography.caption)
+                            .foregroundColor(theme.textSecondary)
+
+                        Text(LocalizedStringKey("Default shortcuts use ⌥⇧1–0. You can customize each slot below."))
+                            .font(theme.typography.caption)
+                            .foregroundColor(theme.textSecondary)
+                    }
+
+                    if appSettings.isClipboardEnhancementShortcutsEnabled {
+                        ClipboardActionShortcutEditor()
+                    }
+                }
+                .transition(
+                    .asymmetric(
+                        insertion: .opacity.combined(with: .move(edge: .top)),
+                        removal: .opacity
+                    )
+                )
             }
         }
         .padding(16)
         .background(CardBackground(isSelected: false))
+        .animation(.easeInOut(duration: 0.25), value: isExpanded)
     }
 }
 
