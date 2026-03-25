@@ -108,7 +108,9 @@ class SettingsCoordinator: ObservableObject {
         // System mute - no side effects needed (services read directly)
         // Pause media - no side effects needed (services read directly)
         
-        // AI Enhancement - affects notifications
+        // AI Enhancement - affects notifications.
+        // These NotificationCenter bridges are still required for non-SwiftUI consumers
+        // and older app surfaces that have not been rewritten to observe AppSettingsStore.
         store.isAIEnhancementEnabledPublisher
             .sink { [weak self] enabled in
                 self?.handleAIEnhancementChange(enabled)

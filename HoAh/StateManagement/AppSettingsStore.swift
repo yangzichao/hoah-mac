@@ -67,7 +67,9 @@ class AppSettingsStore: ObservableObject {
     /// Whether to preserve transcript in clipboard after recording
     @Published var preserveTranscriptInClipboard: Bool {
         didSet {
-            // Keep legacy key in sync for runtime clipboard behavior in CursorPaster.
+            // Keep the legacy key in sync during the state-management migration.
+            // CursorPaster is still a static utility with no injected AppSettingsStore,
+            // so paste behavior must continue to work even before all callers are moved over.
             UserDefaults.hoah.set(preserveTranscriptInClipboard, forKey: "preserveTranscriptInClipboard")
             saveSettings()
         }
@@ -928,6 +930,8 @@ class AppSettingsStore: ObservableObject {
 
     /// Keeps legacy UserDefaults keys synchronized for runtime paths that still read them directly.
     /// This avoids behavior drift while we migrate all callers to AppSettingsStore.
+    /// The duplication is intentional for now: the app has a mix of injected services,
+    /// static utilities, and older SwiftUI views that still read legacy keys directly.
     private func syncLegacyUserDefaults(from state: AppSettingsState) {
         UserDefaults.hoah.set(state.hasCompletedOnboarding, forKey: "HasCompletedOnboarding")
         UserDefaults.hoah.set(state.appInterfaceLanguage, forKey: "AppInterfaceLanguage")

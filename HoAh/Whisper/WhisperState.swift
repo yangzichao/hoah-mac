@@ -277,6 +277,9 @@ class WhisperState: NSObject, ObservableObject {
 
         // Play stop sound when transcription starts with a small delay
         Task {
+            // Read the bridged legacy key during the AppSettingsStore migration.
+            // Sound/recording flows still pass through static helpers and async tasks where
+            // threading injected settings through every call site would be invasive.
             let isSystemMuteEnabled = UserDefaults.hoah.bool(forKey: "isSystemMuteEnabled")
             if isSystemMuteEnabled {
                 try? await Task.sleep(nanoseconds: 200_000_000) // 200 milliseconds delay
@@ -615,6 +618,9 @@ class WhisperState: NSObject, ObservableObject {
         }
 
         Task {
+            // Same bridge rationale as the batch transcription path above: this realtime
+            // finalization task still relies on the legacy key until recorder flows are
+            // fully store-backed end to end.
             let isSystemMuteEnabled = UserDefaults.hoah.bool(forKey: "isSystemMuteEnabled")
             if isSystemMuteEnabled {
                 try? await Task.sleep(nanoseconds: 200_000_000)
@@ -860,6 +866,8 @@ class WhisperState: NSObject, ObservableObject {
     }
 
     private func normalizedRealtimeLanguageCode() -> String? {
+        // Realtime services still consume the legacy selected-language key because model
+        // selection and language selection are not yet sourced exclusively from the store.
         let selectedLanguage = UserDefaults.hoah.string(forKey: "SelectedLanguage") ?? "auto"
         guard selectedLanguage != "auto", !selectedLanguage.isEmpty else {
             return nil
