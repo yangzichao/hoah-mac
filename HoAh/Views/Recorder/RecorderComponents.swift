@@ -455,6 +455,8 @@ struct RecorderStatusDisplay: View {
     }
     
     var body: some View {
+        let visualizerSpec = theme.visualizer
+
         Group {
             if currentState == .enhancing {
                 VStack(spacing: 2) {
@@ -490,11 +492,15 @@ struct RecorderStatusDisplay: View {
                 AudioVisualizer(
                     audioMeter: audioMeter,
                     color: theme.textPrimary,
-                    isActive: currentState == .recording
+                    isActive: currentState == .recording,
+                    spec: visualizerSpec
                 )
                 .scaleEffect(y: menuBarHeight != nil ? min(1.0, (menuBarHeight! - 8) / 25) : 1.0, anchor: .center)
             } else {
-                StaticVisualizer(color: theme.textPrimary)
+                StaticVisualizer(
+                    color: theme.textPrimary,
+                    spec: visualizerSpec
+                )
                     .scaleEffect(y: menuBarHeight != nil ? min(1.0, (menuBarHeight! - 8) / 25) : 1.0, anchor: .center)
             }
         }

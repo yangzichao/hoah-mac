@@ -490,7 +490,7 @@ extension ThemePalette {
         sidebarItemIcon: Color.black.opacity(0.6),
         sidebarItemIconSelected: ThemePalette.systemAccent, // Accent color for icon
         
-        // Sleek, modern glass look
+        // Sleek, modern glass look with subtle flow
         visualizer: ThemeVisualizerSpec(
             style: .bars,
             barCount: 14,
@@ -500,7 +500,10 @@ extension ThemePalette {
             maxHeight: 28.0,
             cornerRadius: 1.5,
             sensitivitySeed: 101, // Glassy seed
-            amplitudeBoost: 1.2
+            amplitudeBoost: 1.2,
+            flowIntensity: 0.28,
+            flowFrequency: 0.75,
+            phaseStep: 0.14
         ),
         miniRecorder: .standard
     )
@@ -645,7 +648,10 @@ extension ThemePalette {
             maxHeight: 34.0,
             cornerRadius: 0.0,
             sensitivitySeed: 2077, // Cyberpunk seed
-            amplitudeBoost: 1.5 // Cyberpunk high energy
+            amplitudeBoost: 1.5, // Cyberpunk high energy
+            flowIntensity: 0.0,
+            flowFrequency: 0.8,
+            phaseStep: 0.15
         ),
         // Slightly wider to accommodate more bars if needed, but 184 fits 16 bars of width 3+1.5=72px easily.
         // Let's make it slightly wider just to look more "HUD" like.
@@ -786,7 +792,7 @@ extension ThemePalette {
         sidebarItemIcon: Color(red: 0.4, green: 0.35, blue: 0.3),
         sidebarItemIconSelected: Color(red: 0.2, green: 0.15, blue: 0.1),
         
-        // Organic/Ink look: Sparse, very round (dots), wider spacing
+        // Organic/Ink look: sparse rounded dots with gentle lateral flow
         visualizer: ThemeVisualizerSpec(
             style: .bars,
             barCount: 8,
@@ -796,7 +802,10 @@ extension ThemePalette {
             maxHeight: 25.0,
             cornerRadius: 2.5, // Fully rounded
             sensitivitySeed: 1980, // Vintage seed
-            amplitudeBoost: 2.5 // High sensitivity for ink dots
+            amplitudeBoost: 2.5, // High sensitivity for ink dots
+            flowIntensity: 0.22,
+            flowFrequency: 0.55,
+            phaseStep: 0.11
         ),
         miniRecorder: .standard
     )
@@ -844,6 +853,9 @@ struct ThemeVisualizerSpec: Codable, Hashable {
     let cornerRadius: Double
     let sensitivitySeed: Int // Deterministic seed for bar height randomization
     let amplitudeBoost: Double // Multiplier for audio level sensitivity
+    let flowIntensity: Double // Extra phase-driven movement layered on top of the base style
+    let flowFrequency: Double // Horizontal spacing of the phase wave
+    let phaseStep: Double // How quickly the phase advances each update
     
     // Helper to generate a default spec matching the original hardcoded values
     static let standard = ThemeVisualizerSpec(
@@ -855,7 +867,10 @@ struct ThemeVisualizerSpec: Codable, Hashable {
         maxHeight: 32.0,
         cornerRadius: 1.7,
         sensitivitySeed: 42,
-        amplitudeBoost: 1.0
+        amplitudeBoost: 1.0,
+        flowIntensity: 0.3,
+        flowFrequency: 0.9,
+        phaseStep: 0.15
     )
 }
 
