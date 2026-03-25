@@ -19,7 +19,14 @@ struct MenuBarView: View {
     private let menuBarLogger = Logger(subsystem: "com.yangzichao.hoah", category: "MenuBar")
     
     private var runtimeErrorMessage: String? {
-        enhancementService.lastRuntimeErrorMessage
+        guard let message = enhancementService.lastRuntimeErrorMessage else {
+            return nil
+        }
+        if let errorConfigId = enhancementService.lastRuntimeErrorConfigId,
+           errorConfigId != appSettings.activeAIConfigurationId {
+            return nil
+        }
+        return message
     }
 
     private var runtimeErrorConfigName: String {
