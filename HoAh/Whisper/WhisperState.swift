@@ -68,6 +68,7 @@ class WhisperState: NSObject, ObservableObject {
     private var recordingSessionModel: (any TranscriptionModel)?
     private var lastRealtimeStreamingFailure: Error?
     private var isRealtimeRecordingSession = false
+    private var isShuttingDown = false
     
     let modelContext: ModelContext
     
@@ -889,5 +890,28 @@ class WhisperState: NSObject, ObservableObject {
         case (false, false):
             return "\(committed) \(partial)"
         }
+    }
+
+    func shutdownForTermination() async {
+        guard !isShuttingDown else { return }
+        isShuttingDown = true
+
+        logger.notice("Shutting down WhisperState before app termination")
+        NotificationCenter.default.removeObserver(self)
+        NSWorkspace.shared.notificationCenter.removeObserver(self)
+        WhisperModelWarmupCoordinator.shared.cancelAllWarmups()
+
+        cancelRecordingTimeout()
+        await recorder.stopRecording()
+        hideRecorderPanel()
+        await cleanupRealtimeStreamingSession()
+        await cleanupModelResources()
+
+        isMiniRecorderVisible = false
+        shouldCancelRecording = false
+        liveCommittedTranscript = ""
+        livePartialTranscript = ""
+        miniRecorderError = nil
+        recordingState = .idle
     }
 }

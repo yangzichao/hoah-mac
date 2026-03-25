@@ -8,6 +8,9 @@ final class WhisperModelWarmupCoordinator: ObservableObject {
     @Published private(set) var warmingModels: Set<String> = []
     private var warmupTimestamps: [String: Date] = [:]
     private var failedWarmups: Set<String> = []
+    private var warmupTasks: [String: Task<Void, Never>] = [:]
+    private var retryTasks: [String: Task<Void, Never>] = [:]
+    private var isShuttingDown = false
     private let retryDelayNanoseconds: UInt64 = 5_000_000_000
     private let warmupStaleness: TimeInterval = 30 * 60
     
@@ -24,6 +27,7 @@ final class WhisperModelWarmupCoordinator: ObservableObject {
         allowRetry: Bool = true,
         force: Bool = false
     ) {
+        guard !isShuttingDown else { return }
         guard shouldWarmup(modelName: model.name),
               !warmingModels.contains(model.name) else {
             return
@@ -38,12 +42,20 @@ final class WhisperModelWarmupCoordinator: ObservableObject {
             whisperState.logger.info("Scheduling warmup for \(model.name, privacy: .public) (\(reason))")
         }
         
-        Task {
+        warmupTasks[model.name]?.cancel()
+        let warmupTask = Task {
             var didSucceed = false
             do {
                 try await runWarmup(for: model, whisperState: whisperState)
                 didSucceed = true
             } catch {
+                guard !Task.isCancelled, !self.isShuttingDown else {
+                    await MainActor.run {
+                        self.warmingModels.remove(model.name)
+                        self.warmupTasks[model.name] = nil
+                    }
+                    return
+                }
                 await MainActor.run {
                     if !failedWarmups.contains(model.name) {
                         NotificationManager.shared.showNotification(
@@ -58,13 +70,17 @@ final class WhisperModelWarmupCoordinator: ObservableObject {
             
             await MainActor.run {
                 self.warmingModels.remove(model.name)
+                self.warmupTasks[model.name] = nil
                 if didSucceed {
                     self.warmupTimestamps[model.name] = Date()
                     self.failedWarmups.remove(model.name)
-                } else if allowRetry {
-                    Task {
+                } else if allowRetry, !self.isShuttingDown {
+                    self.retryTasks[model.name]?.cancel()
+                    self.retryTasks[model.name] = Task {
                         try? await Task.sleep(nanoseconds: retryDelayNanoseconds)
+                        guard !Task.isCancelled else { return }
                         await MainActor.run {
+                            self.retryTasks[model.name] = nil
                             self.scheduleWarmup(
                                 for: model,
                                 whisperState: whisperState,
@@ -77,6 +93,20 @@ final class WhisperModelWarmupCoordinator: ObservableObject {
                 }
             }
         }
+        warmupTasks[model.name] = warmupTask
+    }
+
+    func cancelAllWarmups() {
+        isShuttingDown = true
+        for task in warmupTasks.values {
+            task.cancel()
+        }
+        for task in retryTasks.values {
+            task.cancel()
+        }
+        warmupTasks.removeAll()
+        retryTasks.removeAll()
+        warmingModels.removeAll()
     }
     
     private func runWarmup(for model: LocalModel, whisperState: WhisperState) async throws {

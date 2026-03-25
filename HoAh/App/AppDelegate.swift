@@ -8,6 +8,8 @@ import Sparkle
 class AppDelegate: NSObject, NSApplicationDelegate {
     weak var menuBarManager: MenuBarManager?
     weak var appSettings: AppSettingsStore?
+    weak var whisperState: WhisperState?
+    private var isTerminationCleanupInProgress = false
     
     #if ENABLE_SPARKLE
     private let automaticUpdateCheckDefaultsKey = "sparkle.lastAutomaticScheduledUpdateCheck"
@@ -58,6 +60,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return false
+    }
+
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        guard !isTerminationCleanupInProgress, let whisperState else {
+            return .terminateNow
+        }
+
+        isTerminationCleanupInProgress = true
+
+        Task { @MainActor [weak self] in
+            await whisperState.shutdownForTermination()
+            self?.isTerminationCleanupInProgress = false
+            sender.reply(toApplicationShouldTerminate: true)
+        }
+
+        return .terminateLater
     }
     
     #if ENABLE_SPARKLE
