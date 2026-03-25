@@ -37,6 +37,39 @@ if [ -z "$SIGN_IDENTITY" ] || [ -z "$TEAM_ID" ]; then
   exit 1
 fi
 
+resolve_codesign_identity() {
+  local requested_identity="$1"
+  local team_id="$2"
+
+  if security find-identity -v -p codesigning 2>/dev/null | grep -Fq "$requested_identity"; then
+    printf '%s\n' "$requested_identity"
+    return 0
+  fi
+
+  local detected_identity=""
+  if [ -n "$team_id" ]; then
+    detected_identity="$(security find-identity -v -p codesigning 2>/dev/null | sed -n 's/.*"\(Developer ID Application: .*('"$team_id"')\)".*/\1/p' | head -n 1)"
+  fi
+
+  if [ -z "$detected_identity" ]; then
+    detected_identity="$(security find-identity -v -p codesigning 2>/dev/null | sed -n 's/.*"\(Developer ID Application: .*\)".*/\1/p' | head -n 1)"
+  fi
+
+  if [ -n "$detected_identity" ]; then
+    echo "⚠️  Requested SIGN_IDENTITY not found in keychain: $requested_identity"
+    echo "==> Falling back to detected signing identity: $detected_identity"
+    printf '%s\n' "$detected_identity"
+    return 0
+  fi
+
+  echo "✖️  No usable Developer ID Application identity found in keychain." >&2
+  echo "==> Available signing identities:" >&2
+  security find-identity -v -p codesigning >&2 || true
+  return 1
+}
+
+SIGN_IDENTITY="$(resolve_codesign_identity "$SIGN_IDENTITY" "$TEAM_ID")"
+
 echo "==> Building app (Release, Ad-Hoc)..."
 xcodebuild -scheme HoAh -configuration Release \
   CODE_SIGN_IDENTITY="-" CODE_SIGN_STYLE=Manual PROVISIONING_PROFILE_SPECIFIER="" PROVISIONING_PROFILE="" \
