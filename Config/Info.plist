@@ -33,9 +33,9 @@
 		</dict>
 	</array>
 	<key>CFBundleShortVersionString</key>
-	<string>3.7.0</string>
+	<string>3.7.1</string>
 	<key>CFBundleVersion</key>
-	<string>370</string>
+	<string>371</string>
 	<key>LSUIElement</key>
 	<false/>
 	<key>NSAppleEventsUsageDescription</key>

@@ -1,3 +1,12 @@
+# HoAh Dictation v3.7.1
+
+### Improvements
+* **Clipboard Action UI**: Added a collapsible configuration section so the Clipboard Action card stays compact until you need the detailed shortcut editor.
+* **Whisper Shutdown Safety**: Improved app termination handling to reduce crashes while local Whisper warmup or Metal-backed model resources are still winding down.
+* **Theme Selection Cleanup**: Removed unsupported theme options from the UI and aligned the default theme behavior on appearance.
+
+---
+
 # HoAh Dictation v3.7.0
 
 ### New Features
