@@ -1,0 +1,7 @@
+// App Store 签名配置
+// 用于覆盖项目中的 Developer ID 设置
+
+CODE_SIGN_STYLE = Manual
+DEVELOPMENT_TEAM = Y646LMR36U
+CODE_SIGN_IDENTITY = 3rd Party Mac Developer Application: Zichao Yang (Y646LMR36U)
+PROVISIONING_PROFILE_SPECIFIER = com.yangzichao.hoah AppStore

@@ -1,0 +1,1522 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>%d hr</key>
+	<string>%d hr</string>
+	<key>%d hr %d min</key>
+	<string>%d hr %d min</string>
+	<key>%d min</key>
+	<string>%d min</string>
+	<key>1 day</key>
+	<string>1 day</string>
+	<key>1 hour</key>
+	<string>1 hour</string>
+	<key>14 days</key>
+	<string>14 days</string>
+	<key>3 days</key>
+	<string>3 days</string>
+	<key>30 days</key>
+	<string>30 days</string>
+	<key>7 days</key>
+	<string>7 days</string>
+	<key>A New Way to Type</key>
+	<string>A New Way to Type</string>
+	<key>HoAh is the cleanest, not-for-profit speech-to-text tool.</key>
+	<string>HoAh is the cleanest, not-for-profit speech-to-text tool.</string>
+	<key>Multilingual support · Fun AI transcription enhancements</key>
+	<string>Multilingual support · Fun AI transcription enhancements</string>
+	<key>Multilingual support · Fun AI transcription enhancements · Bring Your Own Key (BYOK)</key>
+	<string>Multilingual support · Fun AI transcription enhancements · Bring Your Own Key (BYOK)</string>
+	<key>AI Action failed: %@</key>
+	<string>AI Action failed: %@</string>
+	<key>AI Config: %@</key>
+	<string>AI Config: %@</string>
+	<key>AI Configurations</key>
+	<string>AI Configurations</string>
+	<key>AI Enhancement</key>
+	<string>AI Action</string>
+	<key>AI Enhancement Provider</key>
+	<string>AI Action Provider</string>
+	<key>AI Enhancement Provider Configuration</key>
+	<string>AI Action Provider Configuration</string>
+	<key>AI Enhancement Provider Integration</key>
+	<string>AI Action Provider Integration</string>
+	<key>AI Enhancement is off. Turn it on and use this configuration?</key>
+	<string>AI Action is off. Turn it on and use this configuration?</string>
+	<key>AI Enhancement needs at least one valid configuration before it can be turned on.</key>
+	<string>AI Action needs at least one valid configuration before it can be turned on.</string>
+	<key>AI Enhancement: Off</key>
+	<string>AI Action: Off</string>
+	<key>AI Enhancement: On</key>
+	<string>AI Action: On</string>
+	<key>AI Mode</key>
+	<string>AI Action</string>
+	<key>AI Action</key>
+	<string>AI Action</string>
+	<key>ai_action_description</key>
+	<string>Use AI to enhance, translate, or transform your transcriptions with custom actions.</string>
+	<key>AI Model</key>
+	<string>AI Model</string>
+	<key>AI Models</key>
+	<string>Dictation Models</string>
+	<key>Dictation Models</key>
+	<string>Dictation Models</string>
+	<key>dictation_models_description</key>
+	<string>Choose a speech-to-text model to convert your voice into text. Local models run privately on your device, while cloud models offer higher accuracy.</string>
+	<key>AI Provider</key>
+	<string>AI Provider</string>
+	<key>AI Provider Integration</key>
+	<string>AI Provider Integration</string>
+	<key>AI enhancement lets you pass the transcribed audio through LLMs to post-process using different prompts suitable for different use cases like e-mails, summary, writing, etc.</key>
+	<string>AI Action lets you post-process your transcriptions with LLMs using different actions for emails, summaries, writing, and more.</string>
+	<key>API Endpoint URL</key>
+	<string>API Endpoint URL</string>
+	<key>API Endpoint URL (e.g., https://api.example.com/v1/chat/completions)</key>
+	<string>API Endpoint URL (e.g., https://api.example.com/v1/chat/completions)</string>
+	<key>API Key</key>
+	<string>API Key</string>
+	<key>API Key (ABSKQmVkcm9ja0FQSUtleS1...)</key>
+	<string>API Key (ABSKQmVkcm9ja0FQSUtleS1...)</string>
+	<key>API Key Configuration</key>
+	<string>API Key Configuration</string>
+	<key>API Key verified and saved successfully!</key>
+	<string>API Key verified and saved successfully!</string>
+	<key>API Keys</key>
+	<string>API Keys</string>
+	<key>API key verified successfully!</key>
+	<string>API key verified successfully!</string>
+	<key>AWS Bedrock Configuration</key>
+	<string>AWS Bedrock Configuration</string>
+	<key>AWS Profile</key>
+	<string>AWS Profile</string>
+	<key>AWS Profile '%@' has incomplete credentials</key>
+	<string>AWS Profile '%@' has incomplete credentials</string>
+	<key>AWS Profile '%@' not found in ~/.aws/credentials</key>
+	<string>AWS Profile '%@' not found in ~/.aws/credentials</string>
+	<key>Access denied. Check your AWS permissions for Bedrock.</key>
+	<string>Access denied. Check your AWS permissions for Bedrock.</string>
+	<key>Access denied. Ensure your IAM policy includes bedrock:ListFoundationModels permission.</key>
+	<string>Access denied. Ensure your IAM policy includes bedrock:ListFoundationModels permission.</string>
+	<key>Accessibility Access</key>
+	<string>Accessibility Access</string>
+	<key>Accuracy</key>
+	<string>Accuracy</string>
+	<key>Activation Delay</key>
+	<string>Activation Delay</string>
+	<key>Active</key>
+	<string>Active</string>
+	<key>Add</key>
+	<string>Add</string>
+	<key>Add Another API Key</key>
+	<string>Add Another API Key</string>
+	<key>Add App</key>
+	<string>Add App</string>
+	<key>Add Configuration</key>
+	<string>Add Configuration</string>
+	<key>Add Emoji</key>
+	<string>Add Emoji</string>
+	<key>Add New</key>
+	<string>Add New</string>
+	<key>Add New API Key</key>
+	<string>Add New API Key</string>
+	<key>Add a brief description of what this prompt does</key>
+	<string>Add a brief description of what this action does</string>
+	<key>Add a configuration to enable.</key>
+	<string>Add a configuration to enable.</string>
+	<key>Add another hotkey</key>
+	<string>Add another hotkey</string>
+	<key>Add custom emoji</key>
+	<string>Add custom emoji</string>
+	<key>Add multiple words that can activate this prompt</key>
+	<string>Add multiple words that can activate this action</string>
+	<key>Add new prompt</key>
+	<string>Add new action</string>
+	<key>Add space after paste</key>
+	<string>Add space after paste</string>
+	<key>Add trigger word</key>
+	<string>Add trigger word</string>
+	<key>Additional</key>
+	<string>Additional</string>
+	<key>Additional shortcuts for HoAh</key>
+	<string>Additional shortcuts for HoAh</string>
+	<key>All time</key>
+	<string>All time</string>
+	<key>Allow HoAh to paste transcribed text directly at your cursor position</key>
+	<string>Allow HoAh to paste transcribed text directly at your cursor position</string>
+	<key>Allow HoAh to record your voice for transcription</key>
+	<string>Allow HoAh to record your voice for transcription</string>
+	<key>Analyze</key>
+	<string>Analyze</string>
+	<key>App Permissions</key>
+	<string>App Permissions</string>
+	<key>Appearance, startup, and updates</key>
+	<string>Appearance, startup, and updates</string>
+	<key>Applications</key>
+	<string>Applications</string>
+	<key>Applies to the active API key above</key>
+	<string>Applies to the active API key above</string>
+	<key>Are you sure you want to delete "%@"?</key>
+	<string>Are you sure you want to delete "%@"?</string>
+	<key>Are you sure you want to delete the custom model '%@'?</key>
+	<string>Are you sure you want to delete the custom model '%@'?</string>
+	<key>Are you sure you want to delete the model '%@'?</key>
+	<string>Are you sure you want to delete the model '%@'?</string>
+	<key>Audio Cleanup</key>
+	<string>Audio Cleanup</string>
+	<key>Audio Duration</key>
+	<string>Audio Duration</string>
+	<key>Audio Input</key>
+	<string>Audio Input</string>
+	<key>Audio files older than the selected period will be automatically deleted, while keeping the text transcripts intact.</key>
+	<string>Audio files older than the selected period will be automatically deleted, while keeping the text transcripts intact.</string>
+	<key>Authentication</key>
+	<string>Authentication</string>
+	<key>Auto Enhancement Modes</key>
+	<string>Auto Actions</string>
+	<key>Auto Send</key>
+	<string>Auto Send</string>
+	<key>Auto enhancement is off, so triggers are inactive until you turn it on.</key>
+	<string>AI Action is off, so triggers are inactive until you turn it on.</string>
+	<key>Auto-Restore Preferences</key>
+	<string>Auto-Restore Preferences</string>
+	<key>Autodetected</key>
+	<string>Autodetected</string>
+	<key>Automate your workflows with context-aware configurations.</key>
+	<string>Automate your workflows with context-aware configurations.</string>
+	<key>Automatic text formatting</key>
+	<string>Automatic text formatting</string>
+	<key>Automatically apply AI-powered enhancement after each transcription</key>
+	<string>Automatically apply AI Action after each transcription</string>
+	<key>Automatically delete transcript history</key>
+	<string>Automatically delete transcript history</string>
+	<key>Available Devices</key>
+	<string>Available Devices</string>
+	<key>Avg. Enhancement Time</key>
+	<string>Avg. AI Action Time</string>
+	<key>Base URL</key>
+	<string>Base URL</string>
+	<key>Before Copy</key>
+	<string>Before Copy</string>
+	<key>Built-in</key>
+	<string>Built-in</string>
+	<key>Built-in prompt</key>
+	<string>Built-in action</string>
+	<key>Cancel</key>
+	<string>Cancel</string>
+	<key>Cancel Shortcut</key>
+	<string>Cancel Shortcut</string>
+	<key>Choose File</key>
+	<string>Choose File</string>
+	<key>Choose how text is pasted</key>
+	<string>Choose how text is pasted</string>
+	<key>Choose how you want to trigger HoAh</key>
+	<string>Choose how you want to trigger HoAh</string>
+	<key>Choose your preferred recorder interface</key>
+	<string>Choose your preferred recorder interface</string>
+	<key>Cleanup Complete</key>
+	<string>Cleanup Complete</string>
+	<key>Cleanup triggered. Old transcripts are cleaned up according to your retention setting.</key>
+	<string>Cleanup triggered. Old transcripts are cleaned up according to your retention setting.</string>
+	<key>Clear</key>
+	<string>Clear</string>
+	<key>Click here and start speaking...</key>
+	<string>Click here and start speaking...</string>
+	<key>Clipboard Context</key>
+	<string>Clipboard Context</string>
+	<key>Cloud</key>
+	<string>Cloud</string>
+	<key>Cloud Batch</key>
+	<string>Cloud Batch</string>
+	<key>Cloud Realtime</key>
+	<string>Cloud Streaming</string>
+	<key>Cloud Streaming</key>
+	<string>Cloud Streaming</string>
+	<key>Cloud Model</key>
+	<string>Cloud Model</string>
+	<key>Cloud Batch Model</key>
+	<string>Cloud Batch Model</string>
+	<key>Cloud Realtime Model</key>
+	<string>Cloud Streaming Model</string>
+	<key>Cloud Streaming Model</key>
+	<string>Cloud Streaming Model</string>
+	<key>For cloud realtime</key>
+	<string>For cloud streaming</string>
+	<key>Realtime</key>
+	<string>Realtime</string>
+	<key>Streaming</key>
+	<string>Streaming</string>
+	<key>Multilingual</key>
+	<string>Multilingual</string>
+	<key>English-only</key>
+	<string>English-only</string>
+	<key>Uses the native Apple Speech framework for transcription. Requires macOS 26.</key>
+	<string>Uses the native Apple Speech framework for transcription. Requires macOS 26.</string>
+	<key>Base model, good balance between speed and accuracy, supports multiple languages</key>
+	<string>Base model, good balance between speed and accuracy, supports multiple languages</string>
+	<key>Large model v3, very slow but most accurate</key>
+	<string>Large model v3, very slow but most accurate</string>
+	<key>Large model v3 Turbo, faster than v3 with similar accuracy</key>
+	<string>Large model v3 Turbo, faster than v3 with similar accuracy</string>
+	<key>Quantized version of Large v3 Turbo, faster with slightly lower accuracy</key>
+	<string>Quantized version of Large v3 Turbo, faster with slightly lower accuracy</string>
+	<key>Whisper Large v3 Turbo model with Groq's lightning-speed inference</key>
+	<string>Whisper Large v3 Turbo model with Groq's lightning-speed inference</string>
+	<key>ElevenLabs' realtime speech-to-text model with low-latency partial transcripts.</key>
+	<string>ElevenLabs' realtime speech-to-text model with low-latency partial transcripts.</string>
+	<key>ElevenLabs' Scribe v2 batch transcription model for the most accurate file-based transcription.</key>
+	<string>ElevenLabs' Scribe v2 batch transcription model for the most accurate file-based transcription.</string>
+	<key>OpenAI's realtime transcription model with low-latency partials and multilingual dictation support.</key>
+	<string>OpenAI's realtime transcription model with low-latency partials and multilingual dictation support.</string>
+	<key>Amazon Transcribe's realtime streaming transcription with partial results and stabilization.</key>
+	<string>Amazon Transcribe's realtime streaming transcription with partial results and stabilization.</string>
+	<key>Cloud Model Description</key>
+	<string>Highest accuracy, requires API key and internet connection</string>
+	<key>Complete Setup</key>
+	<string>Complete Setup</string>
+	<key>Complete the setup to get started</key>
+	<string>Complete the setup to get started</string>
+	<key>Configure</key>
+	<string>Configure</string>
+	<key>Configure LLM providers for post-processing transcribed text. For transcription models, use the AI Models tab.</key>
+	<string>Configure LLM providers for post-processing transcribed text. For dictation models, use the Dictation Models tab.</string>
+	<key>Configure Shortcut</key>
+	<string>Configure Shortcut</string>
+	<key>Configure your microphone preferences</key>
+	<string>Configure your microphone preferences</string>
+	<key>Configured</key>
+	<string>Configured</string>
+	<key>Connect an audio input device to get started</key>
+	<string>Connect an audio input device to get started</string>
+	<key>Connected</key>
+	<string>Connected</string>
+	<key>Connected to</key>
+	<string>Connected to</string>
+	<key>Connected to %@</key>
+	<string>Connected to %@</string>
+	<key>Connection failed.</key>
+	<string>Connection failed.</string>
+	<key>Connection successful! Configuration saved.</key>
+	<string>Connection successful! Configuration saved.</string>
+	<key>Context Awareness</key>
+	<string>Context Awareness</string>
+	<key>Control how HoAh handles your transcription data and audio recordings for privacy and storage management.</key>
+	<string>Control how HoAh handles your transcription data and audio recordings for privacy and storage management.</string>
+	<key>Control transcript history and storage</key>
+	<string>Control transcript history and storage</string>
+	<key>Copied!</key>
+	<string>Copied!</string>
+	<key>Copy Enhanced</key>
+	<string>Copy AI Action Result</string>
+	<key>Copy Last Transcription</key>
+	<string>Copy Last Transcription</string>
+	<key>Copy Original</key>
+	<string>Copy Original</string>
+	<key>Copy System Info</key>
+	<string>Copy System Info</string>
+	<key>Could not add emoji.</key>
+	<string>Could not add emoji.</string>
+	<key>Current Configuration</key>
+	<string>Current Configuration</string>
+	<key>Current model: %@</key>
+	<string>Current model: %@</string>
+	<key>Custom</key>
+	<string>Custom</string>
+	<key>Custom Cancel Shortcut</key>
+	<string>Custom Cancel Shortcut</string>
+	<key>Custom Provider</key>
+	<string>Custom Provider</string>
+	<key>Custom Provider Configuration</key>
+	<string>Custom Provider Configuration</string>
+	<key>Customize app &amp; system feedback</key>
+	<string>Customize app &amp; system feedback</string>
+	<key>Custom…</key>
+	<string>Custom…</string>
+	<key>Dashboard</key>
+	<string>Dashboard</string>
+	<key>Data &amp; Privacy</key>
+	<string>Data &amp; Privacy</string>
+	<key>Data Management</key>
+	<string>Data Management</string>
+	<key>Default</key>
+	<string>Default</string>
+	<key>Default Auto-Enhancement</key>
+	<string>Default Action</string>
+	<key>Default Dictation Model</key>
+	<string>Default Dictation Model</string>
+	<key>Default Model</key>
+	<string>Default Model</string>
+	<key>Default and other built-in prompts can be edited but not deleted. Reset anytime to restore the original text and trigger words.</key>
+	<string>Default and other built-in actions can be edited but not deleted. Reset anytime to restore the original text and trigger words.</string>
+	<key>Define how AI should enhance your transcriptions</key>
+	<string>Define what the AI should do to your transcriptions</string>
+	<key>Delete</key>
+	<string>Delete</string>
+	<key>Delete Configuration</key>
+	<string>Delete Configuration</string>
+	<key>Delete Custom Model</key>
+	<string>Delete Custom Model</string>
+	<key>Delete Model</key>
+	<string>Delete Model</string>
+	<key>Delete Selected Items?</key>
+	<string>Delete Selected Items?</string>
+	<key>Delete transcripts older than</key>
+	<string>Delete transcripts older than</string>
+	<key>Description</key>
+	<string>Description</string>
+	<key>Deselect All</key>
+	<string>Deselect All</string>
+	<key>Devices will be used in order of priority. If a device is unavailable, the next one will be tried. If no prioritized device is available, the system default microphone will be used.</key>
+	<string>Devices will be used in order of priority. If a device is unavailable, the next one will be tried. If no prioritized device is available, the system default microphone will be used.</string>
+	<key>Dictation Model: %@</key>
+	<string>Dictation Model: %@</string>
+	<key>Disabled</key>
+	<string>Disabled</string>
+	<key>Dismiss</key>
+	<string>Dismiss</string>
+	<key>Done</key>
+	<string>Done</string>
+	<key>Double-click to edit • Right-click for more options</key>
+	<string>Double-click to edit • Right-click for more options</string>
+	<key>Download AI Model</key>
+	<string>Download AI Model</string>
+	<key>Downloaded</key>
+	<string>Downloaded</string>
+	<key>Duration: %@</key>
+	<string>Duration: %@</string>
+	<key>Edit</key>
+	<string>Edit</string>
+	<key>Edit AI Configuration</key>
+	<string>Edit AI Configuration</string>
+	<key>Edit Configuration</key>
+	<string>Edit Configuration</string>
+	<key>Edit Built-in Prompt</key>
+	<string>Edit Built-in Action</string>
+	<key>Edit Model</key>
+	<string>Edit Model</string>
+	<key>Edit Prompt</key>
+	<string>Edit Action</string>
+	<key>Edit an existing configuration or add a new one to enable AI Enhancement.</key>
+	<string>Edit an existing configuration or add a new one to enable AI Action.</string>
+	<key>Emoji already exists!</key>
+	<string>Emoji already exists!</string>
+	<key>Emoji cannot be empty.</key>
+	<string>Emoji cannot be empty.</string>
+	<key>Emoji in Use</key>
+	<string>Emoji in Use</string>
+	<key>Enable</key>
+	<string>Enable</string>
+	<key>Enable AI Enhancement</key>
+	<string>Enable AI Action</string>
+	<key>Enable AI Enhancement?</key>
+	<string>Enable AI Action?</string>
+	<key>Enable Auto Enhancement</key>
+	<string>Enable AI Action</string>
+	<key>Enable Cross-Region Inference</key>
+	<string>Enable Cross-Region Inference</string>
+	<key>Enable Middle-Click Toggle</key>
+	<string>Enable Middle-Click Toggle</string>
+	<key>Enable Prompt Triggers</key>
+	<string>Enable Action Triggers</string>
+	<key>Enable automatic audio cleanup</key>
+	<string>Enable automatic audio cleanup</string>
+	<key>English</key>
+	<string>English</string>
+	<key>Enhancement Model</key>
+	<string>AI Action Model</string>
+	<key>Enhancement Models</key>
+	<string>AI Action Models</string>
+	<key>Enhancement Prompt</key>
+	<string>AI Action</string>
+	<key>Enhancement Shortcuts</key>
+	<string>AI Action Shortcuts</string>
+	<key>Enhancement Time</key>
+	<string>AI Action Time</string>
+	<key>Enhancement shortcuts are available only when the recorder is visible and HoAh is running.</key>
+	<string>AI Action shortcuts are available only when the recorder is visible and HoAh is running.</string>
+	<key>AI Action shortcuts work while the recorder is visible. On this page, ⌘1–⌘0 also works when the HoAh window is focused.</key>
+	<string>AI Action shortcuts work while the recorder is visible. On this page, ⌘1–⌘0 also works when the HoAh window is focused.</string>
+	<key>Enhancing</key>
+	<string>Applying AI Action…</string>
+	<key>Enter a description</key>
+	<string>Enter a description</string>
+	<key>Enter a short, descriptive title</key>
+	<string>Enter a short, descriptive title</string>
+	<key>Enter model name</key>
+	<string>Enter model name</string>
+	<key>Enter region (e.g., us-west-2)</key>
+	<string>Enter region (e.g., us-west-2)</string>
+	<key>Enter website URL (e.g., google.com)</key>
+	<string>Enter website URL (e.g., google.com)</string>
+	<key>Enter your API Key</key>
+	<string>Enter your API Key</string>
+	<key>Enter your API key</key>
+	<string>Enter your API key</string>
+	<key>Error</key>
+	<string>Error</string>
+	<key>Experimental</key>
+	<string>Experimental</string>
+	<key>Experimental Features</key>
+	<string>Experimental Features</string>
+	<key>Experimental features that might be unstable &amp; bit buggy.</key>
+	<string>Experimental features that might be unstable &amp; bit buggy.</string>
+	<key>No experimental features currently available.</key>
+	<string>No experimental features currently available.</string>
+	<key>Export</key>
+	<string>Export</string>
+	<key>Export CSV (Single File)</key>
+	<string>Export CSV (Single File)</string>
+	<key>Export Daily Markdown (Folder)</key>
+	<string>Export Daily Markdown (Folder)</string>
+	<key>Export Here</key>
+	<string>Export Here</string>
+	<key>Export Settings...</key>
+	<string>Export Settings...</string>
+	<key>Export your custom prompts, word replacements, keyboard shortcuts, and app preferences to a backup file. API keys are not included in the export.</key>
+	<string>Export your custom actions, word replacements, keyboard shortcuts, and app preferences to a backup file. API keys are not included in the export.</string>
+	<key>Failed to read credentials for AWS Profile '%@': %@</key>
+	<string>Failed to read credentials for AWS Profile '%@': %@</string>
+	<key>Failed to resolve credentials for AWS Profile '%@': %@</key>
+	<string>Failed to resolve credentials for AWS Profile '%@': %@</string>
+	<key>Failed to sign request: %@</key>
+	<string>Failed to sign request: %@</string>
+	<key>Faster than Real-time</key>
+	<string>Faster than Real-time</string>
+	<key>Follow System</key>
+	<string>Follow System</string>
+	<key>For best results, using your Mac's built-in microphone is recommended.</key>
+	<string>For best results, using your Mac's built-in microphone is recommended.</string>
+	<key>For cloud processing</key>
+	<string>For cloud processing</string>
+	<key>For local processing</key>
+	<string>For local processing</string>
+	<key>Free</key>
+	<string>Free</string>
+	<key>From ~/.aws/credentials or ~/.aws/config</key>
+	<string>From ~/.aws/credentials or ~/.aws/config</string>
+	<key>General</key>
+	<string>General</string>
+	<key>Generating waveform...</key>
+	<string>Generating waveform...</string>
+	<key>Get API Key</key>
+	<string>Get API Key</string>
+	<key>Get Started</key>
+	<string>Get Started</string>
+	<key>Got it</key>
+	<string>Got it</string>
+	<key>Help</key>
+	<string>Help</string>
+	<key>Hide Dock Icon</key>
+	<string>Hide Dock Icon</string>
+	<key>Hide Dock Icon (Menu Bar Only)</key>
+	<string>Hide Dock Icon (Menu Bar Only)</string>
+	<key>History</key>
+	<string>History</string>
+	<key>HoAh</key>
+	<string>HoAh</string>
+	<key>HoAh Shortcuts</key>
+	<string>HoAh Shortcuts</string>
+	<key>HoAh requires the following permissions to function properly</key>
+	<string>HoAh requires the following permissions to function properly</string>
+	<key>HoAh sessions completed</key>
+	<string>HoAh sessions completed</string>
+	<key>HoAh uses Accessibility permissions to paste the transcribed text directly into other applications at your cursor's position. This allows for a seamless dictation experience across your Mac.</key>
+	<string>HoAh uses Accessibility permissions to paste the transcribed text directly into other applications at your cursor's position. This allows for a seamless dictation experience across your Mac.</string>
+	<key>HoAh vs. typing by hand</key>
+	<string>HoAh vs. typing by hand</string>
+	<key>How to get a free API Key?</key>
+	<string>How to get a free API Key?</string>
+	<key>Icon</key>
+	<string>Icon</string>
+	<key>If enabled, your instructions are combined with a general-purpose template to improve transcription quality.
+
+Disable for full control over the AI's system prompt (for advanced users).</key>
+	<string>If enabled, your instructions are combined with a general-purpose template to improve transcription quality.
+
+Disable for full control over the AI's system instructions (for advanced users).</string>
+	<key>Immediately</key>
+	<string>Immediately</string>
+	<key>Import Settings...</key>
+	<string>Import Settings...</string>
+	<key>Import or export your settings</key>
+	<string>Import or export your settings</string>
+	<key>Imported</key>
+	<string>Imported</string>
+	<key>Imported local model</key>
+	<string>Imported local model</string>
+	<key>Input Mode</key>
+	<string>Input Mode</string>
+	<key>Interface Language</key>
+	<string>Interface Language</string>
+	<key>Invalid AWS credentials. Please check your profile configuration.</key>
+	<string>Invalid AWS credentials. Please check your profile configuration.</string>
+	<key>Invalid Bedrock URL</key>
+	<string>Invalid Bedrock URL</string>
+	<key>Invalid emoji character.</key>
+	<string>Invalid emoji character.</string>
+	<key>Invalid emoji.</key>
+	<string>Invalid emoji.</string>
+	<key>Invalid response from Bedrock</key>
+	<string>Invalid response from Bedrock</string>
+	<key>Keep audio files for</key>
+	<string>Keep audio files for</string>
+	<key>Keep enhancement prompts handy</key>
+	<string>Keep AI actions handy</string>
+	<key>Keyboard Shortcut</key>
+	<string>Keyboard Shortcut</string>
+	<key>Keyboard Shortcuts</key>
+	<string>Keyboard Shortcuts</string>
+	<key>Keystrokes Saved</key>
+	<string>Keystrokes Saved</string>
+	<key>Language</key>
+	<string>Language</string>
+	<key>Language: %@</key>
+	<string>Language: %@</string>
+	<key>Language: Autodetected</key>
+	<string>Language: Autodetected</string>
+	<key>Language: English</key>
+	<string>Language: English</string>
+	<key>Language: English (only)</key>
+	<string>Language: English (only)</string>
+	<key>Last 24 hours</key>
+	<string>Last 24 hours</string>
+	<key>Last used %@</key>
+	<string>Last used %@</string>
+	<key>Launch at Login</key>
+	<string>Launch at Login</string>
+	<key>Learn more</key>
+	<string>Learn more</string>
+	<key>Learn what is on the screen to understand the context</key>
+	<string>Learn what is on the screen to understand the context</string>
+	<key>Let's test your HoAh setup.</key>
+	<string>Let's test your HoAh setup.</string>
+	<key>Load More</key>
+	<string>Load More</string>
+	<key>Loading...</key>
+	<string>Loading...</string>
+	<key>Local</key>
+	<string>Local</string>
+	<key>Local Model Description</key>
+	<string>Best balance of speed and accuracy, runs entirely on your device</string>
+	<key>Manage API Keys</key>
+	<string>Manage API Keys</string>
+	<key>Manage Configurations...</key>
+	<string>Manage Configurations...</string>
+	<key>Manage Models</key>
+	<string>Manage Models</string>
+	<key>Maximum recording duration</key>
+	<string>Maximum recording duration</string>
+	<key>Microphone Access</key>
+	<string>Microphone Access</string>
+	<key>Middle Button</key>
+	<string>Middle Button</string>
+	<key>Mini Recorder</key>
+	<string>Mini Recorder</string>
+	<key>Model</key>
+	<string>Model</string>
+	<key>Model ID (e.g., anthropic.claude-3-5-sonnet-20241022-v2:0)</key>
+	<string>Model ID (e.g., anthropic.claude-3-5-sonnet-20241022-v2:0)</string>
+	<key>Model Name (e.g., gpt-4o-mini, claude-3-5-sonnet-20240620)</key>
+	<string>Model Name (e.g., gpt-4o-mini, claude-3-5-sonnet-20240620)</string>
+	<key>Multilingual Model</key>
+	<string>Multilingual Model</string>
+	<key>Mute system audio during recording</key>
+	<string>Mute system audio during recording</string>
+	<key>Name</key>
+	<string>Name</string>
+	<key>Native Apple</key>
+	<string>Native Apple</string>
+	<key>Need help? Check the Help menu for support options</key>
+	<string>Need help? Check the Help menu for support options</string>
+	<key>New AI Configuration</key>
+	<string>New AI Configuration</string>
+	<key>New Prompt</key>
+	<string>New Action</string>
+	<key>Next Key</key>
+	<string>Next Key</string>
+	<key>No API keys added yet. Add one below.</key>
+	<string>No API keys added yet. Add one below.</string>
+	<key>No AWS profiles found in ~/.aws/credentials</key>
+	<string>No AWS profiles found in ~/.aws/credentials</string>
+	<key>No AWS profiles found in ~/.aws/credentials or ~/.aws/config</key>
+	<string>No AWS profiles found in ~/.aws/credentials or ~/.aws/config</string>
+	<key>No Audio Devices</key>
+	<string>No Audio Devices</string>
+	<key>No Transcriptions Yet</key>
+	<string>No Transcriptions Yet</string>
+	<key>No additional devices available</key>
+	<string>No additional devices available</string>
+	<key>No applications added</key>
+	<string>No applications added</string>
+	<key>No configurations available</key>
+	<string>No configurations available</string>
+	<key>No configurations. Click + to add one.</key>
+	<string>No configurations. Click + to add one.</string>
+	<key>No devices available</key>
+	<string>No devices available</string>
+	<key>No input devices found</key>
+	<string>No input devices found</string>
+	<key>No keys added yet for %@. Add one below.</key>
+	<string>No keys added yet for %@. Add one below.</string>
+	<key>No limit</key>
+	<string>No limit</string>
+	<key>No microphones found</key>
+	<string>No microphones found</string>
+	<key>No model selected</key>
+	<string>No model selected</string>
+	<key>No models available</key>
+	<string>No models available</string>
+	<key>No models loaded</key>
+	<string>No models loaded</string>
+	<key>No prioritized devices</key>
+	<string>No prioritized devices</string>
+	<key>No prompts available</key>
+	<string>No actions available</string>
+	<key>No providers connected</key>
+	<string>No providers connected</string>
+	<key>No transcription models available. Please connect to a cloud service or download a local model in the AI Models tab.</key>
+	<string>No dictation models available. Please connect to a cloud service or download a local model in the Dictation Models tab.</string>
+	<key>No transcriptions found</key>
+	<string>No transcriptions found</string>
+	<key>No websites added</key>
+	<string>No websites added</string>
+	<key>Not Set</key>
+	<string>Not Set</string>
+	<key>Notch Recorder</key>
+	<string>Notch Recorder</string>
+	<key>Note: Selecting a device here will override your Mac's system-wide default microphone.</key>
+	<string>Note: Selecting a device here will override your Mac's system-wide default microphone.</string>
+	<key>OK</key>
+	<string>OK</string>
+	<key>Older transcripts will be deleted automatically based on your selection.</key>
+	<string>Older transcripts will be deleted automatically based on your selection.</string>
+	<key>On-Device</key>
+	<string>On-Device</string>
+	<key>Only OpenAI-compatible transcription APIs are supported</key>
+	<string>Only OpenAI-compatible transcription APIs are supported</string>
+	<key>Open System Settings</key>
+	<string>Open System Settings</string>
+	<key>OpenAI Compatible</key>
+	<string>OpenAI Compatible</string>
+	<key>Optimizing model for your device...</key>
+	<string>Optimizing model for your device...</string>
+	<key>Optional: Add context about yourself (name, role, industry, tech stack, etc.) to help AI provide more relevant responses.</key>
+	<string>Optional: Add context about yourself (name, role, industry, tech stack, etc.) to help AI provide more relevant responses.</string>
+	<key>Other App Shortcuts</key>
+	<string>Other App Shortcuts</string>
+	<key>Our Recommendations</key>
+	<string>Our Recommendations</string>
+	<key>Output Format</key>
+	<string>Output Format</string>
+	<key>PRO</key>
+	<string>PRO</string>
+	<key>Paid</key>
+	<string>Paid</string>
+	<key>Paste Last Transcript(Enhanced)</key>
+	<string>Paste Last Transcript (AI Action)</string>
+	<key>Paste Last Transcript(Original)</key>
+	<string>Paste Last Transcript(Original)</string>
+	<key>Paste Method</key>
+	<string>Paste Method</string>
+	<key>Pause Media during recording</key>
+	<string>Pause Media during recording</string>
+	<key>Performance Analysis</key>
+	<string>Performance Analysis</string>
+	<key>Permissions</key>
+	<string>Permissions</string>
+	<key>Please add and select an API key first.</key>
+	<string>Please add and select an API key first.</string>
+	<key>Please configure AI in Settings → Enhancement</key>
+	<string>Please configure AI in Settings → AI Action</string>
+	<key>Please fix the validation errors before saving.</key>
+	<string>Please fix the validation errors before saving.</string>
+	<key>Preserve transcript in clipboard</key>
+	<string>Preserve transcript in clipboard</string>
+	<key>Prioritized Devices</key>
+	<string>Prioritized Devices</string>
+	<key>Prompt Instructions</key>
+	<string>Instructions</string>
+	<key>Prompt Triggers</key>
+	<string>Action Triggers</string>
+	<key>Prompt Used</key>
+	<string>Action Used</string>
+	<key>Prompt:</key>
+	<string>Action:</string>
+	<key>Prompt: %@</key>
+	<string>Action: %@</string>
+	<key>Provide optional context about yourself to help AI better tailor responses. This information will be included in all enhancement requests.</key>
+	<string>Provide optional context about yourself to help AI better tailor responses. This information will be included in all AI Action requests.</string>
+	<key>Provider</key>
+	<string>Provider</string>
+	<key>Quick reference for all HoAh shortcuts</key>
+	<string>Quick reference for all HoAh shortcuts</string>
+	<key>Quick tap to start hands-free recording (tap again to stop). Press and hold for push-to-talk (release to stop recording).</key>
+	<string>Quick tap to start hands-free recording (tap again to stop). Press and hold for push-to-talk (release to stop recording).</string>
+	<key>Quickly enable or disable AI Action while recording.</key>
+	<string>Quickly enable or disable AI Action while recording.</string>
+	<key>Quit HoAh</key>
+	<string>Quit HoAh</string>
+	<key>RAM</key>
+	<string>RAM</string>
+	<key>Recommended</key>
+	<string>Recommended</string>
+	<key>Recorder Style</key>
+	<string>Recorder Style</string>
+	<key>Recording</key>
+	<string>Recording</string>
+	<key>Recording Feedback</key>
+	<string>Recording Feedback</string>
+	<key>Recording stops automatically when this limit is reached to avoid unintended long sessions.</key>
+	<string>Recording stops automatically when this limit is reached to avoid unintended long sessions.</string>
+	<key>Refresh</key>
+	<string>Refresh</string>
+	<key>Refresh models</key>
+	<string>Refresh models</string>
+	<key>Region</key>
+	<string>Region</string>
+	<key>Region (e.g., us-east-1)</key>
+	<string>Region (e.g., us-east-1)</string>
+	<key>Remove API Key</key>
+	<string>Remove API Key</string>
+	<key>Remove All</key>
+	<string>Remove All</string>
+	<key>Remove Key</key>
+	<string>Remove Key</string>
+	<key>Remove word</key>
+	<string>Remove word</string>
+	<key>Request Permission</key>
+	<string>Request Permission</string>
+	<key>Requires OpenAI-compatible API endpoint</key>
+	<string>Requires OpenAI-compatible API endpoint</string>
+	<key>Reset</key>
+	<string>Reset</string>
+	<key>Reset Built-in Prompts</key>
+	<string>Reset Built-in Actions</string>
+	<key>Reset System Settings</key>
+	<string>Reset System Settings</string>
+	<key>Reset System Settings?</key>
+	<string>Reset System Settings?</string>
+	<key>Reset all system settings (appearance, behavior, audio) to default values. Your AI settings (API keys, models, prompts, profile) and custom shortcuts will be preserved.</key>
+	<string>Reset all system settings (appearance, behavior, audio) to default values. Your AI settings (API keys, models, actions, profile) and custom shortcuts will be preserved.</string>
+	<key>Reset to Default</key>
+	<string>Reset to Default</string>
+	<key>Retranscription successful</key>
+	<string>Retranscription successful</string>
+	<key>Retry Last Transcription</key>
+	<string>Retry Last Transcription</string>
+	<key>Run Transcript Cleanup Now</key>
+	<string>Run Transcript Cleanup Now</string>
+	<key>Save</key>
+	<string>Save</string>
+	<key>Save Anyway</key>
+	<string>Save Anyway</string>
+	<key>Save Button Preview</key>
+	<string>Save Button Preview</string>
+	<key>Save as MD</key>
+	<string>Save as MD</string>
+	<key>Save as TXT</key>
+	<string>Save as TXT</string>
+	<key>Search applications...</key>
+	<string>Search applications...</string>
+	<key>Search transcriptions</key>
+	<string>Search transcriptions</string>
+	<key>Select All</key>
+	<string>Select All</string>
+	<key>Select Applications</key>
+	<string>Select Applications</string>
+	<key>Select Device</key>
+	<string>Select Device</string>
+	<key>Select Language</key>
+	<string>Select Language</string>
+	<key>Select Profile</key>
+	<string>Select Profile</string>
+	<key>Select a folder to export daily Markdown files</key>
+	<string>Select a folder to export daily Markdown files</string>
+	<key>Select a view</key>
+	<string>Select a view</string>
+	<key>Select how you want the recorder to appear on your screen.</key>
+	<string>Select how you want the recorder to appear on your screen.</string>
+	<key>Select the default AI behavior applied to every dictation.</key>
+	<string>Select the default action applied to every dictation.</string>
+	<key>Select the method used to paste text. Use AppleScript if you have a non-standard keyboard layout.</key>
+	<string>Select the method used to paste text. Use AppleScript if you have a non-standard keyboard layout.</string>
+	<key>Selected Text Context</key>
+	<string>Selected Text Context</string>
+	<key>Server URL</key>
+	<string>Server URL</string>
+	<key>Sessions Recorded</key>
+	<string>Sessions Recorded</string>
+	<key>Set as Active</key>
+	<string>Set as Active</string>
+	<key>Set as Default</key>
+	<string>Set as Default</string>
+	<key>Set up a keyboard shortcut to use HoAh anywhere</key>
+	<string>Set up a keyboard shortcut to use HoAh anywhere</string>
+	<key>Settings</key>
+	<string>Settings</string>
+	<key>Setup Required</key>
+	<string>Setup Required</string>
+	<key>Shortcut:</key>
+	<string>Shortcut:</string>
+	<key>Show Dock Icon</key>
+	<string>Show Dock Icon</string>
+	<key>Show in Finder</key>
+	<string>Show in Finder</string>
+	<key>Sound feedback</key>
+	<string>Sound feedback</string>
+	<key>Speed</key>
+	<string>Speed</string>
+	<key>Start with a Predefined Template</key>
+	<string>Start with a Predefined Template</string>
+	<key>Start your first recording to unlock value insights.</key>
+	<string>Start your first recording to unlock value insights.</string>
+	<key>Switch Action</key>
+	<string>Switch Action</string>
+	<key>Switch HoAh's interface language. Changes take effect immediately on supported screens; untranslated items will fall back to English.</key>
+	<string>Switch HoAh's interface language. Changes take effect immediately on supported screens; untranslated items will fall back to English.</string>
+	<key>Switch between your saved actions without touching the UI. Use ⌘1–⌘0 to activate the corresponding action in the order they are saved.</key>
+	<string>Switch between your saved actions without touching the UI. Use ⌘1–⌘0 to activate the corresponding action in the order they are saved.</string>
+	<key>Switch between your saved actions with ⌘1–⌘0. The shortcut works while the recorder is visible, and also on this page when the HoAh window is focused.</key>
+	<string>Switch between your saved actions with ⌘1–⌘0. The shortcut works while the recorder is visible, and also on this page when the HoAh window is focused.</string>
+	<key>System Information</key>
+	<string>System Information</string>
+	<key>System Prompt</key>
+	<string>System Instructions</string>
+	<key>Test Connection</key>
+	<string>Test Connection</string>
+	<key>Testing...</key>
+	<string>Testing...</string>
+	<key>The same API key works across all regions and models</key>
+	<string>The same API key works across all regions and models</string>
+	<key>The text transcripts will be preserved.</key>
+	<string>The text transcripts will be preserved.</string>
+	<key>The transcription language is automatically detected by the model.</key>
+	<string>The transcription language is automatically detected by the model.</string>
+	<key>This action cannot be undone. Are you sure you want to delete %lld item%@?</key>
+	<string>This action cannot be undone. Are you sure you want to delete %lld item%@?</string>
+	<key>This is an English-optimized model and only supports English transcription.</key>
+	<string>This is an English-optimized model and only supports English transcription.</string>
+	<key>This model supports multiple languages. Select a specific language or auto-detect(if available)</key>
+	<string>This model supports multiple languages. Select a specific language or auto-detect(if available)</string>
+	<key>This will revert interface and recording settings to their defaults. Your API keys, AI models, and shortcuts will NOT be affected.</key>
+	<string>This will revert interface and recording settings to their defaults. Your API keys, AI models, and shortcuts will NOT be affected.</string>
+	<key>Tip: Use ⌃⌘Space for emoji picker.</key>
+	<string>Tip: Use ⌃⌘Space for emoji picker.</string>
+	<key>Title</key>
+	<string>Title</string>
+	<key>Toggle AI Action</key>
+	<string>Toggle AI Action</string>
+	<key>Toggle Menu Bar Only</key>
+	<string>Toggle Menu Bar Only</string>
+	<key>Transcribing</key>
+	<string>Transcribing</string>
+	<key>Transcript Cleanup</key>
+	<string>Transcript Cleanup</string>
+	<key>Transcription Language</key>
+	<string>Transcription Language</string>
+	<key>Transcription Model</key>
+	<string>Dictation Model</string>
+	<key>Transcription Models</key>
+	<string>Dictation Models</string>
+	<key>Transcription Result</key>
+	<string>Transcription Result</string>
+	<key>transcription_tab_original</key>
+	<string>Original</string>
+	<key>transcription_tab_enhanced</key>
+	<string>Enhanced</string>
+	<key>transcription_tab_ai_request</key>
+	<string>AI Request</string>
+	<key>Transcription Time</key>
+	<string>Transcription Time</string>
+	<key>Trigger Words</key>
+	<string>Trigger Words</string>
+	<key>Try It Out!</key>
+	<string>Try It Out!</string>
+	<key>Turn it on to apply your configuration.</key>
+	<string>Turn it on to apply your configuration.</string>
+	<key>Unavailable</key>
+	<string>Unavailable</string>
+	<key>Unknown error</key>
+	<string>Unknown error</string>
+	<key>Updates are managed manually for this fork. Grab new builds from your own distribution channel when you're ready.</key>
+	<string>Updates are managed manually for this fork. Grab new builds from your own distribution channel when you're ready.</string>
+	<key>Use</key>
+	<string>Use</string>
+	<key>Use AppleScript Paste Method</key>
+	<string>Use AppleScript Paste Method</string>
+	<key>Use System Instructions</key>
+	<string>Use System Instructions</string>
+	<key>Use currently selected text to understand the context</key>
+	<string>Use currently selected text to understand the context</string>
+	<key>Use text from clipboard to understand the context</key>
+	<string>Use text from clipboard to understand the context</string>
+	<key>User Message</key>
+	<string>User Message</string>
+	<key>User Profile</key>
+	<string>User Profile</string>
+	<key>Using %@</key>
+	<string>Using %@</string>
+	<key>Validation Errors</key>
+	<string>Validation Errors</string>
+	<key>Verification Failed</key>
+	<string>Verification Failed</string>
+	<key>Verification failed</key>
+	<string>Verification failed</string>
+	<key>Verification failed. Please check your API key and try again.</key>
+	<string>Verification failed. Please check your API key and try again.</string>
+	<key>Verify &amp; Save</key>
+	<string>Verify &amp; Save</string>
+	<key>Verify and Save</key>
+	<string>Verify and Save</string>
+	<key>Verifying...</key>
+	<string>Verifying...</string>
+	<key>Voice Activity Detection (VAD)</key>
+	<string>Voice Activity Detection (VAD)</string>
+	<key>Warning: Using a prioritized device will override your Mac's system-wide default microphone if it becomes active.</key>
+	<string>Warning: Using a prioritized device will override your Mac's system-wide default microphone if it becomes active.</string>
+	<key>We'll download the optimized model to get you started.</key>
+	<string>We'll download the optimized model to get you started.</string>
+	<key>Websites</key>
+	<string>Websites</string>
+	<key>Welcome to HoAh</key>
+	<string>Welcome to HoAh</string>
+	<key>Welcome to the Future of Typing</key>
+	<string>Welcome to the Future of Typing</string>
+	<key>Speech to Text, Made Simple</key>
+	<string>Speech to Text, Made Simple</string>
+	<key>When enabled, these prompts auto-activate if their trigger words are present in your text.</key>
+	<string>When enabled, these actions auto-activate if their trigger words are present in your text.</string>
+	<key>Words Dictated</key>
+	<string>Words Dictated</string>
+	<key>Words Per Minute</key>
+	<string>Words Per Minute</string>
+	<key>Your Shortcut</key>
+	<string>Your Shortcut</string>
+	<key>Your history will appear here</key>
+	<string>Your history will appear here</string>
+	<key>add_prompt_button_title</key>
+	<string>Add Action</string>
+	<key>ai_enhancement_auto_prompt_hint</key>
+	<string>Only one action is active at a time. It auto-applies after each transcription while AI Action is on. Current:</string>
+	<key>ai_provider_configure_prompt</key>
+	<string>Cannot enable: Please configure a valid API Key in the AI Provider section below.</string>
+	<key>auto_export_description</key>
+	<string>Automatically save each transcription to a daily Markdown log file.</string>
+	<key>auto_export_enable_hint</key>
+	<string>Each transcription will be appended to a daily log file.</string>
+	<key>auto_export_enable_toggle</key>
+	<string>Enable Auto Export</string>
+	<key>auto_export_folder_label</key>
+	<string>Export Folder</string>
+	<key>auto_export_no_folder</key>
+	<string>No folder selected</string>
+	<key>auto_export_select_folder</key>
+	<string>Select Folder</string>
+	<key>auto_export_reauthorize</key>
+	<string>Re-authorize</string>
+	<key>auto_export_status_active</key>
+	<string>Auto export is active</string>
+	<key>auto_export_status_no_folder</key>
+	<string>Please select an export folder</string>
+	<key>auto_export_status_off</key>
+	<string>Off</string>
+	<key>auto_export_status_on</key>
+	<string>On</string>
+	<key>auto_export_status_needs_permission</key>
+	<string>Needs folder permission</string>
+	<key>auto_export_title</key>
+	<string>Auto Daily Export</string>
+	<key>auto_export_permission_required</key>
+	<string>Folder permission required. Please reselect the export folder.</string>
+	<key>e.g. My Gemini Config</key>
+	<string>e.g. My Gemini Config</string>
+	<key>fewer keystrokes</key>
+	<string>fewer keystrokes</string>
+	<key>help_api_guide_desc</key>
+	<string>Learn how to get a free API Key to unlock AI Actions.</string>
+	<key>help_api_guide_title</key>
+	<string>Setup AI &amp; API Key</string>
+	<key>help_cancel_button</key>
+	<string>Cancel</string>
+	<key>help_check_now</key>
+	<string>Check Now</string>
+	<key>help_check_updates</key>
+	<string>Check for Updates</string>
+	<key>help_update_schedule</key>
+	<string>Automatic checks run around local Monday noon. If HoAh misses that window, it checks on the next launch.</string>
+	<key>help_current_version</key>
+	<string>Current Version:</string>
+	<key>help_documentation_desc</key>
+	<string>View release notes and more info.</string>
+	<key>help_documentation_title</key>
+	<string>Official Website</string>
+	<key>help_reset_button</key>
+	<string>Reset</string>
+	<key>help_reset_confirm_message</key>
+	<string>Reset all system settings (appearance, behavior, audio) to default values. Your AI settings (API keys, models, prompts, profile) and custom shortcuts will be preserved.</string>
+	<key>help_reset_confirm_title</key>
+	<string>Reset System Settings?</string>
+	<key>help_reset_defaults_button</key>
+	<string>Reset Defaults</string>
+	<key>help_reset_flow_button</key>
+	<string>Reset Flow</string>
+	<key>help_reset_onboarding_desc</key>
+	<string>Show the welcome tutorial again.</string>
+	<key>help_reset_onboarding_title</key>
+	<string>Reset Onboarding</string>
+	<key>help_reset_prefs_desc</key>
+	<string>Restore appearance &amp; behavior defaults.</string>
+	<key>help_reset_prefs_title</key>
+	<string>Reset Preferences</string>
+	<key>help_resources_title</key>
+	<string>Resources</string>
+	<key>help_restart_app_desc</key>
+	<string>Relaunch the application.</string>
+	<key>help_restart_app_title</key>
+	<string>Restart HoAh</string>
+	<key>help_restart_button</key>
+	<string>Restart App</string>
+	<key>help_troubleshooting_title</key>
+	<string>Troubleshooting</string>
+	<key>help_troubleshooting_desc</key>
+	<string>Reset preferences or restart app.</string>
+	<key>help_user_guide_desc</key>
+	<string>Master HoAh in 1 minute.</string>
+	<key>help_user_guide_title</key>
+	<string>User Guide</string>
+	<key>macOS 26+</key>
+	<string>macOS 26+</string>
+	<key>menu_check_for_updates</key>
+	<string>Check for Updates…</string>
+	<key>ms</key>
+	<string>ms</string>
+	<key>onboarding_continue</key>
+	<string>Continue</string>
+	<key>onboarding_feature_free</key>
+	<string>Forever Free</string>
+	<key>onboarding_feature_minimal</key>
+	<string>Lightweight</string>
+	<key>onboarding_feature_no_ads</key>
+	<string>No Ads</string>
+	<key>onboarding_feature_no_signup</key>
+	<string>No Sign-Up</string>
+	<key>onboarding_feature_opensource</key>
+	<string>No Data Collection</string>
+	<key>onboarding_feature_private</key>
+	<string>Local-First, Cloud Optional</string>
+	<key>onboarding_hotkey_sheet_desc</key>
+	<string>We’ll warn you if the shortcut conflicts with system or menu shortcuts.</string>
+	<key>onboarding_hotkey_sheet_done</key>
+	<string>Done</string>
+	<key>onboarding_hotkey_sheet_title</key>
+	<string>Set a Custom Shortcut</string>
+	<key>onboarding_hotkey_test_custom_button</key>
+	<string>Set Custom Shortcut</string>
+	<key>onboarding_hotkey_test_custom_note</key>
+	<string>We’ll warn you if the shortcut conflicts with system or menu shortcuts.</string>
+	<key>onboarding_hotkey_test_help</key>
+	<string>If the hotkey doesn’t work, set a custom shortcut (we’ll check for conflicts).</string>
+	<key>onboarding_hotkey_test_pending</key>
+	<string>Hotkey test: waiting for a press…</string>
+	<key>onboarding_hotkey_test_success</key>
+	<string>Hotkey test: detected</string>
+	<key>onboarding_language_en_subtitle</key>
+	<string>Interface and dictation in English</string>
+	<key>onboarding_language_en_title</key>
+	<string>English</string>
+	<key>onboarding_language_follow_system_subtitle</key>
+	<string>Match macOS language automatically</string>
+	<key>onboarding_language_follow_system_title</key>
+	<string>Follow System</string>
+	<key>onboarding_language_subtitle</key>
+	<string>This sets both the app interface and the default dictation language. You can change it later in Settings.</string>
+	<key>onboarding_language_title</key>
+	<string>Choose Your Language</string>
+	<key>onboarding_language_zh_subtitle</key>
+	<string>Interface and dictation default to Chinese</string>
+	<key>onboarding_language_zh_title</key>
+	<string>中文（简体）</string>
+	<key>onboarding_model_apple_body</key>
+	<string>No download required, but quality is usually lower than Whisper or Scribe for long or mixed Chinese–English speech.</string>
+	<key>onboarding_model_apple_note</key>
+	<string>If you plan to use Apple dictation most of the time, using macOS built-in dictation may be enough. In HoAh we recommend switching to Whisper or Scribe for better results.</string>
+	<key>onboarding_model_apple_title</key>
+	<string>Not Recommended · Apple Dictation (Quick Trial Only)</string>
+	<key>onboarding_model_scribe_body</key>
+	<string>Currently the best cloud model for accuracy and long recordings.</string>
+	<key>onboarding_model_scribe_later</key>
+	<string>Learn about Scribe v2 in Dictation Models later</string>
+	<key>onboarding_model_scribe_note</key>
+	<string>Requires an ElevenLabs account and API key. You can enable Scribe v2 later in the “Dictation Models” section.</string>
+	<key>onboarding_model_scribe_title</key>
+	<string>Strongly Recommended · Scribe v2 (ElevenLabs)</string>
+	<key>onboarding_model_subtitle</key>
+	<string>HoAh processes your voice locally on your device. Download one model to continue.</string>
+	<key>onboarding_model_tag_best_quality</key>
+	<string>Best Quality</string>
+	<key>onboarding_model_tag_best_value</key>
+	<string>Best Value</string>
+	<key>onboarding_model_title</key>
+	<string>Choose a Speech Model</string>
+	<key>onboarding_model_whisper_body</key>
+	<string>Best default for most users. High accuracy, great for Chinese + English and mixed speech.</string>
+	<key>onboarding_model_whisper_download_and_use</key>
+	<string>Download and Use (Recommended)</string>
+	<key>onboarding_model_whisper_note</key>
+	<string>Approx. %@ download once, then runs entirely on your Mac without uploading audio.</string>
+	<key>onboarding_model_whisper_title</key>
+	<string>Strongly Recommended · Local Whisper Large v3 Turbo (Quantized)</string>
+	<key>onboarding_model_whisper_use</key>
+	<string>Use This Model</string>
+	<key>onboarding_permissions_accessibility_authorized_restart</key>
+	<string>Authorized &amp; Restart App</string>
+	<key>onboarding_permissions_accessibility_confirm_or_skip</key>
+	<string>I've set it up / Skip for now</string>
+	<key>onboarding_permissions_accessibility_description</key>
+	<string>Enable Accessibility for HoAh in System Settings so it can type into any app for you.</string>
+	<key>onboarding_permissions_accessibility_restart_hint</key>
+	<string>After enabling Accessibility for HoAh, restart the app so the permission takes effect.</string>
+	<key>onboarding_permissions_accessibility_title</key>
+	<string>Accessibility Access</string>
+	<key>onboarding_permissions_button_continue</key>
+	<string>Looks good, continue</string>
+	<key>onboarding_permissions_button_enable</key>
+	<string>Enable Access</string>
+	<key>onboarding_permissions_button_keyboard_continue</key>
+	<string>Looks good, continue</string>
+	<key>onboarding_permissions_button_keyboard_setup</key>
+	<string>Set Shortcut</string>
+	<key>onboarding_permissions_device_description</key>
+	<string>Choose the microphone you want HoAh to use. The built-in microphone is usually a good default.</string>
+	<key>onboarding_permissions_device_title</key>
+	<string>Microphone Selection</string>
+	<key>onboarding_permissions_keyboard_description</key>
+	<string>Pick a shortcut (we recommend the right Option key) so you can start and stop dictation from anywhere.</string>
+	<key>onboarding_permissions_keyboard_title</key>
+	<string>Keyboard Shortcut</string>
+	<key>onboarding_permissions_microphone_description</key>
+	<string>Allow HoAh to use your microphone so you can start speaking and convert voice to text.</string>
+	<key>onboarding_permissions_microphone_title</key>
+	<string>Microphone Access</string>
+	<key>onboarding_permissions_open_settings</key>
+	<string>Open System Settings</string>
+	<key>onboarding_permissions_skip_for_now</key>
+	<string>Skip for now</string>
+	<key>onboarding_restart_now</key>
+	<string>Restart Now</string>
+	<key>onboarding_restart_required_message</key>
+	<string>HoAh needs to restart to apply accessibility permissions.</string>
+	<key>onboarding_restart_required_title</key>
+	<string>Restart Required</string>
+	<key>onboarding_tagline</key>
+	<string>Built for you, not for profit.</string>
+	<key>onboarding_try_instruction</key>
+	<string>Press Right Option to start, press again to stop</string>
+	<key>onboarding_try_instruction_alt</key>
+	<string>Or hold to speak, release to send</string>
+	<key>onboarding_try_instruction_dynamic</key>
+	<string>Press %@ to start, press again to stop</string>
+	<key>onboarding_try_it_placeholder</key>
+	<string>Your transcription will appear here...</string>
+	<key>onboarding_try_it_title</key>
+	<string>Try It Now!</string>
+	<key>onboarding_tutorial_ai_footer</key>
+	<string>You can enable AI post-processing later in AI settings.</string>
+	<key>onboarding_tutorial_ai_intro</key>
+	<string>If you provide your own API key (for example from OpenAI, Groq, or other providers), HoAh can:</string>
+	<key>onboarding_tutorial_ai_point1</key>
+	<string>• Polish your text into clearer, well-written output.</string>
+	<key>onboarding_tutorial_ai_point2</key>
+	<string>• Translate between Chinese and English while keeping tone and terminology.</string>
+	<key>onboarding_tutorial_ai_point3</key>
+	<string>• Turn long speech into summaries and to-do lists.</string>
+	<key>onboarding_tutorial_ai_setup_bullet1</key>
+	<string>• Add an API key in the AI Action tab</string>
+	<key>onboarding_tutorial_ai_setup_bullet2</key>
+	<string>• Groq, Cerebras, Gemini all offer free tiers</string>
+	<key>onboarding_tutorial_ai_setup_bullet3</key>
+	<string>• Even paid APIs cost less than $0.02/day</string>
+	<key>onboarding_tutorial_ai_setup_bullet4</key>
+	<string>• Switch actions via menu bar or during recording</string>
+	<key>onboarding_tutorial_ai_setup_title</key>
+	<string>AI Action needs an API key</string>
+	<key>onboarding_tutorial_ai_subtitle</key>
+	<string>Refine, polish, and translate instantly.</string>
+	<key>onboarding_tutorial_ai_title</key>
+	<string>AI Superpowers</string>
+	<key>onboarding_tutorial_back</key>
+	<string>Back</string>
+	<key>onboarding_tutorial_basics_subtitle</key>
+	<string>Dictation is just a keystroke away.</string>
+	<key>onboarding_tutorial_basics_title</key>
+	<string>Master the Basics</string>
+	<key>onboarding_tutorial_clipboard_tip</key>
+	<string>Finished text is auto-copied to your clipboard for quick pasting.</string>
+	<key>onboarding_tutorial_complete</key>
+	<string>Complete Setup</string>
+	<key>onboarding_tutorial_escape_tip</key>
+	<string>Double-tap Escape to cancel recording instantly.</string>
+	<key>onboarding_tutorial_example_ai_title</key>
+	<string>3. AI Action examples</string>
+	<key>onboarding_tutorial_example_base_label</key>
+	<string>· Base mode:</string>
+	<key>onboarding_tutorial_example_polish_label</key>
+	<string>· Polish mode:</string>
+	<key>onboarding_tutorial_example_raw_title</key>
+	<string>1. What you actually say (raw speech)</string>
+	<key>onboarding_tutorial_example_title</key>
+	<string>Example: Delaying a meeting (English)</string>
+	<key>onboarding_tutorial_example_transcript_title</key>
+	<string>2. Base transcription (Whisper, local model)</string>
+	<key>onboarding_tutorial_hold</key>
+	<string>Hold</string>
+	<key>onboarding_tutorial_hold_to_speak</key>
+	<string>Hold to speak, release to send.</string>
+	<key>onboarding_tutorial_hotkey_tip</key>
+	<string>You can change this hotkey anytime in Settings or the menu bar.</string>
+	<key>onboarding_tutorial_minimalist_description</key>
+	<string>Runs quietly in the menu bar. Stays out of your way until you need it.</string>
+	<key>onboarding_tutorial_minimalist_title</key>
+	<string>Minimalist</string>
+	<key>onboarding_tutorial_next</key>
+	<string>Next</string>
+	<key>onboarding_tutorial_polish_description</key>
+	<string>Turn messy thoughts into professional text. Fixes grammar, removes filler words, and more.</string>
+	<key>onboarding_tutorial_polish_title</key>
+	<string>Polish</string>
+	<key>onboarding_tutorial_privacy_subtitle</key>
+	<string>Powerful, yet invisible.</string>
+	<key>onboarding_tutorial_privacy_title</key>
+	<string>Privacy &amp; Design</string>
+	<key>onboarding_tutorial_private_description</key>
+	<string>Whisper runs 100% on device. Your audio never leaves your Mac.</string>
+	<key>onboarding_tutorial_private_title</key>
+	<string>Private &amp; Local</string>
+	<key>onboarding_tutorial_right_option</key>
+	<string>Right Option</string>
+	<key>onboarding_tutorial_shortcut_label</key>
+	<string>Your Shortcut:</string>
+	<key>onboarding_tutorial_speak</key>
+	<string>Speak</string>
+	<key>onboarding_tutorial_start_button</key>
+	<string>Start Using HoAh</string>
+	<key>onboarding_tutorial_step1</key>
+	<string>At any time, press the right Option key to start listening.</string>
+	<key>onboarding_tutorial_step2</key>
+	<string>When you’re done speaking, press the right Option key again to stop.</string>
+	<key>onboarding_tutorial_step3</key>
+	<string>If your cursor is in a text field, HoAh types the result there; otherwise it copies the text to your clipboard so you can paste it anywhere.</string>
+	<key>onboarding_tutorial_subtitle</key>
+	<string>Here's how to start dictating and how AI can help you polish the results.</string>
+	<key>onboarding_tutorial_title</key>
+	<string>Start Using HoAh</string>
+	<key>onboarding_tutorial_translate_description</key>
+	<string>Dictate in mixed languages. Get output in English, Chinese, Spanish, Klingon, Morse Code, Formal Logic, Python, 🐶, 🐱, etc.</string>
+	<key>onboarding_tutorial_translate_title</key>
+	<string>Translate</string>
+	<key>open_hoah_dashboard</key>
+	<string>Open HoAh</string>
+	<key>or</key>
+	<string>or</string>
+	<key>polish_combined_mode_active</key>
+	<string>High-EQ Formal Writing active</string>
+	<key>polish_enhancement_recommendation</key>
+	<string>Tip: Keep these options turned off for most use cases. Enable only when you need stronger results.</string>
+	<key>polish_formal_writing_hint</key>
+	<string>Rewrite into formal, concise, polite written style suitable for professional communication.</string>
+	<key>polish_formal_writing_toggle</key>
+	<string>Formal Writing Mode</string>
+	<key>polish_professional_hint</key>
+	<string>Transform into diplomatic, tactful, emotionally intelligent workplace communication.</string>
+	<key>polish_professional_toggle</key>
+	<string>Professional Mode (High-EQ)</string>
+	<key>second_translation_toggle_hint</key>
+	<string>Show a second translation option with a different target language.</string>
+	<key>second_translation_toggle_title</key>
+	<string>Enable Second Translation</string>
+	<key>prompt_basic_description</key>
+	<string>Minimal cleanup: remove fillers/false starts; keep wording, tone, and structure (no rewriting, no translation).</string>
+	<key>prompt_basic_title</key>
+	<string>Basic</string>
+	<key>prompt_email_description</key>
+	<string>Polite, concise email; context-aware corrections; facts intact.</string>
+	<key>prompt_email_title</key>
+	<string>Email Draft</string>
+	<key>prompt_formal_description</key>
+	<string>Formal rewrite: polite, concise, fixes homophone/ASR slips, preserves English nouns and details.</string>
+	<key>prompt_formal_title</key>
+	<string>Writing</string>
+	<key>prompt_polish_description</key>
+	<string>Polish: improve clarity/flow and fix obvious ASR/grammar/punctuation; light rephrasing allowed; keep multilingual mix and technical details (no translation).</string>
+	<key>prompt_polish_title</key>
+	<string>Polish</string>
+	<key>prompt_professional_description</key>
+	<string>High-EQ workplace communication: transforms criticism into constructive feedback, diplomatic and tactful.</string>
+	<key>prompt_professional_title</key>
+	<string>Professional</string>
+	<key>prompt_qna_description</key>
+	<string>Direct Q&amp;A: concise answers; uses steps/code blocks when needed.</string>
+	<key>prompt_qna_title</key>
+	<string>Q&amp;A</string>
+	<key>prompt_summarize_description</key>
+	<string>Concise bullets with context-aware corrections; preserves key facts.</string>
+	<key>prompt_summarize_title</key>
+	<string>Summarize</string>
+	<key>prompt_terminal_description</key>
+	<string>Generate safe, concise English shell commands from user speech.</string>
+	<key>prompt_terminal_title</key>
+	<string>Terminal</string>
+	<key>prompt_todo_description</key>
+	<string>Turn speech into actionable bullet-point tasks; skip cancelled items.</string>
+	<key>prompt_todo_title</key>
+	<string>TODO List</string>
+	<key>prompt_translate_description</key>
+	<string>Lightly polish speech and translate it into your chosen language; output only the translation.</string>
+	<key>prompt_translate_title</key>
+	<string>Translate</string>
+	<key>prompt_translate2_description</key>
+	<string>A second translation for bi-directional in-person conversations without switching back and forth.</string>
+	<key>prompt_translate2_title</key>
+	<string>Translate 2</string>
+	<key>provider_status_with_name</key>
+	<string>%@ (%@)</string>
+	<key>qa_output_heading_answer</key>
+	<string>Answer:</string>
+	<key>qa_output_heading_question</key>
+	<string>Question:</string>
+	<key>qa_show_original_hint</key>
+	<string>Include the original question above the Q&amp;A response.</string>
+	<key>qa_show_original_toggle</key>
+	<string>Show question before answer</string>
+	<key>recorder_recent_copied</key>
+	<string>Copied to clipboard</string>
+	<key>recorder_recent_copy_action</key>
+	<string>Copy &amp; close</string>
+	<key>recorder_recent_copy_failed</key>
+	<string>Failed to copy</string>
+	<key>recorder_recent_copy_latest</key>
+	<string>Copy latest</string>
+	<key>recorder_recent_empty</key>
+	<string>No recent transcriptions</string>
+	<key>recorder_recent_header</key>
+	<string>Recent (last 3)</string>
+	<key>translation_language_arabic</key>
+	<string>Arabic</string>
+	<key>translation_language_custom</key>
+	<string>Custom...</string>
+	<key>translation_language_english</key>
+	<string>English</string>
+	<key>translation_language_french</key>
+	<string>French</string>
+	<key>translation_language_german</key>
+	<string>German</string>
+	<key>translation_language_japanese</key>
+	<string>Japanese</string>
+	<key>translation_language_korean</key>
+	<string>Korean</string>
+	<key>translation_language_portuguese</key>
+	<string>Portuguese</string>
+	<key>translation_language_russian</key>
+	<string>Russian</string>
+	<key>translation_language_simplified_chinese</key>
+	<string>Chinese</string>
+	<key>translation_language_spanish</key>
+	<string>Spanish</string>
+	<key>translation_output_heading_original</key>
+	<string>Original:</string>
+	<key>translation_show_original_hint</key>
+	<string>Add the original text below the translation output.</string>
+	<key>translation_show_original_toggle</key>
+	<string>Show original transcript</string>
+	<key>translation_target_custom_hint</key>
+	<string>Enter any target language you want. If the model cannot translate to it, it will skip; otherwise it will follow what you type.</string>
+	<key>translation_target_custom_placeholder</key>
+	<string>Type any language name (e.g., Portuguese (Brazil))</string>
+	<key>translation_target_description</key>
+	<string>Translate mode will send everything you speak to GPT in the selected language.</string>
+	<key>translation_target_explore_creative</key>
+	<string>Explore Creative Targets</string>
+	<key>translation_target_picker_label</key>
+	<string>Select language</string>
+	<key>translation_target_title</key>
+	<string>Translation Target</string>
+	<key>ui_theme_basic</key>
+	<string>Basic</string>
+	<key>ui_theme_cyberpunk</key>
+	<string>Cyberpunk</string>
+	<key>ui_theme_desc</key>
+	<string>Switch visual styles instantly. No restart needed.</string>
+	<key>ui_theme_liquid_glass</key>
+	<string>Frosted Glass</string>
+	<key>ui_theme_title</key>
+	<string>UI Theme</string>
+	<key>ui_theme_vintage</key>
+	<string>Vintage</string>
+	<key>user_profile_character_count</key>
+	<string>%d / 500</string>
+	<key>user_profile_placeholder</key>
+	<string>Name: John Doe
+Role: Software Engineer
+Industry: Technology
+Tech Stack: Swift, Python, JavaScript
+Communication Style: Direct and concise
+Languages: English, Chinese</string>
+	<key>words generated</key>
+	<string>words generated</string>
+	<key>|</key>
+	<string>|</string>
+	<key>➕</key>
+	<string>➕</string>
+	<!-- Audio Input Modes -->
+	<key>audio_input_mode_system_default_title</key>
+	<string>System Default</string>
+	<key>audio_input_mode_custom_title</key>
+	<string>Custom Device</string>
+	<key>audio_input_mode_prioritized_title</key>
+	<string>Prioritized</string>
+	<key>audio_input_mode_system_default_desc</key>
+	<string>Use system's default input device</string>
+	<key>audio_input_mode_custom_desc</key>
+	<string>Select a specific input device</string>
+	<key>audio_input_mode_prioritized_desc</key>
+	<string>Set up device priority order</string>
+	<key>简体中文</key>
+	<string>简体中文</string>
+	<key>mode_settings_title</key>
+	<string>Mode Settings</string>
+	<key>Finishing</key>
+	<string>Finishing</string>
+	<key>Another clipboard AI Action is still running</key>
+	<string>Another clipboard AI Action is still running</string>
+	<key>Clipboard is empty</key>
+	<string>Clipboard is empty</string>
+	<key>Clipboard Action</key>
+	<string>Clipboard Action</string>
+	<key>Customize Clipboard Action Shortcuts</key>
+	<string>Customize Clipboard Action Shortcuts</string>
+	<key>Default is Option + Shift + number. Record a new shortcut for any action if you want a different mapping.</key>
+	<string>Default is Option + Shift + number. Record a new shortcut for any action if you want a different mapping.</string>
+	<key>Default shortcuts use ⌥⇧1–0. You can customize each slot below.</key>
+	<string>Default shortcuts use ⌥⇧1–0. You can customize each slot below.</string>
+	<key>Applying AI Action: %@</key>
+	<string>Applying AI Action: %@</string>
+	<key>Action %d</key>
+	<string>Action %d</string>
+	<key>Shortcut Slot %d</key>
+	<string>Shortcut Slot %d</string>
+	<key>No matching AI Action yet</key>
+	<string>No matching AI Action yet</string>
+	<key>Please add a valid AI configuration first</key>
+	<string>Please add a valid AI configuration first</string>
+	<key>Run the current clipboard text through an AI Action and paste the result into the focused input.</key>
+	<string>Run the current clipboard text through an AI Action and paste the result into the focused input.</string>
+	<key>No AI Action assigned to shortcut %@</key>
+	<string>No AI Action assigned to shortcut %@</string>
+	<key>This feature is disabled by default. Once enabled, the shortcut works globally while HoAh is running.</key>
+	<string>This feature is disabled by default. Once enabled, the shortcut works globally while HoAh is running.</string>
+	<key>Source</key>
+	<string>Source</string>
+	<key>Clipboard AI Action</key>
+	<string>Clipboard AI Action</string>
+</dict>
+</plist>
