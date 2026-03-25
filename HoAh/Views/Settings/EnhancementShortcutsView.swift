@@ -203,6 +203,10 @@ struct ClipboardActionShortcutsSection: View {
                 Spacer()
 
                 HStack(spacing: 10) {
+                    Toggle("", isOn: $appSettings.isClipboardEnhancementShortcutsEnabled)
+                        .toggleStyle(ThemedSwitchToggleStyle(theme: theme))
+                        .labelsHidden()
+
                     Button {
                         withAnimation(.spring(response: 0.35, dampingFraction: 0.88)) {
                             isExpanded.toggle()
@@ -217,10 +221,6 @@ struct ClipboardActionShortcutsSection: View {
                             .clipShape(Circle())
                     }
                     .buttonStyle(.plain)
-
-                    Toggle("", isOn: $appSettings.isClipboardEnhancementShortcutsEnabled)
-                        .toggleStyle(ThemedSwitchToggleStyle(theme: theme))
-                        .labelsHidden()
                 }
             }
 
