@@ -4,6 +4,8 @@ import Foundation
 extension AIEnhancementService {
     /// Apply a validated configuration and rebuild the runtime session snapshot
     func applyConfiguration(_ config: AIEnhancementConfiguration) {
+        clearRuntimeError()
+
         let token = beginSessionSwitch()
         markSwitching(configId: config.id)
         
