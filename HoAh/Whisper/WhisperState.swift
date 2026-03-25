@@ -899,12 +899,23 @@ class WhisperState: NSObject, ObservableObject {
         logger.notice("Shutting down WhisperState before app termination")
         NotificationCenter.default.removeObserver(self)
         NSWorkspace.shared.notificationCenter.removeObserver(self)
-        WhisperModelWarmupCoordinator.shared.cancelAllWarmups()
 
+        // Phase 1: stop scheduling new work.
+        WhisperModelWarmupCoordinator.shared.cancelAllWarmups()
         cancelRecordingTimeout()
         await recorder.stopRecording()
         hideRecorderPanel()
         await cleanupRealtimeStreamingSession()
+
+        // Phase 2: barrier — wait for all in-flight whisper GPU operations to finish.
+        // Warmup tasks each create an independent WhisperContext with its own Metal
+        // residency sets. We must let them run to completion (and release those sets)
+        // before freeing the global Metal device; otherwise ggml_metal_rsets_free
+        // aborts on the non-empty rsets->data assertion.
+        await WhisperModelWarmupCoordinator.shared.waitForPendingWarmups()
+        await waitForTranscriptionToIdle(timeout: 10.0)
+
+        // Phase 3: safe to release the Metal device now.
         await cleanupModelResources()
 
         isMiniRecorderVisible = false
@@ -913,5 +924,17 @@ class WhisperState: NSObject, ObservableObject {
         livePartialTranscript = ""
         miniRecorderError = nil
         recordingState = .idle
+    }
+
+    private func waitForTranscriptionToIdle(timeout: TimeInterval) async {
+        guard recordingState != .idle else { return }
+        logger.notice("Shutdown: waiting for transcription to finish (timeout \(timeout)s)")
+        let deadline = Date().addingTimeInterval(timeout)
+        while recordingState != .idle && Date() < deadline {
+            try? await Task.sleep(nanoseconds: 100_000_000)
+        }
+        if recordingState != .idle {
+            logger.warning("Shutdown: transcription did not reach idle within \(timeout)s, proceeding")
+        }
     }
 }

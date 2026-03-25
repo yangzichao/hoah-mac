@@ -98,15 +98,27 @@ final class WhisperModelWarmupCoordinator: ObservableObject {
 
     func cancelAllWarmups() {
         isShuttingDown = true
-        for task in warmupTasks.values {
-            task.cancel()
-        }
+        // Cancel retry tasks immediately — they are only sleeping, no Metal work in progress.
         for task in retryTasks.values {
             task.cancel()
         }
-        warmupTasks.removeAll()
         retryTasks.removeAll()
+        // Warmup tasks are intentionally NOT cancelled here.
+        // Cancelling a Swift Task does not interrupt the underlying C-level whisper inference
+        // or Metal resource initialization already in progress. Calling cleanupModelResources()
+        // while those ops are live causes ggml_metal_rsets_free to abort (rsets->data count != 0).
+        // Callers must await waitForPendingWarmups() before releasing any WhisperContext.
+    }
+
+    /// Waits for all in-flight warmup tasks to finish releasing their WhisperContexts.
+    /// Must be called after cancelAllWarmups() and before cleanupModelResources().
+    func waitForPendingWarmups() async {
+        let tasks = Array(warmupTasks.values)
+        warmupTasks.removeAll()
         warmingModels.removeAll()
+        for task in tasks {
+            _ = await task.value
+        }
     }
     
     private func runWarmup(for model: LocalModel, whisperState: WhisperState) async throws {
