@@ -33,9 +33,9 @@
 		</dict>
 	</array>
 	<key>CFBundleShortVersionString</key>
-	<string>3.6.7</string>
+	<string>3.7.1</string>
 	<key>CFBundleVersion</key>
-	<string>367</string>
+	<string>371</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSUIElement</key>
