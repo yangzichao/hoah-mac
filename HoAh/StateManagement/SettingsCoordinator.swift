@@ -155,6 +155,8 @@ class SettingsCoordinator: ObservableObject {
     /// - Parameter isMenuBarOnly: Whether menu bar only mode is enabled
     private func handleMenuBarOnlyChange(_ isMenuBarOnly: Bool) {
         logger.info("Menu bar only changed to: \(isMenuBarOnly)")
+
+        guard !RuntimeEnvironment.isRunningTests else { return }
         
         let application = NSApplication.shared
         if isMenuBarOnly {
@@ -183,6 +185,8 @@ class SettingsCoordinator: ObservableObject {
     /// - Parameter type: New recorder type ("mini" or "notch")
     private func handleRecorderTypeChange(_ type: String) {
         logger.info("Recorder type changed to: \(type)")
+
+        guard !RuntimeEnvironment.isRunningTests else { return }
         
         guard let whisperState = whisperState else { return }
         

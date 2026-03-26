@@ -40,7 +40,9 @@ struct HoAhApp: App {
     private let transcriptionAutoCleanupService = TranscriptionAutoCleanupService.shared
     
     init() {
-        UserDefaults.migrateToAppGroupIfNeeded()
+        if !RuntimeEnvironment.isRunningTests {
+            UserDefaults.migrateToAppGroupIfNeeded()
+        }
 
         // Configure KeyboardShortcuts localization
         // Note: KeyboardShortcuts.Localization may not be available in all versions
@@ -53,7 +55,9 @@ struct HoAhApp: App {
         let appSettings = AppSettingsStore()
         _appSettings = StateObject(wrappedValue: appSettings)
 
-        UIStyleConsistencyChecker.recordAndCompare(theme: ThemePalette.theme(for: appSettings.uiTheme))
+        if !RuntimeEnvironment.isRunningTestsOrPreviews {
+            UIStyleConsistencyChecker.recordAndCompare(theme: ThemePalette.theme(for: appSettings.uiTheme))
+        }
         
         let settingsCoordinator = SettingsCoordinator(store: appSettings)
         _settingsCoordinator = StateObject(wrappedValue: settingsCoordinator)
@@ -61,8 +65,12 @@ struct HoAhApp: App {
         let schema = Schema([Transcription.self])
         var initializationFailed = false
         
+        if RuntimeEnvironment.isRunningTests,
+           let testContainer = Self.createInMemoryContainer(schema: schema, logger: logger) {
+            container = testContainer
+        }
         // Attempt 1: Try persistent storage
-        if let persistentContainer = Self.createPersistentContainer(schema: schema, logger: logger) {
+        else if let persistentContainer = Self.createPersistentContainer(schema: schema, logger: logger) {
             container = persistentContainer
             
             #if DEBUG
@@ -125,15 +133,19 @@ struct HoAhApp: App {
         appDelegate.appSettings = appSettings
         
         // Ensure no lingering recording state from previous runs
-        Task {
-            await whisperState.resetOnLaunch()
+        if !RuntimeEnvironment.isRunningTests {
+            Task {
+                await whisperState.resetOnLaunch()
+            }
         }
         
-        
-        AppShortcuts.updateAppShortcutParameters()
+        if !RuntimeEnvironment.isRunningTests {
+            AppShortcuts.updateAppShortcutParameters()
+        }
 
         // Enable Launch at Login by default on first install
-        if !UserDefaults.hoah.bool(forKey: "HasConfiguredLaunchAtLogin") {
+        if !RuntimeEnvironment.isRunningTests,
+           !UserDefaults.hoah.bool(forKey: "HasConfiguredLaunchAtLogin") {
             LaunchAtLogin.isEnabled = true
             UserDefaults.hoah.set(true, forKey: "HasConfiguredLaunchAtLogin")
         }
@@ -328,99 +340,112 @@ struct HoAhApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ZStack {
-                ContentView()
-                
-                if !appSettings.hasCompletedOnboarding {
-                    OnboardingView(hasCompletedOnboarding: $appSettings.hasCompletedOnboarding)
-                        .transition(.opacity)
-                        .background(
-                            OnboardingWindowLevelModifier()
-                        )
+            Group {
+                if RuntimeEnvironment.isRunningTests {
+                    EmptyView()
+                        .frame(width: 1, height: 1)
+                } else {
+                    ZStack {
+                        ContentView()
+                        
+                        if !appSettings.hasCompletedOnboarding {
+                            OnboardingView(hasCompletedOnboarding: $appSettings.hasCompletedOnboarding)
+                                .transition(.opacity)
+                                .background(
+                                    OnboardingWindowLevelModifier()
+                                )
+                        }
+                    }
                 }
             }
-            .environmentObject(appSettings)
-            .environmentObject(settingsCoordinator)
-            .environmentObject(whisperState)
-            .environmentObject(hotkeyManager)
-            .environmentObject(menuBarManager)
-            .environmentObject(aiService)
-            .environmentObject(enhancementService)
-            .environmentObject(configValidationService)
-            .environmentObject(localizationManager)
-            .environment(\.locale, localizationManager.locale)
-            .environment(\.theme, ThemePalette.theme(for: appSettings.uiTheme))
-            .accentColor(ThemePalette.theme(for: appSettings.uiTheme).accentColor)
-            .tint(ThemePalette.theme(for: appSettings.uiTheme).accentColor)
-            .toggleStyle(ThemedSwitchToggleStyle(theme: ThemePalette.theme(for: appSettings.uiTheme)))
-            .preferredColorScheme(appSettings.uiTheme == "cyberpunk" ? .dark : (appSettings.uiTheme == "liquidGlass" || appSettings.uiTheme == "vintage") ? .light : nil)
-            .modelContainer(container)
-            .onAppear {
-                appDelegate.whisperState = whisperState
+                .environmentObject(appSettings)
+                .environmentObject(settingsCoordinator)
+                .environmentObject(whisperState)
+                .environmentObject(hotkeyManager)
+                .environmentObject(menuBarManager)
+                .environmentObject(aiService)
+                .environmentObject(enhancementService)
+                .environmentObject(configValidationService)
+                .environmentObject(localizationManager)
+                .environment(\.locale, localizationManager.locale)
+                .environment(\.theme, ThemePalette.theme(for: appSettings.uiTheme))
+                .accentColor(ThemePalette.theme(for: appSettings.uiTheme).accentColor)
+                .tint(ThemePalette.theme(for: appSettings.uiTheme).accentColor)
+                .toggleStyle(ThemedSwitchToggleStyle(theme: ThemePalette.theme(for: appSettings.uiTheme)))
+                .preferredColorScheme(appSettings.uiTheme == "cyberpunk" ? .dark : (appSettings.uiTheme == "liquidGlass" || appSettings.uiTheme == "vintage") ? .light : nil)
+                .modelContainer(container)
+                .onAppear {
+                    appDelegate.whisperState = whisperState
 
-                // Configure audio services with centralized settings
-                SoundManager.shared.configure(with: appSettings)
-                MediaController.shared.configure(with: appSettings)
-                
-                // Configure AI services with centralized settings
-                aiService.configure(with: appSettings)
-                enhancementService.configure(with: appSettings)
-                configValidationService.configure(with: appSettings, aiService: aiService, enhancementService: enhancementService)
-                
-                // Perform Polish mode migration (Writing/Professional → Polish toggles)
-                appSettings.performPolishModeMigration()
-                
-                // Configure coordinator with service references
-                settingsCoordinator.configure(
-                    menuBarManager: menuBarManager,
-                    hotkeyManager: hotkeyManager,
-                    whisperState: whisperState,
-                    soundManager: SoundManager.shared,
-                    mediaController: MediaController.shared,
-                    aiEnhancementService: enhancementService,
-                    aiService: aiService,
-                    localizationManager: localizationManager
-                )
-                
-                localizationManager.apply(languageCode: appSettings.appInterfaceLanguage)
+                    guard !RuntimeEnvironment.isRunningTests else { return }
 
-                // Check if container initialization failed
-                if containerInitializationFailed {
-                    let alert = NSAlert()
-                    alert.messageText = "Critical Storage Error"
-                    alert.informativeText = "HoAh cannot initialize its storage system. The app cannot continue.\n\nPlease try reinstalling the app or contact support if the issue persists."
-                    alert.alertStyle = .critical
-                    alert.addButton(withTitle: "Quit")
-                    alert.runModal()
+                    // Configure audio services with centralized settings
+                    SoundManager.shared.configure(with: appSettings)
+                    MediaController.shared.configure(with: appSettings)
                     
-                    NSApplication.shared.terminate(nil)
-                    return
+                    // Configure AI services with centralized settings
+                    aiService.configure(with: appSettings)
+                    enhancementService.configure(with: appSettings)
+                    configValidationService.configure(with: appSettings, aiService: aiService, enhancementService: enhancementService)
+                    
+                    // Perform Polish mode migration (Writing/Professional → Polish toggles)
+                    appSettings.performPolishModeMigration()
+                    
+                    // Configure coordinator with service references
+                    settingsCoordinator.configure(
+                        menuBarManager: menuBarManager,
+                        hotkeyManager: hotkeyManager,
+                        whisperState: whisperState,
+                        soundManager: SoundManager.shared,
+                        mediaController: MediaController.shared,
+                        aiEnhancementService: enhancementService,
+                        aiService: aiService,
+                        localizationManager: localizationManager
+                    )
+                    
+                    localizationManager.apply(languageCode: appSettings.appInterfaceLanguage)
+
+                    // Check if container initialization failed
+                    if containerInitializationFailed {
+                        let alert = NSAlert()
+                        alert.messageText = "Critical Storage Error"
+                        alert.informativeText = "HoAh cannot initialize its storage system. The app cannot continue.\n\nPlease try reinstalling the app or contact support if the issue persists."
+                        alert.alertStyle = .critical
+                        alert.addButton(withTitle: "Quit")
+                        alert.runModal()
+                        
+                        NSApplication.shared.terminate(nil)
+                        return
+                    }
+                    // Start the transcription auto-cleanup service (handles immediate and scheduled transcript deletion)
+                    transcriptionAutoCleanupService.startMonitoring(modelContext: container.mainContext)
+                    
+                    // Start the automatic audio cleanup process only if transcript cleanup is not enabled
+                    if !appSettings.isTranscriptionCleanupEnabled {
+                        audioCleanupManager.startAutomaticCleanup(modelContext: container.mainContext)
+                    }
+                    
                 }
-                // Start the transcription auto-cleanup service (handles immediate and scheduled transcript deletion)
-                transcriptionAutoCleanupService.startMonitoring(modelContext: container.mainContext)
-                
-                // Start the automatic audio cleanup process only if transcript cleanup is not enabled
-                if !UserDefaults.hoah.bool(forKey: "IsTranscriptionCleanupEnabled") {
-                    audioCleanupManager.startAutomaticCleanup(modelContext: container.mainContext)
+                .background(WindowAccessor { window in
+                    guard !RuntimeEnvironment.isRunningTests else { return }
+                    WindowManager.shared.configureWindow(window)
+                })
+                .onDisappear {
+                    guard !RuntimeEnvironment.isRunningTests else { return }
+
+                    whisperState.unloadModel()
+                    
+                    // Stop the transcription auto-cleanup service
+                    transcriptionAutoCleanupService.stopMonitoring()
+                    
+                    // Stop the automatic audio cleanup process
+                    audioCleanupManager.stopAutomaticCleanup()
                 }
-                
-            }
-            .background(WindowAccessor { window in
-                WindowManager.shared.configureWindow(window)
-            })
-            .onDisappear {
-                whisperState.unloadModel()
-                
-                // Stop the transcription auto-cleanup service
-                transcriptionAutoCleanupService.stopMonitoring()
-                
-                // Stop the automatic audio cleanup process
-                audioCleanupManager.stopAutomaticCleanup()
-            }
-            .onChange(of: appSettings.appInterfaceLanguage) { _, newValue in
-                localizationManager.apply(languageCode: newValue)
-                NotificationCenter.default.post(name: .languageDidChange, object: nil)
-            }
+                .onChange(of: appSettings.appInterfaceLanguage) { _, newValue in
+                    guard !RuntimeEnvironment.isRunningTests else { return }
+                    localizationManager.apply(languageCode: newValue)
+                    NotificationCenter.default.post(name: .languageDidChange, object: nil)
+                }
         }
         .windowStyle(.hiddenTitleBar)
         .commands {
@@ -437,7 +462,12 @@ struct HoAhApp: App {
             #endif
         }
         
-        MenuBarExtra(isInserted: $showMenuBarIcon) {
+        MenuBarExtra(
+            isInserted: Binding(
+                get: { RuntimeEnvironment.isRunningTests ? false : showMenuBarIcon },
+                set: { showMenuBarIcon = $0 }
+            )
+        ) {
             MenuBarView()
                 .environmentObject(appSettings)
                 .environmentObject(whisperState)

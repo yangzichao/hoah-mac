@@ -156,6 +156,24 @@ struct AppSettingsStateTests {
     }
 }
 
+@Suite("AppSettingsSnapshot Tests")
+struct AppSettingsSnapshotTests {
+    @Test("Snapshot falls back to legacy system mute key")
+    func snapshotFallsBackToLegacySystemMuteKey() {
+        let suiteName = "AppSettingsSnapshotTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defaults.removePersistentDomain(forName: suiteName)
+        defaults.set(false, forKey: "isSystemMuteEnabled")
+        defer {
+            defaults.removePersistentDomain(forName: suiteName)
+        }
+
+        let snapshot = AppSettingsSnapshot.current(userDefaults: defaults)
+
+        #expect(snapshot.isSystemMuteEnabled == false)
+    }
+}
+
 // MARK: - AppSettingsStore Tests
 
 @MainActor
@@ -228,6 +246,46 @@ struct AppSettingsStoreTests {
         #expect(UserDefaults.hoah.string(forKey: "AppInterfaceLanguage") == "en")
         #expect(UserDefaults.hoah.string(forKey: "selectedAIProvider") == "OpenAI")
     }
+
+    @Test("Store syncs transcription settings to legacy runtime keys")
+    func storeSyncsTranscriptionSettingsToLegacyRuntimeKeys() {
+        let keys = [
+            "SelectedLanguage",
+            "HasManuallySelectedLanguage",
+            "IsTextFormattingEnabled",
+            "IsVADEnabled",
+            "AppendTrailingSpace",
+            "IsTranscriptionCleanupEnabled",
+            "TranscriptionRetentionMinutes",
+            "IsAudioCleanupEnabled",
+            "AudioRetentionPeriod"
+        ]
+        keys.forEach { UserDefaults.hoah.removeObject(forKey: $0) }
+        defer { keys.forEach { UserDefaults.hoah.removeObject(forKey: $0) } }
+
+        let mockStorage = MockSettingsStorage()
+        let store = AppSettingsStore(storage: mockStorage)
+
+        store.selectedLanguage = "ja"
+        store.hasManuallySelectedLanguage = true
+        store.isTextFormattingEnabled = false
+        store.isVADEnabled = false
+        store.appendTrailingSpace = false
+        store.isTranscriptionCleanupEnabled = false
+        store.transcriptionRetentionMinutes = 60
+        store.isAudioCleanupEnabled = true
+        store.audioRetentionPeriod = 14
+
+        #expect(UserDefaults.hoah.string(forKey: "SelectedLanguage") == "ja")
+        #expect(UserDefaults.hoah.object(forKey: "HasManuallySelectedLanguage") as? Bool == true)
+        #expect(UserDefaults.hoah.object(forKey: "IsTextFormattingEnabled") as? Bool == false)
+        #expect(UserDefaults.hoah.object(forKey: "IsVADEnabled") as? Bool == false)
+        #expect(UserDefaults.hoah.object(forKey: "AppendTrailingSpace") as? Bool == false)
+        #expect(UserDefaults.hoah.object(forKey: "IsTranscriptionCleanupEnabled") as? Bool == false)
+        #expect(UserDefaults.hoah.integer(forKey: "TranscriptionRetentionMinutes") == 60)
+        #expect(UserDefaults.hoah.object(forKey: "IsAudioCleanupEnabled") as? Bool == true)
+        #expect(UserDefaults.hoah.integer(forKey: "AudioRetentionPeriod") == 14)
+    }
     
     @Test("Store saves when property changes")
     func storeSavesOnPropertyChange() {
@@ -260,6 +318,20 @@ struct AppSettingsStoreTests {
         
         // Should be reset to "mini"
         #expect(store.recorderType == "mini")
+    }
+
+    @Test("Store keeps current Ollama and Doubao providers")
+    func storeKeepsCurrentProviders() {
+        let mockStorage = MockSettingsStorage()
+        var savedState = AppSettingsState()
+        savedState.selectedAIProvider = AIProvider.ollama.rawValue
+        mockStorage.savedState = savedState
+
+        let ollamaStore = AppSettingsStore(storage: mockStorage)
+        #expect(ollamaStore.selectedAIProvider == AIProvider.ollama.rawValue)
+
+        ollamaStore.selectedAIProvider = AIProvider.doubao.rawValue
+        #expect(ollamaStore.selectedAIProvider == AIProvider.doubao.rawValue)
     }
     
     @Test("Store validates delay and clamps to range")

@@ -255,6 +255,10 @@ enum AIProvider: String, CaseIterable {
         }
     }
 
+    static var supportedProviderNames: Set<String> {
+        Set(allCases.map(\.rawValue))
+    }
+
     var pickerDisplayName: String {
         switch self {
         case .groq:
@@ -1021,10 +1025,7 @@ class AIService: ObservableObject {
         }
         
         if selectedProvider == .awsBedrock {
-            let hasRegion = !bedrockRegion.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            let hasModel = !bedrockModelId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            let trimmedKey = key.trimmingCharacters(in: .whitespacesAndNewlines)
-            completion(hasRegion && hasModel && !trimmedKey.isEmpty, hasRegion && hasModel && !trimmedKey.isEmpty ? nil : "Provide API key, region, and model.")
+            verifyBedrockConnection(apiKey: trimmedKey, region: bedrockRegion, modelId: bedrockModelId, completion: completion)
             return
         }
         
@@ -1036,6 +1037,16 @@ class AIService: ObservableObject {
         switch selectedProvider {
         case .anthropic:
             verifyAnthropicAPIKey(trimmedKey, completion: completion)
+        case .doubao:
+            Task {
+                let result = await AIConfigurationValidator.verifyDoubaoKey(
+                    apiKey: trimmedKey,
+                    modelGroup: DoubaoModelGroup.infer(from: currentModel)
+                )
+                await MainActor.run {
+                    completion(result.success, result.errorMessage)
+                }
+            }
         default:
             verifyOpenAICompatibleAPIKey(trimmedKey, completion: completion)
         }
@@ -1087,174 +1098,58 @@ class AIService: ObservableObject {
     }
     
     private func verifyOpenAICompatibleAPIKey(_ key: String, completion: @escaping (Bool, String?) -> Void) {
-        let endpoint = activeConfiguration?.customEndpoint
-        guard let url = URL(string: selectedProvider.requestURL(customEndpoint: endpoint)) else {
-            completion(false, "Invalid API URL")
-            return
-        }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        if selectedProvider.usesAPIKeyHeader {
-            request.addValue(key, forHTTPHeaderField: "api-key")
+        let endpoint: String?
+        if let customEndpoint = activeConfiguration?.customEndpoint {
+            endpoint = customEndpoint
         } else {
-            request.addValue("Bearer \(key)", forHTTPHeaderField: "Authorization")
+            switch selectedProvider {
+            case .azureOpenAI:
+                endpoint = selectedProvider.normalizedCustomEndpoint(selectedProvider.baseURL)
+            case .ociGenerativeAI:
+                endpoint = selectedProvider.normalizedCustomEndpoint(AIProvider.ociEndpoint(for: "us-chicago-1"))
+            case .ollama:
+                endpoint = selectedProvider.normalizedCustomEndpoint("http://localhost:11434")
+            default:
+                endpoint = nil
+            }
         }
-        
-        let testBody: [String: Any] = [
-            "model": currentModel,
-            "messages": [
-                ["role": "user", "content": "test"]
-            ]
-        ]
-        
-        request.httpBody = try? JSONSerialization.data(withJSONObject: testBody)
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                completion(false, error.localizedDescription)
-                return
+
+        Task {
+            let result = await AIConfigurationValidator.verifyOpenAICompatibleKey(
+                apiKey: key,
+                provider: selectedProvider,
+                model: currentModel,
+                endpoint: endpoint
+            )
+            await MainActor.run {
+                completion(result.success, result.errorMessage)
             }
-            
-            if let httpResponse = response as? HTTPURLResponse {
-                let isValid = httpResponse.statusCode == 200
-                
-                if !isValid {
-                    if let data = data, let responseString = String(data: data, encoding: .utf8) {
-                        completion(false, responseString)
-                    } else {
-                        completion(false, nil)
-                    }
-                } else {
-                    completion(true, nil)
-                }
-            } else {
-                completion(false, nil)
-            }
-        }.resume()
+        }
     }
     
     private func verifyAnthropicAPIKey(_ key: String, completion: @escaping (Bool, String?) -> Void) {
-        let url = URL(string: selectedProvider.baseURL)!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue(key, forHTTPHeaderField: "x-api-key")
-        request.addValue("2023-06-01", forHTTPHeaderField: "anthropic-version")
-        
-        let testBody: [String: Any] = [
-            "model": currentModel,
-            "max_tokens": 1024,
-            "system": "You are a test system.",
-            "messages": [
-                ["role": "user", "content": "test"]
-            ]
-        ]
-        
-        request.httpBody = try? JSONSerialization.data(withJSONObject: testBody)
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                completion(false, error.localizedDescription)
-                return
+        Task {
+            let result = await AIConfigurationValidator.verifyAnthropicKey(
+                apiKey: key,
+                model: currentModel
+            )
+            await MainActor.run {
+                completion(result.success, result.errorMessage)
             }
-            
-            if let httpResponse = response as? HTTPURLResponse {
-                if httpResponse.statusCode == 200 {
-                    completion(true, nil)
-                } else {
-                    if let data = data, let responseString = String(data: data, encoding: .utf8) {
-                        completion(false, responseString)
-                    } else {
-                        completion(false, nil)
-                    }
-                }
-            } else {
-                completion(false, nil)
-            }
-        }.resume()
+        }
     }
     
     func verifyBedrockConnection(apiKey: String, region: String, modelId: String, completion: @escaping (Bool, String?) -> Void) {
-        guard !apiKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-              !region.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-              !modelId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            completion(false, "Please provide API key, region, and model.")
-            return
+        Task {
+            let result = await AIConfigurationValidator.verifyBedrockBearerToken(
+                apiKey: apiKey,
+                region: region,
+                modelId: modelId
+            )
+            await MainActor.run {
+                completion(result.success, result.errorMessage)
+            }
         }
-        
-        // Build test request
-        let messages: [[String: Any]] = [
-            [
-                "role": "user",
-                "content": [
-                    ["text": "Hello"]
-                ]
-            ]
-        ]
-        
-        let payload: [String: Any] = [
-            "messages": messages,
-            "inferenceConfig": [
-                "maxTokens": 10,
-                "temperature": 0.3
-            ]
-        ]
-        
-        guard let payloadData = try? JSONSerialization.data(withJSONObject: payload) else {
-            completion(false, "Failed to create test request.")
-            return
-        }
-        
-        let host = "bedrock-runtime.\(region).amazonaws.com"
-        guard let url = URL(string: "https://\(host)/model/\(modelId)/converse") else {
-            completion(false, "Invalid endpoint URL.")
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = payloadData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
-        request.timeoutInterval = 30
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                completion(false, "Connection failed: \(error.localizedDescription)")
-                return
-            }
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                completion(false, "Invalid response from server.")
-                return
-            }
-            
-            guard let data = data else {
-                completion(false, "No data received from server.")
-                return
-            }
-            
-            if httpResponse.statusCode == 200 {
-                // Try to parse response to ensure it's valid
-                if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                   let output = json["output"] as? [String: Any],
-                   let message = output["message"] as? [String: Any],
-                   let content = message["content"] as? [[String: Any]],
-                   !content.isEmpty {
-                    completion(true, nil)
-                } else {
-                    completion(false, "Received unexpected response format.")
-                }
-            } else if httpResponse.statusCode == 401 || httpResponse.statusCode == 403 {
-                completion(false, "Authentication failed. Please check your API key.")
-            } else if httpResponse.statusCode == 404 {
-                completion(false, "Model not found. Please check the model ID.")
-            } else {
-                let errorString = String(data: data, encoding: .utf8) ?? "Unknown error"
-                completion(false, "HTTP \(httpResponse.statusCode): \(errorString)")
-            }
-        }.resume()
     }
 
     func fetchOpenRouterModels() async {

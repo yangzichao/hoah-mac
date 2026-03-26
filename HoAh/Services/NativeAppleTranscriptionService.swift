@@ -102,7 +102,7 @@ class NativeAppleTranscriptionService: TranscriptionService {
         let audioFile = try AVAudioFile(forReading: audioURL)
         
         // Get the user's selected language in simple format and convert to BCP-47 format
-        let selectedLanguage = UserDefaults.hoah.string(forKey: "SelectedLanguage") ?? "auto"
+        let selectedLanguage = AppSettingsSnapshot.current().selectedLanguage
         let effectiveLanguage = resolveEffectiveLanguageCode(selectedLanguage: selectedLanguage)
         let appleLocale = mapToAppleLocale(effectiveLanguage)
         let locale = Locale(identifier: appleLocale)

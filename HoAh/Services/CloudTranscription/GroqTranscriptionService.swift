@@ -54,7 +54,7 @@ class GroqTranscriptionService {
             throw CloudTranscriptionError.audioFileNotFound
         }
         
-        let selectedLanguage = UserDefaults.hoah.string(forKey: "SelectedLanguage") ?? "auto"
+        let selectedLanguage = AppSettingsSnapshot.current().selectedLanguage
         let prompt = UserDefaults.hoah.string(forKey: "TranscriptionPrompt") ?? ""
         
         body.append("--\(boundary)\(crlf)".data(using: .utf8)!)

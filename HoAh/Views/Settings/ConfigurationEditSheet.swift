@@ -793,9 +793,14 @@ struct ConfigurationEditSheet: View {
                 }
                 return
             case .apiKey:
-                aiService.verifyBedrockConnection(apiKey: trimmedApiKey, region: region, modelId: trimmedModel) { success, errorMessage in
-                    Task { @MainActor in
-                        handleVerificationResult(success: success, errorMessage: errorMessage)
+                Task {
+                    let result = await AIConfigurationValidator.verifyBedrockBearerToken(
+                        apiKey: trimmedApiKey,
+                        region: region,
+                        modelId: trimmedModel
+                    )
+                    await MainActor.run {
+                        handleVerificationResult(success: result.success, errorMessage: result.errorMessage)
                     }
                 }
                 return

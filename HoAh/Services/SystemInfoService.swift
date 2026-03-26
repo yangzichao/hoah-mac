@@ -193,7 +193,7 @@ class SystemInfoService {
     }
 
     private func getCurrentLanguage() -> String {
-        return UserDefaults.hoah.string(forKey: "SelectedLanguage") ?? "auto"
+        AppSettingsSnapshot.current().selectedLanguage
     }
 
 }

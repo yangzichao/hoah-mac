@@ -277,10 +277,7 @@ class WhisperState: NSObject, ObservableObject {
 
         // Play stop sound when transcription starts with a small delay
         Task {
-            // Read the bridged legacy key during the AppSettingsStore migration.
-            // Sound/recording flows still pass through static helpers and async tasks where
-            // threading injected settings through every call site would be invasive.
-            let isSystemMuteEnabled = UserDefaults.hoah.bool(forKey: "isSystemMuteEnabled")
+            let isSystemMuteEnabled = appSettings?.isSystemMuteEnabled ?? AppSettingsSnapshot.current().isSystemMuteEnabled
             if isSystemMuteEnabled {
                 try? await Task.sleep(nanoseconds: 200_000_000) // 200 milliseconds delay
             }
@@ -384,7 +381,7 @@ class WhisperState: NSObject, ObservableObject {
 
         text = text.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        if UserDefaults.hoah.object(forKey: "IsTextFormattingEnabled") as? Bool ?? true {
+        if appSettings?.isTextFormattingEnabled ?? AppSettingsSnapshot.current().isTextFormattingEnabled {
             text = WhisperTextFormatter.format(text)
             logger.notice("📝 Formatted transcript: \(text, privacy: .public)")
         }
@@ -618,10 +615,7 @@ class WhisperState: NSObject, ObservableObject {
         }
 
         Task {
-            // Same bridge rationale as the batch transcription path above: this realtime
-            // finalization task still relies on the legacy key until recorder flows are
-            // fully store-backed end to end.
-            let isSystemMuteEnabled = UserDefaults.hoah.bool(forKey: "isSystemMuteEnabled")
+            let isSystemMuteEnabled = appSettings?.isSystemMuteEnabled ?? AppSettingsSnapshot.current().isSystemMuteEnabled
             if isSystemMuteEnabled {
                 try? await Task.sleep(nanoseconds: 200_000_000)
             }
@@ -715,7 +709,7 @@ class WhisperState: NSObject, ObservableObject {
 
         if let textToPaste = finalPastedText, transcription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                CursorPaster.pasteAtCursor(textToPaste + " ")
+                CursorPaster.pasteAtCursor(textToPaste)
             }
         }
 
@@ -868,7 +862,7 @@ class WhisperState: NSObject, ObservableObject {
     private func normalizedRealtimeLanguageCode() -> String? {
         // Realtime services still consume the legacy selected-language key because model
         // selection and language selection are not yet sourced exclusively from the store.
-        let selectedLanguage = UserDefaults.hoah.string(forKey: "SelectedLanguage") ?? "auto"
+        let selectedLanguage = appSettings?.selectedLanguage ?? AppSettingsSnapshot.current().selectedLanguage
         guard selectedLanguage != "auto", !selectedLanguage.isEmpty else {
             return nil
         }

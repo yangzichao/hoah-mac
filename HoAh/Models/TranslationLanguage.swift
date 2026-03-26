@@ -114,6 +114,12 @@ extension TranslationLanguage {
 """
     }
 
+    private static func personaInstructionPrefix(for description: String) -> String {
+        """
+the same language as the input, rewritten as personified \(description) speech.
+"""
+    }
+
     private static func resolveProgrammingLanguageTarget(_ trimmed: String, token: String) -> (kind: TranslationTargetKind, replacement: String)? {
         func matches(exact: Set<String>, contains: Set<String> = []) -> Bool {
             if exact.contains(token) { return true }
@@ -175,6 +181,8 @@ extension TranslationLanguage {
         
         if matches(token, exact: ["🐱", "🐈", "😺", "😸", "😻", "🙀", "😿", "😹", "😼", "😽", "🐈‍⬛"], contains: ["cat", "kitty", "kitten", "猫", "喵", "咪", "lolspeak", "lolcat"]) {
             let replacement = """
+\(personaInstructionPrefix(for: trimmed))
+
 the same language as the input, rewritten as an adorable cat speaking.
 
 **For English input, use Lolspeak:**
@@ -200,11 +208,13 @@ the same language as the input, rewritten as an adorable cat speaking.
 **Personality:** aloof yet secretly affectionate, easily distracted, demands treats, judges everything
 Output ONLY the cat-ified text, no explanations.
 """
-            return (.persona(description: "🐱"), replacement)
+            return (.persona(description: trimmed), replacement)
         }
         
         if matches(token, exact: ["🐶", "🐕", "🦮", "🐕‍🦺", "🐩"], contains: ["dog", "puppy", "doggy", "狗", "汪", "犬", "doggolingo", "doggo"]) {
             let replacement = """
+\(personaInstructionPrefix(for: trimmed))
+
 the same language as the input, rewritten as an enthusiastic dog speaking.
 
 **For English input, use DoggoLingo:**
@@ -230,13 +240,15 @@ the same language as the input, rewritten as an enthusiastic dog speaking.
 **Personality:** boundlessly enthusiastic, loyal, thinks hooman is THE BEST, treats mundane things as AMAZING
 Output ONLY the dog-ified text, no explanations.
 """
-            return (.persona(description: "🐶"), replacement)
+            return (.persona(description: trimmed), replacement)
         }
 
         // MARK: - Bird (Birb Language)
         
         if matches(token, exact: ["🐦", "🐤", "🐥", "🐣", "🦜", "🦅", "🦆", "🦉", "🦚", "🦩", "🕊️", "🐧", "🦢"], contains: ["bird", "birb", "鸟", "小鸟"]) {
             let replacement = """
+\(personaInstructionPrefix(for: trimmed))
+
 the same language as the input, rewritten as a cute bird speaking.
 
 **For English input, use Birb language:**
@@ -263,13 +275,15 @@ the same language as the input, rewritten as a cute bird speaking.
 **Personality:** small but mighty, easily distracted by seeds/shiny objects, surprisingly judgmental, loves high places
 Output ONLY the birb-ified text, no explanations.
 """
-            return (.persona(description: "🐦"), replacement)
+            return (.persona(description: trimmed), replacement)
         }
 
         // MARK: - Bunny (Rabbit Language)
         
         if matches(token, exact: ["🐰", "🐇", "🐾"], contains: ["bunny", "rabbit", "兔", "兔兔", "兔子"]) {
             let replacement = """
+\(personaInstructionPrefix(for: trimmed))
+
 the same language as the input, rewritten as a soft, shy bunny speaking.
 
 **For English input:**
@@ -295,7 +309,7 @@ the same language as the input, rewritten as a soft, shy bunny speaking.
 **Personality:** soft and shy, easily startled, obsessed with carrots/snacks, secretly brave, loves to hop
 Output ONLY the bunny-fied text, no explanations.
 """
-            return (.persona(description: "🐰"), replacement)
+            return (.persona(description: trimmed), replacement)
         }
 
         // MARK: - Chuunibyou Style (中二病)
@@ -707,7 +721,9 @@ Rewrite the input as a **Pokémon** speaking. Choose a Pokémon whose personalit
 
         if isAnimalOrCreatureTarget(trimmed) {
             let replacement = """
-the same language as the input, but spoken as a vivid, anthropomorphic \(trimmed) with playful quirks, light interjections, and consistent in-universe tone (no translation)
+\(personaInstructionPrefix(for: trimmed))
+
+Use playful quirks, light interjections, and a consistent in-universe tone. Do not translate.
 """
             return (.persona(description: trimmed), replacement)
         }

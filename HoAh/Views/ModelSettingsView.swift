@@ -2,11 +2,8 @@ import SwiftUI
 
 struct ModelSettingsView: View {
     @Environment(\.theme) private var theme
+    @EnvironmentObject private var appSettings: AppSettingsStore
     @ObservedObject var whisperPrompt: WhisperPrompt
-    @AppStorage("SelectedLanguage", store: .hoah) private var selectedLanguage: String = "auto"
-    @AppStorage("IsTextFormattingEnabled", store: .hoah) private var isTextFormattingEnabled = true
-    @AppStorage("IsVADEnabled", store: .hoah) private var isVADEnabled = true
-    @AppStorage("AppendTrailingSpace", store: .hoah) private var appendTrailingSpace = true
     @State private var customPrompt: String = ""
     @State private var isEditing: Bool = false
     
@@ -27,11 +24,11 @@ struct ModelSettingsView: View {
                 Button(action: {
                     if isEditing {
                         // Save changes
-                        whisperPrompt.setCustomPrompt(customPrompt, for: selectedLanguage)
+                        whisperPrompt.setCustomPrompt(customPrompt, for: appSettings.selectedLanguage)
                         isEditing = false
                     } else {
                         // Enter edit mode
-                        customPrompt = whisperPrompt.getLanguagePrompt(for: selectedLanguage)
+                        customPrompt = whisperPrompt.getLanguagePrompt(for: appSettings.selectedLanguage)
                         isEditing = true
                     }
                 }) {
@@ -51,7 +48,7 @@ struct ModelSettingsView: View {
                     )
                 
             } else {
-                Text(whisperPrompt.getLanguagePrompt(for: selectedLanguage))
+                Text(whisperPrompt.getLanguagePrompt(for: appSettings.selectedLanguage))
                     .font(theme.typography.caption)
                     .foregroundColor(theme.textSecondary)
                     .padding(8)
@@ -69,7 +66,7 @@ struct ModelSettingsView: View {
             Divider().padding(.vertical, 4)
 
             HStack {
-                Toggle(isOn: $appendTrailingSpace) {
+                Toggle(isOn: $appSettings.appendTrailingSpace) {
                     Text("Add space after paste")
                 }
                 .toggleStyle(ThemedSwitchToggleStyle(theme: theme))
@@ -81,7 +78,7 @@ struct ModelSettingsView: View {
             }
 
             HStack {
-                Toggle(isOn: $isTextFormattingEnabled) {
+                Toggle(isOn: $appSettings.isTextFormattingEnabled) {
                     Text("Automatic text formatting")
                 }
                 .toggleStyle(ThemedSwitchToggleStyle(theme: theme))
@@ -93,7 +90,7 @@ struct ModelSettingsView: View {
             }
 
             HStack {
-                Toggle(isOn: $isVADEnabled) {
+                Toggle(isOn: $appSettings.isVADEnabled) {
                     Text("Voice Activity Detection (VAD)")
                 }
                 .toggleStyle(ThemedSwitchToggleStyle(theme: theme))
@@ -109,10 +106,10 @@ struct ModelSettingsView: View {
         .background(theme.controlBackground)
         .cornerRadius(10)
         // Reset the editor when language changes
-        .onChange(of: selectedLanguage) { oldValue, newValue in
+        .onChange(of: appSettings.selectedLanguage) { oldValue, newValue in
             if isEditing {
-                customPrompt = whisperPrompt.getLanguagePrompt(for: selectedLanguage)
+                customPrompt = whisperPrompt.getLanguagePrompt(for: newValue)
             }
         }
     }
-} 
+}

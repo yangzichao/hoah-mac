@@ -2,14 +2,9 @@ import SwiftUI
 import SwiftData
 
 struct AudioCleanupSettingsView: View {
+    @EnvironmentObject private var appSettings: AppSettingsStore
     @EnvironmentObject private var whisperState: WhisperState
     @Environment(\.theme) private var theme
-    
-    // Audio cleanup settings
-    @AppStorage("IsTranscriptionCleanupEnabled", store: .hoah) private var isTranscriptionCleanupEnabled = true
-    @AppStorage("TranscriptionRetentionMinutes", store: .hoah) private var transcriptionRetentionMinutes = 30 * 24 * 60
-    @AppStorage("IsAudioCleanupEnabled", store: .hoah) private var isAudioCleanupEnabled = false
-    @AppStorage("AudioRetentionPeriod", store: .hoah) private var audioRetentionPeriod = 7
     @State private var isPerformingCleanup = false
     @State private var isShowingConfirmation = false
     @State private var cleanupInfo: (fileCount: Int, totalSize: Int64, transcriptions: [Transcription]) = (0, 0, [])
@@ -24,23 +19,23 @@ struct AudioCleanupSettingsView: View {
                 .foregroundColor(theme.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
             
-            SettingsToggleRow("Automatically delete transcript history", isOn: $isTranscriptionCleanupEnabled)
+            SettingsToggleRow("Automatically delete transcript history", isOn: $appSettings.isTranscriptionCleanupEnabled)
                 .padding(.vertical, 4)
             
-            if isTranscriptionCleanupEnabled {
+            if appSettings.isTranscriptionCleanupEnabled {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Text("Delete transcripts older than")
                         Spacer()
                         Menu {
-                            Button("Immediately") { transcriptionRetentionMinutes = 0 }
-                            Button("1 hour") { transcriptionRetentionMinutes = 60 }
-                            Button("1 day") { transcriptionRetentionMinutes = 24 * 60 }
-                            Button("3 days") { transcriptionRetentionMinutes = 3 * 24 * 60 }
-                            Button("7 days") { transcriptionRetentionMinutes = 7 * 24 * 60 }
-                            Button("30 days") { transcriptionRetentionMinutes = 30 * 24 * 60 }
+                            Button("Immediately") { appSettings.transcriptionRetentionMinutes = 0 }
+                            Button("1 hour") { appSettings.transcriptionRetentionMinutes = 60 }
+                            Button("1 day") { appSettings.transcriptionRetentionMinutes = 24 * 60 }
+                            Button("3 days") { appSettings.transcriptionRetentionMinutes = 3 * 24 * 60 }
+                            Button("7 days") { appSettings.transcriptionRetentionMinutes = 7 * 24 * 60 }
+                            Button("30 days") { appSettings.transcriptionRetentionMinutes = 30 * 24 * 60 }
                         } label: {
-                            Text(getTranscriptionRetentionLabel(transcriptionRetentionMinutes))
+                            Text(getTranscriptionRetentionLabel(appSettings.transcriptionRetentionMinutes))
                                 .foregroundColor(theme.textPrimary)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
@@ -78,24 +73,24 @@ struct AudioCleanupSettingsView: View {
                 .padding(.vertical, 4)
             }
 
-            if !isTranscriptionCleanupEnabled {
-                SettingsToggleRow("Enable automatic audio cleanup", isOn: $isAudioCleanupEnabled)
+            if !appSettings.isTranscriptionCleanupEnabled {
+                SettingsToggleRow("Enable automatic audio cleanup", isOn: $appSettings.isAudioCleanupEnabled)
                     .padding(.vertical, 4)
             }
 
-            if isAudioCleanupEnabled && !isTranscriptionCleanupEnabled {
+            if appSettings.isAudioCleanupEnabled && !appSettings.isTranscriptionCleanupEnabled {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Text("Keep audio files for")
                         Spacer()
                         Menu {
-                            Button("1 day") { audioRetentionPeriod = 1 }
-                            Button("3 days") { audioRetentionPeriod = 3 }
-                            Button("7 days") { audioRetentionPeriod = 7 }
-                            Button("14 days") { audioRetentionPeriod = 14 }
-                            Button("30 days") { audioRetentionPeriod = 30 }
+                            Button("1 day") { appSettings.audioRetentionPeriod = 1 }
+                            Button("3 days") { appSettings.audioRetentionPeriod = 3 }
+                            Button("7 days") { appSettings.audioRetentionPeriod = 7 }
+                            Button("14 days") { appSettings.audioRetentionPeriod = 14 }
+                            Button("30 days") { appSettings.audioRetentionPeriod = 30 }
                         } label: {
-                            Text(getAudioRetentionLabel(audioRetentionPeriod))
+                            Text(getAudioRetentionLabel(appSettings.audioRetentionPeriod))
                                 .foregroundColor(theme.textPrimary)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
@@ -173,11 +168,11 @@ struct AudioCleanupSettingsView: View {
                 } message: {
                     VStack(alignment: .leading, spacing: 8) {
                         if cleanupInfo.fileCount > 0 {
-                            Text(String(format: NSLocalizedString("This will delete %lld audio files older than %lld days.", comment: ""), cleanupInfo.fileCount, audioRetentionPeriod))
+                            Text(String(format: NSLocalizedString("This will delete %lld audio files older than %lld days.", comment: ""), cleanupInfo.fileCount, appSettings.audioRetentionPeriod))
                             Text(String(format: NSLocalizedString("Total size to be freed: %@", comment: ""), AudioCleanupManager.shared.formatFileSize(cleanupInfo.totalSize)))
                             Text(LocalizedStringKey("The text transcripts will be preserved."))
                         } else {
-                            Text(String(format: NSLocalizedString("No audio files found that are older than %lld days.", comment: ""), audioRetentionPeriod))
+                            Text(String(format: NSLocalizedString("No audio files found that are older than %lld days.", comment: ""), appSettings.audioRetentionPeriod))
                         }
                     }
                 }
@@ -192,10 +187,10 @@ struct AudioCleanupSettingsView: View {
                 }
             }
         }
-        .onChange(of: isTranscriptionCleanupEnabled) { _, newValue in
+        .onChange(of: appSettings.isTranscriptionCleanupEnabled) { _, newValue in
             if newValue {
                 AudioCleanupManager.shared.stopAutomaticCleanup()
-            } else if isAudioCleanupEnabled {
+            } else if appSettings.isAudioCleanupEnabled {
                 AudioCleanupManager.shared.startAutomaticCleanup(modelContext: whisperState.modelContext)
             }
         }

@@ -135,8 +135,7 @@ enum UIStyleConsistencyChecker {
     }
 
     private static var isRunningInPreviewOrTests: Bool {
-        let env = ProcessInfo.processInfo.environment
-        return env["XCTestConfigurationFilePath"] != nil || env["XCODE_RUNNING_FOR_PREVIEWS"] != nil
+        RuntimeEnvironment.isRunningTestsOrPreviews
     }
 }
 

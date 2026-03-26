@@ -85,6 +85,31 @@ class UserDefaultsStorage: SettingsStorage {
             state.preserveTranscriptInClipboard = preserveClipboard
             foundAnyLegacySettings = true
         }
+
+        if let selectedLanguage = userDefaults.string(forKey: "SelectedLanguage") {
+            state.selectedLanguage = selectedLanguage
+            foundAnyLegacySettings = true
+        }
+
+        if let hasManuallySelectedLanguage = userDefaults.object(forKey: "HasManuallySelectedLanguage") as? Bool {
+            state.hasManuallySelectedLanguage = hasManuallySelectedLanguage
+            foundAnyLegacySettings = true
+        }
+
+        if let isTextFormattingEnabled = userDefaults.object(forKey: "IsTextFormattingEnabled") as? Bool {
+            state.isTextFormattingEnabled = isTextFormattingEnabled
+            foundAnyLegacySettings = true
+        }
+
+        if let isVADEnabled = userDefaults.object(forKey: "IsVADEnabled") as? Bool {
+            state.isVADEnabled = isVADEnabled
+            foundAnyLegacySettings = true
+        }
+
+        if let appendTrailingSpace = userDefaults.object(forKey: "AppendTrailingSpace") as? Bool {
+            state.appendTrailingSpace = appendTrailingSpace
+            foundAnyLegacySettings = true
+        }
         
         // Migrate hotkey settings
         if let hotkey1 = userDefaults.string(forKey: "selectedHotkey1") {
@@ -159,14 +184,33 @@ class UserDefaultsStorage: SettingsStorage {
         
         // Migrate selected models per provider
         // Note: We need to check all possible providers
-        let providerNames = ["AWS Bedrock", "OCI Generative AI", "Cerebras", "GROQ", "Gemini", "Anthropic",
-                            "OpenAI", "Azure OpenAI", "OpenRouter"]
+        let providerNames = AIProvider.allCases.map(\.rawValue)
         for providerName in providerNames {
             let key = "\(providerName)SelectedModel"
             if let model = userDefaults.string(forKey: key) {
                 state.selectedModels[providerName] = model
                 foundAnyLegacySettings = true
             }
+        }
+
+        if let isTranscriptionCleanupEnabled = userDefaults.object(forKey: "IsTranscriptionCleanupEnabled") as? Bool {
+            state.isTranscriptionCleanupEnabled = isTranscriptionCleanupEnabled
+            foundAnyLegacySettings = true
+        }
+
+        if let transcriptionRetentionMinutes = userDefaults.object(forKey: "TranscriptionRetentionMinutes") as? Int {
+            state.transcriptionRetentionMinutes = max(transcriptionRetentionMinutes, 0)
+            foundAnyLegacySettings = true
+        }
+
+        if let isAudioCleanupEnabled = userDefaults.object(forKey: "IsAudioCleanupEnabled") as? Bool {
+            state.isAudioCleanupEnabled = isAudioCleanupEnabled
+            foundAnyLegacySettings = true
+        }
+
+        if let audioRetentionPeriod = userDefaults.object(forKey: "AudioRetentionPeriod") as? Int {
+            state.audioRetentionPeriod = max(audioRetentionPeriod, 1)
+            foundAnyLegacySettings = true
         }
         
         // Only return migrated state if we found any legacy settings
@@ -209,7 +253,7 @@ class UserDefaultsStorage: SettingsStorage {
         let keyManager = CloudAPIKeyManager.shared
         
         // Handle legacy providers that are no longer supported
-        let validProviders = ["AWS Bedrock", "OCI Generative AI", "Cerebras", "GROQ", "Gemini", "Anthropic", "OpenAI", "Azure OpenAI", "OpenRouter"]
+        let validProviders = AIProvider.supportedProviderNames
         if !validProviders.contains(provider) {
             logger.warning("Legacy provider '\(provider)' no longer supported, migrating to 'Gemini'")
             provider = "Gemini"

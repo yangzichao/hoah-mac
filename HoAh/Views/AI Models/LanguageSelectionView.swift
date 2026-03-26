@@ -8,18 +8,16 @@ enum LanguageDisplayMode {
 
 struct LanguageSelectionView: View {
     @ObservedObject var whisperState: WhisperState
-    @AppStorage("SelectedLanguage", store: .hoah) private var selectedLanguage: String = "auto"
-    @AppStorage("HasManuallySelectedLanguage", store: .hoah) private var hasManuallySelectedLanguage = false
+    @EnvironmentObject private var appSettings: AppSettingsStore
     // Add display mode parameter with full as the default
     var displayMode: LanguageDisplayMode = .full
     @ObservedObject var whisperPrompt: WhisperPrompt
     @Environment(\.theme) private var theme
 
     private func updateLanguage(_ language: String, isUserSelection: Bool = false) {
-        // Update UI state - the UserDefaults updating is now automatic with @AppStorage
-        selectedLanguage = language
+        appSettings.selectedLanguage = language
         if isUserSelection {
-            hasManuallySelectedLanguage = true
+            appSettings.hasManuallySelectedLanguage = true
         }
 
         // Force the prompt to update for the new language
@@ -52,7 +50,7 @@ struct LanguageSelectionView: View {
 
     // Get the display name of the current language
     private func currentLanguageDisplayName() -> String {
-        return getCurrentModelLanguages()[selectedLanguage] ?? "Unknown"
+        return getCurrentModelLanguages()[appSettings.selectedLanguage] ?? "Unknown"
     }
 
     private func preferredFallbackLanguage(from languages: [String: String], prefersAuto: Bool) -> String {
@@ -71,28 +69,34 @@ struct LanguageSelectionView: View {
         let languages = model.supportedLanguages
         let supportsAuto = languages.keys.contains("auto")
         let isEnglishOnly = !model.isMultilingualModel
-        let currentSelectionIsValid = languages[selectedLanguage] != nil
+        let currentSelectionIsValid = languages[appSettings.selectedLanguage] != nil
         let defaultLanguage = preferredFallbackLanguage(from: languages, prefersAuto: supportsAuto)
-        let isEnglishSelection = selectedLanguage == "en" || selectedLanguage.hasPrefix("en-")
+        let isEnglishSelection = appSettings.selectedLanguage == "en" || appSettings.selectedLanguage.hasPrefix("en-")
 
         if isEnglishOnly {
-            hasManuallySelectedLanguage = false
+            appSettings.hasManuallySelectedLanguage = false
             updateLanguage(defaultLanguage)
             return
         }
 
         if !currentSelectionIsValid {
-            hasManuallySelectedLanguage = false
+            appSettings.hasManuallySelectedLanguage = false
             updateLanguage(defaultLanguage)
             return
         }
 
-        if !hasManuallySelectedLanguage && selectedLanguage != "auto" && currentSelectionIsValid && !isEnglishSelection {
+        if !appSettings.hasManuallySelectedLanguage &&
+            appSettings.selectedLanguage != "auto" &&
+            currentSelectionIsValid &&
+            !isEnglishSelection {
             // Preserve explicit non-English selections that may have come from other legacy flows
-            hasManuallySelectedLanguage = true
+            appSettings.hasManuallySelectedLanguage = true
         }
 
-        if supportsAuto && !hasManuallySelectedLanguage && selectedLanguage != "auto" && isEnglishSelection {
+        if supportsAuto &&
+            !appSettings.hasManuallySelectedLanguage &&
+            appSettings.selectedLanguage != "auto" &&
+            isEnglishSelection {
             updateLanguage("auto")
         }
     }
@@ -140,7 +144,7 @@ struct LanguageSelectionView: View {
                         Picker(
                             "Select Language",
                             selection: Binding(
-                                get: { selectedLanguage },
+                                get: { appSettings.selectedLanguage },
                                 set: { newValue in
                                     updateLanguage(newValue, isUserSelection: true)
                                 }
@@ -168,8 +172,8 @@ struct LanguageSelectionView: View {
                     }
                     .onAppear {
                         let languages = currentModel.supportedLanguages
-                        if selectedLanguage.isEmpty || languages[selectedLanguage] == nil {
-                            hasManuallySelectedLanguage = false
+                        if appSettings.selectedLanguage.isEmpty || languages[appSettings.selectedLanguage] == nil {
+                            appSettings.hasManuallySelectedLanguage = false
                             updateLanguage(languages.keys.contains("auto") ? "auto" : (languages.keys.sorted().first ?? "auto"))
                         }
                         applyDefaultLanguageIfNeeded(for: currentModel)
@@ -191,7 +195,7 @@ struct LanguageSelectionView: View {
                     }
                     .onAppear {
                         // Ensure English is set when viewing English-only model
-                        hasManuallySelectedLanguage = false
+                        appSettings.hasManuallySelectedLanguage = false
                         updateLanguage("en")
                     }
                 }
@@ -232,7 +236,7 @@ struct LanguageSelectionView: View {
                         } label: {
                             HStack {
                                 Text(value)
-                                if selectedLanguage == key {
+                                if appSettings.selectedLanguage == key {
                                     Image(systemName: "checkmark")
                                 }
                             }
@@ -256,7 +260,7 @@ struct LanguageSelectionView: View {
                 .disabled(true)
                 .onAppear {
                     // Ensure English is set for English-only models
-                    hasManuallySelectedLanguage = false
+                    appSettings.hasManuallySelectedLanguage = false
                     updateLanguage("en")
                 }
             }
