@@ -1778,10 +1778,14 @@ Disable for full control over the AI's system prompt (for advanced users).</key>
 	<string>自定义 Selection Action 快捷键</string>
 	<key>Default is Option + Shift + number. Record a new shortcut for any action if you want a different mapping.</key>
 	<string>默认使用 Option + Shift + 数字。你可以为任意指令录制新的快捷键映射。</string>
+	<key>Default shortcuts use ⌥⇧%@. You can customize each action below.</key>
+	<string>默认快捷键使用 ⌥⇧%@。你可以在下方为每个 AI 指令单独自定义。</string>
 	<key>Default shortcuts use ⌥⇧1–0. You can customize each slot below.</key>
 	<string>默认快捷键使用 ⌥⇧1–0。你也可以在下方自定义每个槽位。</string>
 	<key>Applying AI Action: %@</key>
 	<string>正在应用 AI 指令：%@</string>
+	<key>No AI Actions available yet. Add or enable an AI Action to create Selection Action shortcuts.</key>
+	<string>当前还没有可用的 AI 指令。先添加或启用 AI 指令后，才能创建 Selection Action 快捷键。</string>
 	<key>Action %d</key>
 	<string>指令 %d</string>
 	<key>Shortcut Slot %d</key>
