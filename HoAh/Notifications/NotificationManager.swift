@@ -13,7 +13,7 @@ class NotificationManager {
     func showNotification(
         title: String,
         type: AppNotificationView.NotificationType,
-        duration: TimeInterval = 5.0,
+        duration: TimeInterval? = 5.0,
         onTap: (() -> Void)? = nil
     ) {
         dismissTimer?.invalidate()
@@ -70,11 +70,13 @@ class NotificationManager {
         })
         
         // Schedule a new timer to dismiss the new notification.
-        dismissTimer = Timer.scheduledTimer(
-            withTimeInterval: duration,
-            repeats: false
-        ) { [weak self] _ in
-            self?.dismissNotification()
+        if let duration {
+            dismissTimer = Timer.scheduledTimer(
+                withTimeInterval: duration,
+                repeats: false
+            ) { [weak self] _ in
+                self?.dismissNotification()
+            }
         }
     }
 
