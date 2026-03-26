@@ -3,6 +3,22 @@
     <channel>
         <title>HoAh Releases</title>
         <item>
+            <title>3.7.3</title>
+            <pubDate>Thu, 26 Mar 2026 15:50:50 -0700</pubDate>
+            <sparkle:version>373</sparkle:version>
+            <sparkle:shortVersionString>3.7.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[
+                <h3>What's New in Version 3.7.3</h3>
+                <ul>
+                    <li>Updated Selection Action shortcuts to scale automatically with your active AI Actions, so the available shortcut range stays aligned with the actions you can actually run.</li>
+                    <li>Improved the shortcuts reference and settings UI to show the active Selection Action shortcut range more clearly.</li>
+                    <li>Refined settings copy and localizations around AI Action shortcuts for clearer guidance.</li>
+                </ul>
+            ]]></description>
+            <enclosure url="https://github.com/yangzichao/hoah-release/releases/download/v3.7.3/HoAh-3.7.3.dmg" length="0" type="application/octet-stream" sparkle:edSignature=""/>
+        </item>
+        <item>
             <title>3.7.2</title>
             <pubDate>Thu, 26 Mar 2026 15:28:22 -0700</pubDate>
             <sparkle:version>372</sparkle:version>

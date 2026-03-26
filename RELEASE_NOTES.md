@@ -1,3 +1,12 @@
+# HoAh Dictation v3.7.3
+
+### Improvements
+* **Dynamic Selection Action Shortcuts**: Selection Action shortcuts now scale automatically with your active AI Actions, so the shortcut range matches the actions you can actually run.
+* **Shortcut Visibility**: Updated the keyboard shortcuts reference and settings UI to show the active Selection Action shortcut range more clearly.
+* **Copy & Localization Cleanup**: Refined AI Action shortcut descriptions and localizations for clearer settings guidance.
+
+---
+
 # HoAh Dictation v3.7.2
 
 ### Improvements
