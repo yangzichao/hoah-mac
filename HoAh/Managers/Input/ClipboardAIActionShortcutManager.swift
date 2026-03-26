@@ -176,10 +176,11 @@ final class ClipboardAIActionShortcutManager {
             return
         }
 
-        guard let clipboardText = ClipboardManager.getClipboardContent()?.trimmingCharacters(in: .whitespacesAndNewlines),
+        guard await ClipboardManager.copySelectedTextToClipboard(),
+              let clipboardText = ClipboardManager.getClipboardContent()?.trimmingCharacters(in: .whitespacesAndNewlines),
               !clipboardText.isEmpty else {
             NotificationManager.shared.showNotification(
-                title: NSLocalizedString("Clipboard is empty", comment: "Shown when clipboard action shortcut is triggered with no text in clipboard"),
+                title: NSLocalizedString("No selected text found", comment: "Shown when clipboard action shortcut is triggered without any selected text to copy"),
                 type: .warning
             )
             return

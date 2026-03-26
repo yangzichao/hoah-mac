@@ -152,7 +152,7 @@ struct KeyboardShortcutsListView: View {
                             icon: "doc.on.clipboard",
                             iconColor: .green,
                             title: "Run Clipboard Action",
-                            subtitle: "Run the matching AI Action on clipboard text"
+                            subtitle: "Run the matching AI Action on selected text"
                         ) {
                             if clipboardActionShortcutsAreDefault {
                                 StaticKeysBadge(keys: ["⌥", "⇧", "1–0"])

@@ -1770,6 +1770,8 @@ Disable for full control over the AI's system prompt (for advanced users).</key>
 	<string>另一个剪贴板 AI 指令仍在运行中</string>
 	<key>Clipboard is empty</key>
 	<string>剪贴板为空</string>
+	<key>No selected text found</key>
+	<string>未找到选中的文本</string>
 	<key>Clipboard Action</key>
 	<string>Clipboard Action</string>
 	<key>Customize Clipboard Action Shortcuts</key>
@@ -1788,8 +1790,8 @@ Disable for full control over the AI's system prompt (for advanced users).</key>
 	<string>当前还没有对应的 AI 指令</string>
 	<key>Please add a valid AI configuration first</key>
 	<string>请先添加一个可用的 AI 配置</string>
-	<key>Run the current clipboard text through an AI Action and paste the result into the focused input.</key>
-	<string>将当前剪贴板文本交给 AI 指令处理，并将结果粘贴到当前聚焦的输入框。</string>
+	<key>Copy the currently selected text, run it through an AI Action, and paste the result into the focused input.</key>
+	<string>先复制当前选中的文本，再交给 AI 指令处理，并将结果粘贴到当前聚焦的输入框。</string>
 	<key>No AI Action assigned to shortcut %@</key>
 	<string>快捷键 %@ 没有对应的 AI 指令</string>
 	<key>This feature is disabled by default. Once enabled, the shortcut works globally while HoAh is running.</key>
