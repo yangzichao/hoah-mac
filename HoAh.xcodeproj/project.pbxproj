@@ -341,11 +341,11 @@
 				buildSettings = {
 					BUNDLE_LOADER = "$(TEST_HOST)";
 					CODE_SIGN_STYLE = Automatic;
-					CURRENT_PROJECT_VERSION = 371;
+					CURRENT_PROJECT_VERSION = 372;
 					DEVELOPMENT_TEAM = Y646LMR36U;
 					GENERATE_INFOPLIST_FILE = YES;
 					MACOSX_DEPLOYMENT_TARGET = 14.0;
-					MARKETING_VERSION = 3.7.1;
+					MARKETING_VERSION = 3.7.2;
 					PRODUCT_BUNDLE_IDENTIFIER = com.yangzichao.HoAhTests;
 					PRODUCT_NAME = "$(TARGET_NAME)";
 					SDKROOT = macosx;
@@ -364,11 +364,11 @@
 				buildSettings = {
 					BUNDLE_LOADER = "$(TEST_HOST)";
 					CODE_SIGN_STYLE = Automatic;
-					CURRENT_PROJECT_VERSION = 371;
+					CURRENT_PROJECT_VERSION = 372;
 					DEVELOPMENT_TEAM = Y646LMR36U;
 					GENERATE_INFOPLIST_FILE = YES;
 					MACOSX_DEPLOYMENT_TARGET = 14.0;
-					MARKETING_VERSION = 3.7.1;
+					MARKETING_VERSION = 3.7.2;
 					PRODUCT_BUNDLE_IDENTIFIER = com.yangzichao.HoAhTests;
 					PRODUCT_NAME = "$(TARGET_NAME)";
 					SDKROOT = macosx;
@@ -387,11 +387,11 @@
 				buildSettings = {
 					BUNDLE_LOADER = "$(TEST_HOST)";
 					CODE_SIGN_STYLE = Automatic;
-					CURRENT_PROJECT_VERSION = 371;
+					CURRENT_PROJECT_VERSION = 372;
 					DEVELOPMENT_TEAM = Y646LMR36U;
 					GENERATE_INFOPLIST_FILE = YES;
 					MACOSX_DEPLOYMENT_TARGET = 14.0;
-					MARKETING_VERSION = 3.7.1;
+					MARKETING_VERSION = 3.7.2;
 					PRODUCT_BUNDLE_IDENTIFIER = com.yangzichao.HoAhTests;
 					PRODUCT_NAME = "$(TARGET_NAME)";
 					SDKROOT = macosx;
@@ -538,7 +538,7 @@
 					CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
 					CODE_SIGN_STYLE = Automatic;
 					COMBINE_HIDPI_IMAGES = YES;
-						CURRENT_PROJECT_VERSION = 371;
+						CURRENT_PROJECT_VERSION = 372;
 					DEVELOPMENT_ASSET_PATHS = "\"HoAh/Preview Content\"";
 					DEVELOPMENT_TEAM = Y646LMR36U;
 					ENABLE_HARDENED_RUNTIME = NO;
@@ -554,7 +554,7 @@
 						"@executable_path/../Frameworks",
 					);
 					MACOSX_DEPLOYMENT_TARGET = 14.0;
-						MARKETING_VERSION = 3.7.1;
+						MARKETING_VERSION = 3.7.2;
 					PRODUCT_BUNDLE_IDENTIFIER = com.yangzichao.hoah;
 					PRODUCT_MODULE_NAME = HoAh;
 					PRODUCT_NAME = HoAh;
@@ -578,7 +578,7 @@
 					"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application: Zichao Yang (Y646LMR36U)";
 					CODE_SIGN_STYLE = Automatic;
 					COMBINE_HIDPI_IMAGES = YES;
-						CURRENT_PROJECT_VERSION = 371;
+						CURRENT_PROJECT_VERSION = 372;
 					DEVELOPMENT_ASSET_PATHS = "\"HoAh/Preview Content\"";
 					DEVELOPMENT_TEAM = Y646LMR36U;
 					ENABLE_HARDENED_RUNTIME = YES;
@@ -593,7 +593,7 @@
 						"@executable_path/../Frameworks",
 					);
 					MACOSX_DEPLOYMENT_TARGET = 14.0;
-						MARKETING_VERSION = 3.7.1;
+						MARKETING_VERSION = 3.7.2;
 					PRODUCT_BUNDLE_IDENTIFIER = com.yangzichao.hoah;
 					PRODUCT_MODULE_NAME = HoAh;
 					PRODUCT_NAME = HoAh;
@@ -672,7 +672,7 @@
 					"CODE_SIGN_IDENTITY[sdk=macosx*]" = "3rd Party Mac Developer Application: Zichao Yang (Y646LMR36U)";
 					CODE_SIGN_STYLE = Manual;
 					COMBINE_HIDPI_IMAGES = YES;
-						CURRENT_PROJECT_VERSION = 371;
+						CURRENT_PROJECT_VERSION = 372;
 					DEVELOPMENT_ASSET_PATHS = "\"HoAh/Preview Content\"";
 					DEVELOPMENT_TEAM = Y646LMR36U;
 					ENABLE_HARDENED_RUNTIME = YES;
@@ -687,7 +687,7 @@
 						"@executable_path/../Frameworks",
 					);
 					MACOSX_DEPLOYMENT_TARGET = 14.0;
-						MARKETING_VERSION = 3.7.1;
+						MARKETING_VERSION = 3.7.2;
 					PRODUCT_BUNDLE_IDENTIFIER = com.yangzichao.hoah;
 					PRODUCT_MODULE_NAME = HoAh;
 					PRODUCT_NAME = HoAh;
