@@ -2,6 +2,8 @@ import Foundation
 import AppKit
 
 class CursorPaster {
+    private static let pasteTriggerDelay: UInt64 = 50_000_000
+    private static let pasteCompletionDelay: UInt64 = 150_000_000
 
     static func pasteAtCursor(
         _ text: String,
@@ -58,9 +60,22 @@ class CursorPaster {
             }
         }
     }
-    
 
-    
+    @MainActor
+    static func pasteAtCursorAndWait(
+        _ text: String,
+        preserveClipboardOverride: Bool? = nil,
+        appendTrailingSpaceOverride: Bool? = nil
+    ) async {
+        pasteAtCursor(
+            text,
+            preserveClipboardOverride: preserveClipboardOverride,
+            appendTrailingSpaceOverride: appendTrailingSpaceOverride
+        )
+
+        try? await Task.sleep(nanoseconds: pasteTriggerDelay + pasteCompletionDelay)
+    }
+
     private static func pasteUsingCommandV() {
         guard AXIsProcessTrusted() else {
             return

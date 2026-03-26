@@ -4,7 +4,7 @@ struct AppNotificationView: View {
     @Environment(\.theme) private var theme
     let title: String
     let type: NotificationType
-    let duration: TimeInterval
+    let duration: TimeInterval?
     let onClose: () -> Void
     let onTap: (() -> Void)?
     
@@ -89,17 +89,21 @@ struct AppNotificationView: View {
                 .strokeBorder(theme.notificationBorder, lineWidth: 0.5)
         )
         .overlay(
-            VStack {
-                Spacer()
-                GeometryReader { geometry in
-                    Rectangle()
-                        .fill(theme.notificationAccent.opacity(0.8))
-                        .frame(width: geometry.size.width * max(0, progress), height: 2)
-                        .animation(.linear(duration: 0.1), value: progress)
+            Group {
+                if duration != nil {
+                    VStack {
+                        Spacer()
+                        GeometryReader { geometry in
+                            Rectangle()
+                                .fill(theme.notificationAccent.opacity(0.8))
+                                .frame(width: geometry.size.width * max(0, progress), height: 2)
+                                .animation(.linear(duration: 0.1), value: progress)
+                        }
+                        .frame(height: 2)
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 }
-                .frame(height: 2)
             }
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         )
         .onAppear {
             startProgressTimer()
@@ -129,6 +133,8 @@ struct AppNotificationView: View {
     }
 
     private func startProgressTimer() {
+        guard let duration else { return }
+
         let updateInterval: TimeInterval = 0.1
         let totalSteps = duration / updateInterval
         let stepDecrement = 1.0 / totalSteps

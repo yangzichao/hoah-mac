@@ -215,7 +215,7 @@ final class ClipboardAIActionShortcutManager {
                 prompt.displayTitle
             ),
             type: .info,
-            duration: 1.2
+            duration: nil
         )
 
         defer {
@@ -236,7 +236,8 @@ final class ClipboardAIActionShortcutManager {
             )
             // Clipboard Action should be one-shot but keep the AI result in clipboard.
             // We still attempt to paste into the focused input field.
-            CursorPaster.pasteAtCursor(result, preserveClipboardOverride: true)
+            await CursorPaster.pasteAtCursorAndWait(result, preserveClipboardOverride: true)
+            NotificationManager.shared.dismissNotification()
         } catch {
             let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
             archiveClipboardAction(
