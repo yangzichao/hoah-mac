@@ -3,7 +3,11 @@ import AppKit
 
 class CursorPaster {
 
-    static func pasteAtCursor(_ text: String, preserveClipboardOverride: Bool? = nil) {
+    static func pasteAtCursor(
+        _ text: String,
+        preserveClipboardOverride: Bool? = nil,
+        appendTrailingSpaceOverride: Bool? = nil
+    ) {
         let pasteboard = NSPasteboard.general
         // Read from the legacy key (synced by AppSettingsStore).
         // This class is intentionally static because it is called from low-level paste flows,
@@ -27,7 +31,17 @@ class CursorPaster {
             }
         }
 
-        ClipboardManager.setClipboard(text, transient: !preserveTranscript)
+        let shouldAppendTrailingSpace = appendTrailingSpaceOverride ?? AppSettingsSnapshot.current().appendTrailingSpace
+        let finalText: String
+        if shouldAppendTrailingSpace,
+           !text.isEmpty,
+           text.last?.isWhitespace != true {
+            finalText = text + " "
+        } else {
+            finalText = text
+        }
+
+        ClipboardManager.setClipboard(finalText, transient: !preserveTranscript)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
             pasteUsingCommandV()

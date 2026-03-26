@@ -27,7 +27,7 @@ final class WhisperModelWarmupCoordinator: ObservableObject {
         allowRetry: Bool = true,
         force: Bool = false
     ) {
-        guard !isShuttingDown else { return }
+        guard !isShuttingDown, !RuntimeEnvironment.isRunningTestsOrPreviews else { return }
         guard shouldWarmup(modelName: model.name),
               !warmingModels.contains(model.name) else {
             return

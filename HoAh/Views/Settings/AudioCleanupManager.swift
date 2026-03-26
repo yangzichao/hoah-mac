@@ -51,8 +51,8 @@ class AudioCleanupManager {
         logger.info("Analyzing potential audio cleanup")
         
         // Get retention period from UserDefaults
-        let retentionDays = UserDefaults.hoah.integer(forKey: "AudioRetentionPeriod")
-        let effectiveRetentionDays = retentionDays > 0 ? retentionDays : defaultRetentionDays
+        let snapshot = AppSettingsSnapshot.current()
+        let effectiveRetentionDays = snapshot.audioRetentionPeriod > 0 ? snapshot.audioRetentionPeriod : defaultRetentionDays
         
         // Calculate the cutoff date
         let calendar = Calendar.current
@@ -106,11 +106,11 @@ class AudioCleanupManager {
         logger.info("Performing audio cleanup")
         
         // Get retention period from UserDefaults
-        let retentionDays = UserDefaults.hoah.integer(forKey: "AudioRetentionPeriod")
-        let effectiveRetentionDays = retentionDays > 0 ? retentionDays : defaultRetentionDays
+        let snapshot = AppSettingsSnapshot.current()
+        let effectiveRetentionDays = snapshot.audioRetentionPeriod > 0 ? snapshot.audioRetentionPeriod : defaultRetentionDays
         
         // Check if automatic cleanup is enabled
-        let isCleanupEnabled = UserDefaults.hoah.bool(forKey: "IsAudioCleanupEnabled")
+        let isCleanupEnabled = snapshot.isAudioCleanupEnabled
         guard isCleanupEnabled else {
             logger.info("Audio cleanup is disabled, skipping")
             return

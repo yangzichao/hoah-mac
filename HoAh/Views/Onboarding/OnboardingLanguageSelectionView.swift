@@ -4,8 +4,6 @@ struct OnboardingLanguageSelectionView: View {
     @EnvironmentObject private var appSettings: AppSettingsStore
     @EnvironmentObject private var localizationManager: LocalizationManager
     @Environment(\.theme) private var theme
-    // DEPRECATED: Use AppSettingsStore instead of @AppStorage
-    @AppStorage("SelectedLanguage", store: .hoah) private var selectedLanguage: String = "auto"
     
     let onContinue: () -> Void
     

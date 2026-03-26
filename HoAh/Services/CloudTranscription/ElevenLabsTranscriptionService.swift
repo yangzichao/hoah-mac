@@ -58,7 +58,7 @@ class ElevenLabsTranscriptionService {
         body.append(formField: "temperature", value: "0.0", boundary: boundary)
         body.append(formField: "tag_audio_events", value: "false", boundary: boundary)
         
-        let selectedLanguage = UserDefaults.hoah.string(forKey: "SelectedLanguage") ?? "auto"
+        let selectedLanguage = AppSettingsSnapshot.current().selectedLanguage
         if selectedLanguage != "auto", !selectedLanguage.isEmpty {
             body.append(formField: "language_code", value: selectedLanguage, boundary: boundary)
         }

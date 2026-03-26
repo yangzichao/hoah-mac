@@ -82,6 +82,31 @@ class AppSettingsStore: ObservableObject {
             saveSettings() 
         }
     }
+
+    /// Selected transcription language ("auto", "en", etc.)
+    @Published var selectedLanguage: String {
+        didSet { saveSettings() }
+    }
+
+    /// Whether the language selection came from explicit user choice
+    @Published var hasManuallySelectedLanguage: Bool {
+        didSet { saveSettings() }
+    }
+
+    /// Whether transcript text formatting is enabled
+    @Published var isTextFormattingEnabled: Bool {
+        didSet { saveSettings() }
+    }
+
+    /// Whether local Whisper VAD is enabled
+    @Published var isVADEnabled: Bool {
+        didSet { saveSettings() }
+    }
+
+    /// Whether pasted transcript text should append a trailing space
+    @Published var appendTrailingSpace: Bool {
+        didSet { saveSettings() }
+    }
     
     // Hotkey Settings
     
@@ -402,6 +427,32 @@ class AppSettingsStore: ObservableObject {
             saveSettings()
         }
     }
+
+    /// Whether transcript cleanup is enabled
+    @Published var isTranscriptionCleanupEnabled: Bool = true {
+        didSet { saveSettings() }
+    }
+
+    /// Transcript cleanup retention in minutes
+    @Published var transcriptionRetentionMinutes: Int = 30 * 24 * 60 {
+        didSet {
+            validateTranscriptionRetentionMinutes()
+            saveSettings()
+        }
+    }
+
+    /// Whether automatic audio cleanup is enabled
+    @Published var isAudioCleanupEnabled: Bool = false {
+        didSet { saveSettings() }
+    }
+
+    /// Audio cleanup retention in days
+    @Published var audioRetentionPeriod: Int = 7 {
+        didSet {
+            validateAudioRetentionPeriod()
+            saveSettings()
+        }
+    }
     
     /// Display path for the configured export folder (computed from bookmark)
     var autoExportDisplayPath: String? {
@@ -438,6 +489,11 @@ class AppSettingsStore: ObservableObject {
         // Sync with legacy key consumed at runtime by CursorPaster.
         UserDefaults.hoah.set(state.preserveTranscriptInClipboard, forKey: "preserveTranscriptInClipboard")
         self.maxRecordingDurationMinutes = state.maxRecordingDurationMinutes
+        self.selectedLanguage = state.selectedLanguage
+        self.hasManuallySelectedLanguage = state.hasManuallySelectedLanguage
+        self.isTextFormattingEnabled = state.isTextFormattingEnabled
+        self.isVADEnabled = state.isVADEnabled
+        self.appendTrailingSpace = state.appendTrailingSpace
         self.selectedHotkey1 = state.selectedHotkey1
         self.selectedHotkey2 = state.selectedHotkey2
         self.isMiddleClickToggleEnabled = state.isMiddleClickToggleEnabled
@@ -488,8 +544,13 @@ class AppSettingsStore: ObservableObject {
         self.activeAIConfigurationId = state.activeAIConfigurationId
         self.hasCompletedAIConfigMigration = state.hasCompletedAIConfigMigration
         self.isAutoExportEnabled = state.isAutoExportEnabled
+        self.isTranscriptionCleanupEnabled = state.isTranscriptionCleanupEnabled
+        self.transcriptionRetentionMinutes = state.transcriptionRetentionMinutes
+        self.isAudioCleanupEnabled = state.isAudioCleanupEnabled
+        self.audioRetentionPeriod = state.audioRetentionPeriod
         // Sync auto export state to UserDefaults for AutoExportService
         UserDefaults.hoah.set(state.isAutoExportEnabled, forKey: "isAutoExportEnabled")
+        syncLegacyUserDefaults(from: state)
         
         // Default selected prompt to Polish if none set (prevents unintended translation defaults)
         if _selectedPromptId == nil {
@@ -499,6 +560,8 @@ class AppSettingsStore: ObservableObject {
         // Validate AI configurations on load
         validateAIConfigurations()
         validateMaxRecordingDuration()
+        validateTranscriptionRetentionMinutes()
+        validateAudioRetentionPeriod()
         
         logger.info("AppSettingsStore initialized")
     }
@@ -599,12 +662,27 @@ class AppSettingsStore: ObservableObject {
             middleClickActivationDelay = 5000
         }
     }
+
+    /// Validates transcript retention minutes and corrects if negative
+    private func validateTranscriptionRetentionMinutes() {
+        if transcriptionRetentionMinutes < 0 {
+            logger.warning("Negative transcript retention detected, setting to 0")
+            transcriptionRetentionMinutes = 0
+        }
+    }
+
+    /// Validates audio retention days and corrects if too small
+    private func validateAudioRetentionPeriod() {
+        if audioRetentionPeriod < 1 {
+            logger.warning("Audio retention period too low, setting to 7 days")
+            audioRetentionPeriod = 7
+        }
+    }
     
     /// Validates AI provider and corrects if invalid
     /// Note: Custom and ElevenLabs have been removed from AIProvider enum
     private func validateProvider() {
-        let validProviders = ["AWS Bedrock", "OCI Generative AI", "Cerebras", "GROQ", "Gemini", "Anthropic",
-                             "OpenAI", "Azure OpenAI", "OpenRouter"]
+        let validProviders = AIProvider.supportedProviderNames
         if !validProviders.contains(selectedAIProvider) {
             // Migrate legacy providers to Gemini
             if selectedAIProvider == "Custom" || selectedAIProvider == "ElevenLabs" {
@@ -876,6 +954,11 @@ class AppSettingsStore: ObservableObject {
         recorderType = state.recorderType
         preserveTranscriptInClipboard = state.preserveTranscriptInClipboard
         maxRecordingDurationMinutes = state.maxRecordingDurationMinutes
+        selectedLanguage = state.selectedLanguage
+        hasManuallySelectedLanguage = state.hasManuallySelectedLanguage
+        isTextFormattingEnabled = state.isTextFormattingEnabled
+        isVADEnabled = state.isVADEnabled
+        appendTrailingSpace = state.appendTrailingSpace
         selectedHotkey1 = state.selectedHotkey1
         selectedHotkey2 = state.selectedHotkey2
         isMiddleClickToggleEnabled = state.isMiddleClickToggleEnabled
@@ -917,6 +1000,11 @@ class AppSettingsStore: ObservableObject {
         aiEnhancementConfigurations = state.aiEnhancementConfigurations
         activeAIConfigurationId = state.activeAIConfigurationId
         hasCompletedAIConfigMigration = state.hasCompletedAIConfigMigration
+        isAutoExportEnabled = state.isAutoExportEnabled
+        isTranscriptionCleanupEnabled = state.isTranscriptionCleanupEnabled
+        transcriptionRetentionMinutes = state.transcriptionRetentionMinutes
+        isAudioCleanupEnabled = state.isAudioCleanupEnabled
+        audioRetentionPeriod = state.audioRetentionPeriod
     }
     
     // MARK: - Persistence
@@ -938,6 +1026,11 @@ class AppSettingsStore: ObservableObject {
         UserDefaults.hoah.set(state.isMenuBarOnly, forKey: "IsMenuBarOnly")
         UserDefaults.hoah.set(state.recorderType, forKey: "RecorderType")
         UserDefaults.hoah.set(state.preserveTranscriptInClipboard, forKey: "preserveTranscriptInClipboard")
+        UserDefaults.hoah.set(state.selectedLanguage, forKey: "SelectedLanguage")
+        UserDefaults.hoah.set(state.hasManuallySelectedLanguage, forKey: "HasManuallySelectedLanguage")
+        UserDefaults.hoah.set(state.isTextFormattingEnabled, forKey: "IsTextFormattingEnabled")
+        UserDefaults.hoah.set(state.isVADEnabled, forKey: "IsVADEnabled")
+        UserDefaults.hoah.set(state.appendTrailingSpace, forKey: "AppendTrailingSpace")
         UserDefaults.hoah.set(state.selectedHotkey1, forKey: "selectedHotkey1")
         UserDefaults.hoah.set(state.selectedHotkey2, forKey: "selectedHotkey2")
         UserDefaults.hoah.set(state.isMiddleClickToggleEnabled, forKey: "isMiddleClickToggleEnabled")
@@ -957,6 +1050,10 @@ class AppSettingsStore: ObservableObject {
         UserDefaults.hoah.set(state.bedrockRegion, forKey: "AWSBedrockRegion")
         UserDefaults.hoah.set(state.bedrockModelId, forKey: "AWSBedrockModelId")
         UserDefaults.hoah.set(state.isAutoExportEnabled, forKey: "isAutoExportEnabled")
+        UserDefaults.hoah.set(state.isTranscriptionCleanupEnabled, forKey: "IsTranscriptionCleanupEnabled")
+        UserDefaults.hoah.set(state.transcriptionRetentionMinutes, forKey: "TranscriptionRetentionMinutes")
+        UserDefaults.hoah.set(state.isAudioCleanupEnabled, forKey: "IsAudioCleanupEnabled")
+        UserDefaults.hoah.set(state.audioRetentionPeriod, forKey: "AudioRetentionPeriod")
         UserDefaults.hoah.set(state.savedTranslationLanguagesRaw, forKey: TranslationTargetPresets.savedLanguagesKey)
 
         for (provider, model) in state.selectedModels {
@@ -975,6 +1072,11 @@ class AppSettingsStore: ObservableObject {
             recorderType: recorderType,
             preserveTranscriptInClipboard: preserveTranscriptInClipboard,
             maxRecordingDurationMinutes: maxRecordingDurationMinutes,
+            selectedLanguage: selectedLanguage,
+            hasManuallySelectedLanguage: hasManuallySelectedLanguage,
+            isTextFormattingEnabled: isTextFormattingEnabled,
+            isVADEnabled: isVADEnabled,
+            appendTrailingSpace: appendTrailingSpace,
             selectedHotkey1: selectedHotkey1,
             selectedHotkey2: selectedHotkey2,
             isMiddleClickToggleEnabled: isMiddleClickToggleEnabled,
@@ -1005,7 +1107,11 @@ class AppSettingsStore: ObservableObject {
             aiEnhancementConfigurations: aiEnhancementConfigurations,
             activeAIConfigurationId: activeAIConfigurationId,
             hasCompletedAIConfigMigration: hasCompletedAIConfigMigration,
-            isAutoExportEnabled: isAutoExportEnabled
+            isAutoExportEnabled: isAutoExportEnabled,
+            isTranscriptionCleanupEnabled: isTranscriptionCleanupEnabled,
+            transcriptionRetentionMinutes: transcriptionRetentionMinutes,
+            isAudioCleanupEnabled: isAudioCleanupEnabled,
+            audioRetentionPeriod: audioRetentionPeriod
         )
     }
 }

@@ -33,6 +33,21 @@ struct AppSettingsState: Codable {
     
     /// Maximum recording duration in minutes (0 = unlimited)
     var maxRecordingDurationMinutes: Int = 60
+
+    /// Selected transcription language ("auto", "en", etc.)
+    var selectedLanguage: String = "auto"
+
+    /// Whether the current selected language came from explicit user choice
+    var hasManuallySelectedLanguage: Bool = false
+
+    /// Whether transcript text formatting is enabled
+    var isTextFormattingEnabled: Bool = true
+
+    /// Whether local Whisper VAD is enabled
+    var isVADEnabled: Bool = true
+
+    /// Whether pasted transcript text should append a trailing space
+    var appendTrailingSpace: Bool = true
     
     // MARK: - Hotkey Settings
     
@@ -113,8 +128,8 @@ struct AppSettingsState: Codable {
     
     // MARK: - AI Provider Settings
     
-    /// Selected AI provider: "gemini", "openAI", "anthropic", etc.
-    var selectedAIProvider: String = "gemini"
+    /// Selected AI provider raw value, e.g. "Gemini" or "OpenAI"
+    var selectedAIProvider: String = AIProvider.gemini.rawValue
     
     /// AWS Bedrock region
     var bedrockRegion: String = "us-east-1"
@@ -140,6 +155,18 @@ struct AppSettingsState: Codable {
     
     /// Whether automatic daily export is enabled
     var isAutoExportEnabled: Bool = false
+
+    /// Whether transcript history cleanup is enabled
+    var isTranscriptionCleanupEnabled: Bool = true
+
+    /// Retention period for transcript cleanup in minutes
+    var transcriptionRetentionMinutes: Int = 30 * 24 * 60
+
+    /// Whether automatic audio cleanup is enabled
+    var isAudioCleanupEnabled: Bool = false
+
+    /// Retention period for audio cleanup in days
+    var audioRetentionPeriod: Int = 7
     
     // MARK: - Init (explicit to retain default init alongside custom decoder)
     init() {}
@@ -154,6 +181,11 @@ struct AppSettingsState: Codable {
         recorderType: String = "mini",
         preserveTranscriptInClipboard: Bool = true,
         maxRecordingDurationMinutes: Int = 60,
+        selectedLanguage: String = "auto",
+        hasManuallySelectedLanguage: Bool = false,
+        isTextFormattingEnabled: Bool = true,
+        isVADEnabled: Bool = true,
+        appendTrailingSpace: Bool = true,
         selectedHotkey1: String = "rightOption",
         selectedHotkey2: String = "none",
         isMiddleClickToggleEnabled: Bool = false,
@@ -177,14 +209,18 @@ struct AppSettingsState: Codable {
         isPolishFormalWritingEnabled: Bool = false,
         isPolishProfessionalEnabled: Bool = false,
         hasCompletedPolishModeMigration: Bool = false,
-        selectedAIProvider: String = "gemini",
+        selectedAIProvider: String = AIProvider.gemini.rawValue,
         bedrockRegion: String = "us-east-1",
         bedrockModelId: String = "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
         selectedModels: [String: String] = [:],
         aiEnhancementConfigurations: [AIEnhancementConfiguration] = [],
         activeAIConfigurationId: UUID? = nil,
         hasCompletedAIConfigMigration: Bool = false,
-        isAutoExportEnabled: Bool = false
+        isAutoExportEnabled: Bool = false,
+        isTranscriptionCleanupEnabled: Bool = true,
+        transcriptionRetentionMinutes: Int = 30 * 24 * 60,
+        isAudioCleanupEnabled: Bool = false,
+        audioRetentionPeriod: Int = 7
     ) {
         self.version = version
         self.hasCompletedOnboarding = hasCompletedOnboarding
@@ -194,6 +230,11 @@ struct AppSettingsState: Codable {
         self.recorderType = recorderType
         self.preserveTranscriptInClipboard = preserveTranscriptInClipboard
         self.maxRecordingDurationMinutes = maxRecordingDurationMinutes
+        self.selectedLanguage = selectedLanguage
+        self.hasManuallySelectedLanguage = hasManuallySelectedLanguage
+        self.isTextFormattingEnabled = isTextFormattingEnabled
+        self.isVADEnabled = isVADEnabled
+        self.appendTrailingSpace = appendTrailingSpace
         self.selectedHotkey1 = selectedHotkey1
         self.selectedHotkey2 = selectedHotkey2
         self.isMiddleClickToggleEnabled = isMiddleClickToggleEnabled
@@ -225,6 +266,10 @@ struct AppSettingsState: Codable {
         self.activeAIConfigurationId = activeAIConfigurationId
         self.hasCompletedAIConfigMigration = hasCompletedAIConfigMigration
         self.isAutoExportEnabled = isAutoExportEnabled
+        self.isTranscriptionCleanupEnabled = isTranscriptionCleanupEnabled
+        self.transcriptionRetentionMinutes = transcriptionRetentionMinutes
+        self.isAudioCleanupEnabled = isAudioCleanupEnabled
+        self.audioRetentionPeriod = audioRetentionPeriod
     }
     
     // MARK: - Codable (custom to tolerate missing/new fields)
@@ -238,6 +283,11 @@ struct AppSettingsState: Codable {
         case recorderType
         case preserveTranscriptInClipboard
         case maxRecordingDurationMinutes
+        case selectedLanguage
+        case hasManuallySelectedLanguage
+        case isTextFormattingEnabled
+        case isVADEnabled
+        case appendTrailingSpace
         case selectedHotkey1
         case selectedHotkey2
         case isMiddleClickToggleEnabled
@@ -269,6 +319,10 @@ struct AppSettingsState: Codable {
         case activeAIConfigurationId
         case hasCompletedAIConfigMigration
         case isAutoExportEnabled
+        case isTranscriptionCleanupEnabled
+        case transcriptionRetentionMinutes
+        case isAudioCleanupEnabled
+        case audioRetentionPeriod
     }
     
     init(from decoder: Decoder) throws {
@@ -282,6 +336,11 @@ struct AppSettingsState: Codable {
         recorderType = (try? container.decode(String.self, forKey: .recorderType)) ?? "mini"
         preserveTranscriptInClipboard = (try? container.decode(Bool.self, forKey: .preserveTranscriptInClipboard)) ?? true
         maxRecordingDurationMinutes = (try? container.decode(Int.self, forKey: .maxRecordingDurationMinutes)) ?? 60
+        selectedLanguage = (try? container.decode(String.self, forKey: .selectedLanguage)) ?? "auto"
+        hasManuallySelectedLanguage = (try? container.decode(Bool.self, forKey: .hasManuallySelectedLanguage)) ?? false
+        isTextFormattingEnabled = (try? container.decode(Bool.self, forKey: .isTextFormattingEnabled)) ?? true
+        isVADEnabled = (try? container.decode(Bool.self, forKey: .isVADEnabled)) ?? true
+        appendTrailingSpace = (try? container.decode(Bool.self, forKey: .appendTrailingSpace)) ?? true
         selectedHotkey1 = (try? container.decode(String.self, forKey: .selectedHotkey1)) ?? "rightOption"
         selectedHotkey2 = (try? container.decode(String.self, forKey: .selectedHotkey2)) ?? "none"
         isMiddleClickToggleEnabled = (try? container.decode(Bool.self, forKey: .isMiddleClickToggleEnabled)) ?? false
@@ -305,7 +364,7 @@ struct AppSettingsState: Codable {
         isPolishFormalWritingEnabled = (try? container.decode(Bool.self, forKey: .isPolishFormalWritingEnabled)) ?? false
         isPolishProfessionalEnabled = (try? container.decode(Bool.self, forKey: .isPolishProfessionalEnabled)) ?? false
         hasCompletedPolishModeMigration = (try? container.decode(Bool.self, forKey: .hasCompletedPolishModeMigration)) ?? false
-        selectedAIProvider = (try? container.decode(String.self, forKey: .selectedAIProvider)) ?? "gemini"
+        selectedAIProvider = (try? container.decode(String.self, forKey: .selectedAIProvider)) ?? AIProvider.gemini.rawValue
         bedrockRegion = (try? container.decode(String.self, forKey: .bedrockRegion)) ?? "us-east-1"
         bedrockModelId = (try? container.decode(String.self, forKey: .bedrockModelId)) ?? "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
         selectedModels = (try? container.decode([String: String].self, forKey: .selectedModels)) ?? [:]
@@ -313,6 +372,10 @@ struct AppSettingsState: Codable {
         activeAIConfigurationId = (try? container.decodeIfPresent(UUID.self, forKey: .activeAIConfigurationId)) ?? nil
         hasCompletedAIConfigMigration = (try? container.decode(Bool.self, forKey: .hasCompletedAIConfigMigration)) ?? false
         isAutoExportEnabled = (try? container.decode(Bool.self, forKey: .isAutoExportEnabled)) ?? false
+        isTranscriptionCleanupEnabled = (try? container.decode(Bool.self, forKey: .isTranscriptionCleanupEnabled)) ?? true
+        transcriptionRetentionMinutes = (try? container.decode(Int.self, forKey: .transcriptionRetentionMinutes)) ?? 30 * 24 * 60
+        isAudioCleanupEnabled = (try? container.decode(Bool.self, forKey: .isAudioCleanupEnabled)) ?? false
+        audioRetentionPeriod = (try? container.decode(Int.self, forKey: .audioRetentionPeriod)) ?? 7
     }
     
     // MARK: - Validation
@@ -362,6 +425,14 @@ struct AppSettingsState: Codable {
         // Validate delay range
         if middleClickActivationDelay < 0 || middleClickActivationDelay > 5000 {
             errors.append("Invalid middleClickActivationDelay: \(middleClickActivationDelay). Must be between 0 and 5000.")
+        }
+
+        if transcriptionRetentionMinutes < 0 {
+            errors.append("Invalid transcriptionRetentionMinutes: \(transcriptionRetentionMinutes). Must be 0 or greater.")
+        }
+
+        if audioRetentionPeriod < 1 {
+            errors.append("Invalid audioRetentionPeriod: \(audioRetentionPeriod). Must be at least 1.")
         }
 
         if let target = translationTargetLanguage,
@@ -422,6 +493,14 @@ struct AppSettingsState: Codable {
             safe.middleClickActivationDelay = 0
         } else if middleClickActivationDelay > 5000 {
             safe.middleClickActivationDelay = 5000
+        }
+
+        if transcriptionRetentionMinutes < 0 {
+            safe.transcriptionRetentionMinutes = 0
+        }
+
+        if audioRetentionPeriod < 1 {
+            safe.audioRetentionPeriod = 7
         }
 
         let trimmedTarget = translationTargetLanguage?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""

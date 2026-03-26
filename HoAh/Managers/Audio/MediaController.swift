@@ -17,30 +17,24 @@ class MediaController: ObservableObject {
     private weak var appSettings: AppSettingsStore?
     private var cancellables = Set<AnyCancellable>()
     
-    // DEPRECATED: Use AppSettingsStore instead
-    // Keeping for backward compatibility during migration
-    private var legacySystemMuteEnabled: Bool = UserDefaults.hoah.bool(forKey: "isSystemMuteEnabled")
+    // Keep a local copy so audio control still works before AppSettingsStore is injected.
+    private var fallbackSystemMuteEnabled = AppSettingsSnapshot.current().isSystemMuteEnabled
     
     /// Whether system mute is enabled - reads from AppSettingsStore if available
     var isSystemMuteEnabled: Bool {
-        get { appSettings?.isSystemMuteEnabled ?? legacySystemMuteEnabled }
+        get { appSettings?.isSystemMuteEnabled ?? fallbackSystemMuteEnabled }
         set {
             objectWillChange.send()
             if let appSettings = appSettings {
                 appSettings.isSystemMuteEnabled = newValue
             } else {
-                legacySystemMuteEnabled = newValue
+                fallbackSystemMuteEnabled = newValue
                 UserDefaults.hoah.set(newValue, forKey: "isSystemMuteEnabled")
             }
         }
     }
-    
-    private init() {
-        // Set default if not already set
-        if !UserDefaults.hoah.contains(key: "isSystemMuteEnabled") {
-            UserDefaults.hoah.set(true, forKey: "isSystemMuteEnabled")
-        }
-    }
+        
+    private init() {}
     
     /// Configure with AppSettingsStore for centralized state management
     func configure(with appSettings: AppSettingsStore) {
@@ -151,10 +145,6 @@ class MediaController: ObservableObject {
 }
 
 extension UserDefaults {
-    func contains(key: String) -> Bool {
-        return object(forKey: key) != nil
-    }
-    
     var isSystemMuteEnabled: Bool {
         get { bool(forKey: "isSystemMuteEnabled") }
         set { set(newValue, forKey: "isSystemMuteEnabled") }

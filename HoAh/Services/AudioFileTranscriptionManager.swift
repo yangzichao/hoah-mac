@@ -126,7 +126,7 @@ class AudioTranscriptionManager: ObservableObject {
                 text = TranscriptionOutputFilter.filter(text)
                 text = text.trimmingCharacters(in: .whitespacesAndNewlines)
 
-                if UserDefaults.hoah.object(forKey: "IsTextFormattingEnabled") as? Bool ?? true {
+                if AppSettingsSnapshot.current().isTextFormattingEnabled {
                     text = WhisperTextFormatter.format(text)
                 }
                 

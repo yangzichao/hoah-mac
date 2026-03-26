@@ -25,7 +25,7 @@ class TranscriptionAutoCleanupService {
             object: nil
         )
 
-        if UserDefaults.hoah.bool(forKey: keyIsEnabled) {
+        if AppSettingsSnapshot.current().isTranscriptionCleanupEnabled {
             
             Task { [weak self] in
                 guard let self = self, let modelContext = self.modelContext else { return }
@@ -43,10 +43,11 @@ class TranscriptionAutoCleanupService {
     }
 
     @objc private func handleTranscriptionCompleted(_ notification: Notification) {
-        let isEnabled = UserDefaults.hoah.bool(forKey: keyIsEnabled)
+        let snapshot = AppSettingsSnapshot.current()
+        let isEnabled = snapshot.isTranscriptionCleanupEnabled
         guard isEnabled else { return }
 
-        let minutes = UserDefaults.hoah.integer(forKey: keyRetentionMinutes)
+        let minutes = snapshot.transcriptionRetentionMinutes
         if minutes > 0 {
             // Trigger a sweep based on the retention window
             if let modelContext = self.modelContext {
@@ -83,12 +84,12 @@ class TranscriptionAutoCleanupService {
     }
 
     private func sweepOldTranscriptions(modelContext: ModelContext) async {
-        guard UserDefaults.hoah.bool(forKey: keyIsEnabled) else {
+        let snapshot = AppSettingsSnapshot.current()
+        guard snapshot.isTranscriptionCleanupEnabled else {
             return
         }
 
-        let retentionMinutes = UserDefaults.hoah.integer(forKey: keyRetentionMinutes)
-        let effectiveMinutes = max(retentionMinutes, 0)
+        let effectiveMinutes = max(snapshot.transcriptionRetentionMinutes, 0)
 
         let cutoffDate = Date().addingTimeInterval(TimeInterval(-effectiveMinutes * 60))
 

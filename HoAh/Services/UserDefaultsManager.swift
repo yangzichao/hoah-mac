@@ -12,13 +12,12 @@ extension UserDefaults {
     }
     
     static let hoah: UserDefaults = {
-        if canAccessAppGroup, let defaults = UserDefaults(suiteName: AppGroup.identifier) {
-            return defaults
+        if RuntimeEnvironment.isRunningTestsOrPreviews {
+            return .standard
         }
 
-        if ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
-            || ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] != nil {
-            return .standard
+        if canAccessAppGroup, let defaults = UserDefaults(suiteName: AppGroup.identifier) {
+            return defaults
         }
 
         // In non-sandbox / developer-id builds the app group container不存在，回落到标准 defaults。

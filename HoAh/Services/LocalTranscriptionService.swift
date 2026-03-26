@@ -20,26 +20,28 @@ class LocalTranscriptionService: TranscriptionService {
         }
         
         logger.notice("Initiating local transcription for model: \(model.displayName)")
-        
-        // Check if the required model is already loaded in WhisperState
+
+        let sharedContext: WhisperContext?
         if let whisperState = whisperState,
            await whisperState.isModelLoaded,
            let loadedContext = await whisperState.whisperContext,
-            let currentModel = await whisperState.currentTranscriptionModel,
-            currentModel.provider == .local,
-            currentModel.name == model.name {
-            
+           let currentModel = await whisperState.currentTranscriptionModel,
+           currentModel.provider == .local,
+           currentModel.name == model.name {
             logger.notice("✅ Using already loaded model: \(model.name)")
+            sharedContext = loadedContext
             whisperContext = loadedContext
         } else {
-            // Model not loaded or wrong model loaded, proceed with loading
-            // Resolve the on-disk URL using WhisperState.availableModels (covers imports)
+            sharedContext = nil
+
+            // Model not loaded or wrong model loaded, proceed with loading.
+            // Resolve the on-disk URL using WhisperState.availableModels (covers imports).
             let resolvedURL: URL? = await whisperState?.availableModels.first(where: { $0.name == model.name })?.url
             guard let modelURL = resolvedURL, FileManager.default.fileExists(atPath: modelURL.path) else {
                 logger.error("Model file not found for: \(model.name)")
                 throw WhisperStateError.modelLoadFailed
             }
-            
+
             logger.notice("Loading model: \(model.name)")
             do {
                 whisperContext = try await WhisperContext.createContext(path: modelURL.path)
@@ -48,38 +50,43 @@ class LocalTranscriptionService: TranscriptionService {
                 throw WhisperStateError.modelLoadFailed
             }
         }
-        
+
         guard let whisperContext = whisperContext else {
             logger.error("Cannot transcribe: Model could not be loaded")
             throw WhisperStateError.modelLoadFailed
         }
-        
-        // Read audio data
-        let data = try readAudioSamples(audioURL)
-        
-        // Set prompt
-        let currentPrompt = UserDefaults.hoah.string(forKey: "TranscriptionPrompt") ?? ""
-        await whisperContext.setPrompt(currentPrompt)
-        
-        // Transcribe
-        let success = await whisperContext.fullTranscribe(samples: data)
-        
-        guard success else {
-            logger.error("Core transcription engine failed (whisper_full).")
-            throw WhisperStateError.whisperCoreFailed
-        }
-        
-        let text = await whisperContext.getTranscription()
 
-        logger.notice("✅ Local transcription completed successfully.")
-        
-        // Only release resources if we created a new context (not using the shared one)
-        if await whisperState?.whisperContext !== whisperContext {
-            await whisperContext.releaseResources()
-            self.whisperContext = nil
+        let ownsContext = sharedContext !== whisperContext
+
+        do {
+            let data = try readAudioSamples(audioURL)
+
+            let currentPrompt = UserDefaults.hoah.string(forKey: "TranscriptionPrompt") ?? ""
+            await whisperContext.setPrompt(currentPrompt)
+
+            let success = await whisperContext.fullTranscribe(samples: data)
+
+            guard success else {
+                logger.error("Core transcription engine failed (whisper_full).")
+                throw WhisperStateError.whisperCoreFailed
+            }
+
+            let text = await whisperContext.getTranscription()
+            logger.notice("✅ Local transcription completed successfully.")
+
+            if ownsContext {
+                await whisperContext.releaseResources()
+                self.whisperContext = nil
+            }
+
+            return text
+        } catch {
+            if ownsContext {
+                await whisperContext.releaseResources()
+                self.whisperContext = nil
+            }
+            throw error
         }
-        
-        return text
     }
     
     private func readAudioSamples(_ url: URL) throws -> [Float] {
