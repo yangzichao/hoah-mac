@@ -1,3 +1,12 @@
+# HoAh Dictation v3.7.2
+
+### Improvements
+* **Selection AI Actions**: Updated AI actions to automatically copy the current selection before processing, and renamed the feature from "Clipboard AI Action" to "Selection AI Action" for clarity.
+* **Notification & Paste Flow**: Improved Selection AI Action notifications so long-running progress remains visible until the awaited paste completes, then dismisses cleanly.
+* **Stability & Motion Tuning**: Fixed settings migration and stale AI runtime error state issues, while refining recorder visualizer motion controls for smoother behavior.
+
+---
+
 # HoAh Dictation v3.7.1
 
 ### Improvements

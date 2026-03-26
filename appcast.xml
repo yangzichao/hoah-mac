@@ -3,6 +3,22 @@
     <channel>
         <title>HoAh Releases</title>
         <item>
+            <title>3.7.2</title>
+            <pubDate>Thu, 26 Mar 2026 15:28:22 -0700</pubDate>
+            <sparkle:version>372</sparkle:version>
+            <sparkle:shortVersionString>3.7.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[
+                <h3>What's New in Version 3.7.2</h3>
+                <ul>
+                    <li>Updated Selection AI Actions to copy the current selection automatically instead of depending on whatever was already in the clipboard.</li>
+                    <li>Improved Selection AI Action notifications and awaited paste cleanup so progress stays visible until completion and dismisses cleanly afterward.</li>
+                    <li>Fixed settings and AI runtime state issues while refining recorder visualizer motion controls for a more stable experience.</li>
+                </ul>
+            ]]></description>
+            <enclosure url="https://github.com/yangzichao/hoah-release/releases/download/v3.7.2/HoAh-3.7.2.dmg" length="0" type="application/octet-stream" sparkle:edSignature=""/>
+        </item>
+        <item>
             <title>3.7.1</title>
             <pubDate>Tue, 24 Mar 2026 23:21:24 -0700</pubDate>
             <sparkle:version>371</sparkle:version>
