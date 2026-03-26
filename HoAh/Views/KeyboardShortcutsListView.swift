@@ -5,6 +5,7 @@ import KeyboardShortcuts
 struct KeyboardShortcutsListView: View {
     @EnvironmentObject private var hotkeyManager: HotkeyManager
     @EnvironmentObject private var appSettings: AppSettingsStore
+    @EnvironmentObject private var enhancementService: AIEnhancementService
     @Environment(\.theme) private var theme
     @State private var customCancelShortcut: KeyboardShortcuts.Shortcut?
     @State private var pasteOriginalShortcut: KeyboardShortcuts.Shortcut?
@@ -13,6 +14,7 @@ struct KeyboardShortcutsListView: View {
     @State private var toggleHotkey1: KeyboardShortcuts.Shortcut?
     @State private var toggleHotkey2: KeyboardShortcuts.Shortcut?
     @State private var clipboardActionShortcutsAreDefault = true
+    @State private var activeClipboardActionShortcutCount = 0
 
     var body: some View {
         VStack(spacing: 0) {
@@ -147,15 +149,15 @@ struct KeyboardShortcutsListView: View {
                         StaticKeysBadge(keys: ["⌘", "1–0"])
                     }
 
-                    if appSettings.isClipboardEnhancementShortcutsEnabled {
+                    if appSettings.isClipboardEnhancementShortcutsEnabled && activeClipboardActionShortcutCount > 0 {
                         ShortcutCard(
                             icon: "doc.on.clipboard",
                             iconColor: .green,
                             title: "Run Selection Action",
-                            subtitle: "Run the matching AI Action on selected text"
+                            subtitle: "Run the matching AI Action on selected text with ⌥⇧\(ClipboardAIActionShortcutManager.shortcutRangeLabel(for: activeClipboardActionShortcutCount))"
                         ) {
                             if clipboardActionShortcutsAreDefault {
-                                StaticKeysBadge(keys: ["⌥", "⇧", "1–0"])
+                                StaticKeysBadge(keys: ["⌥", "⇧", ClipboardAIActionShortcutManager.shortcutRangeLabel(for: activeClipboardActionShortcutCount)])
                             } else {
                                 HotkeyBadge(text: "Custom")
                             }
@@ -194,7 +196,15 @@ struct KeyboardShortcutsListView: View {
         retryShortcut = KeyboardShortcuts.getShortcut(for: .retryLastTranscription)
         toggleHotkey1 = KeyboardShortcuts.getShortcut(for: .toggleMiniRecorder)
         toggleHotkey2 = KeyboardShortcuts.getShortcut(for: .toggleMiniRecorder2)
-        clipboardActionShortcutsAreDefault = ClipboardAIActionShortcutManager.configuredShortcutNames.enumerated().allSatisfy { index, name in
+
+        activeClipboardActionShortcutCount = ClipboardAIActionShortcutManager.activeShortcutCount(
+            for: enhancementService.promptShortcutPrompts.count
+        )
+
+        clipboardActionShortcutsAreDefault = ClipboardAIActionShortcutManager.configuredShortcutNames
+            .prefix(activeClipboardActionShortcutCount)
+            .enumerated()
+            .allSatisfy { index, name in
             let resolvedShortcut = KeyboardShortcuts.getShortcut(for: name) ?? ClipboardAIActionShortcutManager.defaultShortcut(for: index)
             return resolvedShortcut == ClipboardAIActionShortcutManager.defaultShortcut(for: index)
         }
@@ -471,8 +481,12 @@ private struct NotSetBadge: View {
 
 #Preview {
     let appSettings = AppSettingsStore()
-    let whisperState = WhisperState(modelContext: try! ModelContext(ModelContainer(for: Transcription.self)))
+    let modelContext = try! ModelContext(ModelContainer(for: Transcription.self))
+    let enhancementService = AIEnhancementService(aiService: AIService(), modelContext: modelContext)
+    enhancementService.appSettings = appSettings
+    let whisperState = WhisperState(modelContext: modelContext)
     return KeyboardShortcutsListView()
         .environmentObject(appSettings)
+        .environmentObject(enhancementService)
         .environmentObject(HotkeyManager(whisperState: whisperState, appSettings: appSettings))
 }

@@ -59,7 +59,7 @@ final class ClipboardAIActionShortcutManager {
         .clipboardPrompt6Active, .clipboardPrompt7Active, .clipboardPrompt8Active, .clipboardPrompt9Active, .clipboardPrompt10Active
     ]
 
-    static let shortcutEditorSlots: [(index: Int, name: KeyboardShortcuts.Name)] = [
+    private static let allShortcutEditorSlots: [(index: Int, name: KeyboardShortcuts.Name)] = [
         (0, .clipboardPrompt1Config),
         (1, .clipboardPrompt2Config),
         (2, .clipboardPrompt3Config),
@@ -71,6 +71,10 @@ final class ClipboardAIActionShortcutManager {
         (8, .clipboardPrompt9Config),
         (9, .clipboardPrompt10Config)
     ]
+
+    private var availableShortcutCount: Int {
+        Self.activeShortcutCount(for: enhancementService.promptShortcutPrompts.count)
+    }
 
     init(enhancementService: AIEnhancementService, appSettings: AppSettingsStore, modelContext: ModelContext) {
         self.enhancementService = enhancementService
@@ -85,6 +89,22 @@ final class ClipboardAIActionShortcutManager {
 
     private func setupObservers() {
         appSettings.$isClipboardEnhancementShortcutsEnabled
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.updateShortcutRegistration()
+            }
+            .store(in: &cancellables)
+
+        enhancementService.$activePrompts
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.updateShortcutRegistration()
+            }
+            .store(in: &cancellables)
+
+        appSettings.$isSecondTranslationEnabled
             .dropFirst()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
@@ -160,7 +180,10 @@ final class ClipboardAIActionShortcutManager {
         for index in Self.configuredShortcutNames.indices {
             let configuredName = Self.configuredShortcutNames[index]
             let activeName = Self.activeShortcutNames[index]
-            let activeShortcut = appSettings.isClipboardEnhancementShortcutsEnabled ? resolvedShortcut(for: configuredName, index: index) : nil
+            let isSlotAvailable = index < availableShortcutCount
+            let activeShortcut = appSettings.isClipboardEnhancementShortcutsEnabled && isSlotAvailable
+                ? resolvedShortcut(for: configuredName, index: index)
+                : nil
             KeyboardShortcuts.setShortcut(activeShortcut, for: activeName)
         }
     }
@@ -318,6 +341,29 @@ final class ClipboardAIActionShortcutManager {
         case 8: return .init(.nine, modifiers: KeyboardShortcuts.Name.clipboardDefaultModifiers)
         case 9: return .init(.zero, modifiers: KeyboardShortcuts.Name.clipboardDefaultModifiers)
         default: return nil
+        }
+    }
+
+    static func activeShortcutCount(for promptCount: Int) -> Int {
+        min(max(promptCount, 0), configuredShortcutNames.count)
+    }
+
+    static func shortcutEditorSlots(for promptCount: Int) -> [(index: Int, name: KeyboardShortcuts.Name)] {
+        Array(allShortcutEditorSlots.prefix(activeShortcutCount(for: promptCount)))
+    }
+
+    static func shortcutRangeLabel(for slotCount: Int) -> String {
+        let resolvedCount = activeShortcutCount(for: slotCount)
+
+        switch resolvedCount {
+        case ..<1:
+            return "-"
+        case 1:
+            return "1"
+        case 10:
+            return "1–0"
+        default:
+            return "1–\(resolvedCount)"
         }
     }
 }

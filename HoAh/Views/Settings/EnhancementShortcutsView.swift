@@ -168,8 +168,17 @@ private struct KeyChip: View {
 
 struct ClipboardActionShortcutsSection: View {
     @EnvironmentObject private var appSettings: AppSettingsStore
+    @EnvironmentObject private var enhancementService: AIEnhancementService
     @Environment(\.theme) private var theme
     @State private var isExpanded = false
+
+    private var availableShortcutCount: Int {
+        ClipboardAIActionShortcutManager.activeShortcutCount(for: enhancementService.promptShortcutPrompts.count)
+    }
+
+    private var shortcutRangeLabel: String {
+        ClipboardAIActionShortcutManager.shortcutRangeLabel(for: availableShortcutCount)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -225,9 +234,9 @@ struct ClipboardActionShortcutsSection: View {
             }
 
             HStack(spacing: 8) {
-                KeyChip(label: "⌥", isActive: appSettings.isClipboardEnhancementShortcutsEnabled)
-                KeyChip(label: "⇧", isActive: appSettings.isClipboardEnhancementShortcutsEnabled)
-                KeyChip(label: "1 – 0", isActive: appSettings.isClipboardEnhancementShortcutsEnabled)
+                KeyChip(label: "⌥", isActive: appSettings.isClipboardEnhancementShortcutsEnabled && availableShortcutCount > 0)
+                KeyChip(label: "⇧", isActive: appSettings.isClipboardEnhancementShortcutsEnabled && availableShortcutCount > 0)
+                KeyChip(label: shortcutRangeLabel, isActive: appSettings.isClipboardEnhancementShortcutsEnabled && availableShortcutCount > 0)
             }
 
             if isExpanded {
@@ -237,13 +246,30 @@ struct ClipboardActionShortcutsSection: View {
                             .font(theme.typography.caption)
                             .foregroundColor(theme.textSecondary)
 
-                        Text(LocalizedStringKey("Default shortcuts use ⌥⇧1–0. You can customize each slot below."))
-                            .font(theme.typography.caption)
-                            .foregroundColor(theme.textSecondary)
+                        if availableShortcutCount > 0 {
+                            Text(
+                                String(
+                                    format: NSLocalizedString("Default shortcuts use ⌥⇧%@. You can customize each action below.", comment: "Explains the default selection action shortcut range based on the number of available AI actions"),
+                                    shortcutRangeLabel
+                                )
+                            )
+                                .font(theme.typography.caption)
+                                .foregroundColor(theme.textSecondary)
+                        }
                     }
 
                     if appSettings.isClipboardEnhancementShortcutsEnabled {
-                        ClipboardActionShortcutEditor()
+                        if availableShortcutCount > 0 {
+                            ClipboardActionShortcutEditor(slotCount: availableShortcutCount)
+                        } else {
+                            Text(LocalizedStringKey("No AI Actions available yet. Add or enable an AI Action to create Selection Action shortcuts."))
+                                .font(theme.typography.caption)
+                                .foregroundColor(theme.textSecondary)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 14)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(CardBackground(isSelected: false))
+                        }
                     }
                 }
                 .transition(
@@ -263,6 +289,7 @@ struct ClipboardActionShortcutsSection: View {
 private struct ClipboardActionShortcutEditor: View {
     @EnvironmentObject private var enhancementService: AIEnhancementService
     @Environment(\.theme) private var theme
+    let slotCount: Int
 
     private let columns = [
         GridItem(.flexible(), spacing: 12),
@@ -271,6 +298,10 @@ private struct ClipboardActionShortcutEditor: View {
 
     private var shortcutPrompts: [CustomPrompt] {
         enhancementService.promptShortcutPrompts
+    }
+
+    private var editorSlots: [(index: Int, name: KeyboardShortcuts.Name)] {
+        ClipboardAIActionShortcutManager.shortcutEditorSlots(for: slotCount)
     }
 
     var body: some View {
@@ -284,15 +315,15 @@ private struct ClipboardActionShortcutEditor: View {
                 .foregroundColor(theme.textSecondary)
 
             LazyVGrid(columns: columns, spacing: 10) {
-                ForEach(ClipboardAIActionShortcutManager.shortcutEditorSlots, id: \.index) { slot in
+                ForEach(editorSlots, id: \.index) { slot in
                     HStack {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(promptTitle(for: slot.index))
                                 .font(theme.typography.caption)
-                                .foregroundColor(promptExists(for: slot.index) ? theme.textPrimary : theme.textSecondary)
+                                .foregroundColor(theme.textPrimary)
                                 .lineLimit(1)
 
-                            Text(promptSubtitle(for: slot.index))
+                            Text(String(format: NSLocalizedString("Shortcut Slot %d", comment: "Label for clipboard action shortcut position"), slot.index + 1))
                                 .font(theme.typography.caption2)
                                 .foregroundColor(theme.textSecondary)
                                 .lineLimit(1)
@@ -315,21 +346,10 @@ private struct ClipboardActionShortcutEditor: View {
         .background(CardBackground(isSelected: false))
     }
 
-    private func promptExists(for index: Int) -> Bool {
-        index < shortcutPrompts.count
-    }
-
     private func promptTitle(for index: Int) -> String {
         if index < shortcutPrompts.count {
             return shortcutPrompts[index].displayTitle
         }
         return String(format: NSLocalizedString("Action %d", comment: "Label for clipboard action shortcut slot"), index + 1)
-    }
-
-    private func promptSubtitle(for index: Int) -> String {
-        if promptExists(for: index) {
-            return String(format: NSLocalizedString("Shortcut Slot %d", comment: "Label for clipboard action shortcut position"), index + 1)
-        }
-        return NSLocalizedString("No matching AI Action yet", comment: "Shown when a clipboard shortcut slot has no corresponding AI action")
     }
 }

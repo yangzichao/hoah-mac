@@ -1498,10 +1498,14 @@ Languages: English, Chinese</string>
 	<string>Customize Selection Action Shortcuts</string>
 	<key>Default is Option + Shift + number. Record a new shortcut for any action if you want a different mapping.</key>
 	<string>Default is Option + Shift + number. Record a new shortcut for any action if you want a different mapping.</string>
+	<key>Default shortcuts use ⌥⇧%@. You can customize each action below.</key>
+	<string>Default shortcuts use ⌥⇧%@. You can customize each action below.</string>
 	<key>Default shortcuts use ⌥⇧1–0. You can customize each slot below.</key>
 	<string>Default shortcuts use ⌥⇧1–0. You can customize each slot below.</string>
 	<key>Applying AI Action: %@</key>
 	<string>Applying AI Action: %@</string>
+	<key>No AI Actions available yet. Add or enable an AI Action to create Selection Action shortcuts.</key>
+	<string>No AI Actions available yet. Add or enable an AI Action to create Selection Action shortcuts.</string>
 	<key>Action %d</key>
 	<string>Action %d</string>
 	<key>Shortcut Slot %d</key>
