@@ -1766,16 +1766,16 @@ Disable for full control over the AI's system prompt (for advanced users).</key>
 	<string>豆包 Lite 128K（自动）</string>
 	<key>Finishing</key>
 	<string>收尾中</string>
-	<key>Another clipboard AI Action is still running</key>
-	<string>另一个剪贴板 AI 指令仍在运行中</string>
+	<key>Another selection AI Action is still running</key>
+	<string>另一个选中文本 AI 指令仍在运行中</string>
 	<key>Clipboard is empty</key>
 	<string>剪贴板为空</string>
 	<key>No selected text found</key>
 	<string>未找到选中的文本</string>
-	<key>Clipboard Action</key>
-	<string>Clipboard Action</string>
-	<key>Customize Clipboard Action Shortcuts</key>
-	<string>自定义 Clipboard Action 快捷键</string>
+	<key>Selection Action</key>
+	<string>Selection Action</string>
+	<key>Customize Selection Action Shortcuts</key>
+	<string>自定义 Selection Action 快捷键</string>
 	<key>Default is Option + Shift + number. Record a new shortcut for any action if you want a different mapping.</key>
 	<string>默认使用 Option + Shift + 数字。你可以为任意指令录制新的快捷键映射。</string>
 	<key>Default shortcuts use ⌥⇧1–0. You can customize each slot below.</key>
@@ -1798,7 +1798,7 @@ Disable for full control over the AI's system prompt (for advanced users).</key>
 	<string>此功能默认关闭。开启后，只要 HoAh 正在运行，快捷键就会全局生效。</string>
 	<key>Source</key>
 	<string>来源</string>
-	<key>Clipboard AI Action</key>
-	<string>剪贴板 AI 指令</string>
+	<key>Selection AI Action</key>
+	<string>选中文本 AI 指令</string>
 </dict>
 </plist>

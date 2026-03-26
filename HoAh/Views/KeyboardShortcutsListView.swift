@@ -151,7 +151,7 @@ struct KeyboardShortcutsListView: View {
                         ShortcutCard(
                             icon: "doc.on.clipboard",
                             iconColor: .green,
-                            title: "Run Clipboard Action",
+                            title: "Run Selection Action",
                             subtitle: "Run the matching AI Action on selected text"
                         ) {
                             if clipboardActionShortcutsAreDefault {

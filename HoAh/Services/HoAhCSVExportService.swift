@@ -54,7 +54,7 @@ class HoAhCSVExportService {
         case .dictation:
             return "Dictation"
         case .clipboardAction:
-            return "Clipboard AI Action"
+            return "Selection AI Action"
         }
     }
 

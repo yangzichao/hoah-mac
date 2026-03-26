@@ -51,7 +51,7 @@ struct TranscriptionCard: View {
         case .dictation:
             return nil
         case .clipboardAction:
-            return NSLocalizedString("Clipboard AI Action", comment: "History source label for clipboard AI actions")
+            return NSLocalizedString("Selection AI Action", comment: "History source label for selection AI actions")
         }
     }
 

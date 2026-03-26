@@ -1486,16 +1486,16 @@ Languages: English, Chinese</string>
 	<string>Mode Settings</string>
 	<key>Finishing</key>
 	<string>Finishing</string>
-	<key>Another clipboard AI Action is still running</key>
-	<string>Another clipboard AI Action is still running</string>
+	<key>Another selection AI Action is still running</key>
+	<string>Another selection AI Action is still running</string>
 	<key>Clipboard is empty</key>
 	<string>Clipboard is empty</string>
 	<key>No selected text found</key>
 	<string>No selected text found</string>
-	<key>Clipboard Action</key>
-	<string>Clipboard Action</string>
-	<key>Customize Clipboard Action Shortcuts</key>
-	<string>Customize Clipboard Action Shortcuts</string>
+	<key>Selection Action</key>
+	<string>Selection Action</string>
+	<key>Customize Selection Action Shortcuts</key>
+	<string>Customize Selection Action Shortcuts</string>
 	<key>Default is Option + Shift + number. Record a new shortcut for any action if you want a different mapping.</key>
 	<string>Default is Option + Shift + number. Record a new shortcut for any action if you want a different mapping.</string>
 	<key>Default shortcuts use ⌥⇧1–0. You can customize each slot below.</key>
@@ -1518,7 +1518,7 @@ Languages: English, Chinese</string>
 	<string>This feature is disabled by default. Once enabled, the shortcut works globally while HoAh is running.</string>
 	<key>Source</key>
 	<string>Source</string>
-	<key>Clipboard AI Action</key>
-	<string>Clipboard AI Action</string>
+	<key>Selection AI Action</key>
+	<string>Selection AI Action</string>
 </dict>
 </plist>

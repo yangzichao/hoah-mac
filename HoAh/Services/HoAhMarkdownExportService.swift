@@ -76,7 +76,7 @@ class HoAhMarkdownExportService {
                 content += "## \(timeString) (\(timezoneOffset))\n\n"
 
                 if transcription.isClipboardAction {
-                    content += "> Source: Clipboard AI Action\n\n"
+                    content += "> Source: Selection AI Action\n\n"
                 }
                 
                 // Prioritize enhanced text, fallback to original
