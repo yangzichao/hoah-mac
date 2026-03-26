@@ -170,7 +170,7 @@ final class ClipboardAIActionShortcutManager {
 
         if isProcessingShortcut {
             NotificationManager.shared.showNotification(
-                title: NSLocalizedString("Another clipboard AI Action is still running", comment: "Shown when clipboard action shortcut is triggered while another one is still running"),
+                title: NSLocalizedString("Another selection AI Action is still running", comment: "Shown when selection action shortcut is triggered while another one is still running"),
                 type: .warning
             )
             return

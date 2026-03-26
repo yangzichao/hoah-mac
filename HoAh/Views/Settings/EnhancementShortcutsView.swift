@@ -181,7 +181,7 @@ struct ClipboardActionShortcutsSection: View {
 
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 8) {
-                        Text(LocalizedStringKey("Clipboard Action"))
+                        Text(LocalizedStringKey("Selection Action"))
                             .font(theme.typography.headline)
                             .foregroundColor(theme.textPrimary)
 
@@ -275,7 +275,7 @@ private struct ClipboardActionShortcutEditor: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(LocalizedStringKey("Customize Clipboard Action Shortcuts"))
+            Text(LocalizedStringKey("Customize Selection Action Shortcuts"))
                 .font(theme.typography.headline)
                 .foregroundColor(theme.textPrimary)
 
