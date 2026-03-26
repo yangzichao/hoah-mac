@@ -195,7 +195,7 @@ struct ClipboardActionShortcutsSection: View {
                             .clipShape(Capsule())
                     }
 
-                    Text(LocalizedStringKey("Copy the currently selected text, run it through an AI Action, and paste the result into the focused input."))
+                    Text(LocalizedStringKey("Select text, trigger an AI Action with a shortcut, and HoAh will copy the result to your clipboard and paste it into the focused input."))
                         .font(theme.typography.subheadline)
                         .foregroundColor(theme.textSecondary)
                 }

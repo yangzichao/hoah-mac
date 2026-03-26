@@ -1510,8 +1510,8 @@ Languages: English, Chinese</string>
 	<string>No matching AI Action yet</string>
 	<key>Please add a valid AI configuration first</key>
 	<string>Please add a valid AI configuration first</string>
-	<key>Copy the currently selected text, run it through an AI Action, and paste the result into the focused input.</key>
-	<string>Copy the currently selected text, run it through an AI Action, and paste the result into the focused input.</string>
+	<key>Select text, trigger an AI Action with a shortcut, and HoAh will copy the result to your clipboard and paste it into the focused input.</key>
+	<string>Select text, trigger an AI Action with a shortcut, and HoAh will copy the result to your clipboard and paste it into the focused input.</string>
 	<key>No AI Action assigned to shortcut %@</key>
 	<string>No AI Action assigned to shortcut %@</string>
 	<key>This feature is disabled by default. Once enabled, the shortcut works globally while HoAh is running.</key>

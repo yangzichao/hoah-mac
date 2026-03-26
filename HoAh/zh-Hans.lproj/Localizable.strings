@@ -1790,8 +1790,8 @@ Disable for full control over the AI's system prompt (for advanced users).</key>
 	<string>当前还没有对应的 AI 指令</string>
 	<key>Please add a valid AI configuration first</key>
 	<string>请先添加一个可用的 AI 配置</string>
-	<key>Copy the currently selected text, run it through an AI Action, and paste the result into the focused input.</key>
-	<string>先复制当前选中的文本，再交给 AI 指令处理，并将结果粘贴到当前聚焦的输入框。</string>
+	<key>Select text, trigger an AI Action with a shortcut, and HoAh will copy the result to your clipboard and paste it into the focused input.</key>
+	<string>选中文本后，按下快捷键执行 AI 指令；HoAh 会自动将结果复制到剪贴板，并粘贴到当前聚焦的输入框。</string>
 	<key>No AI Action assigned to shortcut %@</key>
 	<string>快捷键 %@ 没有对应的 AI 指令</string>
 	<key>This feature is disabled by default. Once enabled, the shortcut works globally while HoAh is running.</key>
