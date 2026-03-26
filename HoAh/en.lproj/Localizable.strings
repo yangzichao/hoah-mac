@@ -1490,6 +1490,8 @@ Languages: English, Chinese</string>
 	<string>Another clipboard AI Action is still running</string>
 	<key>Clipboard is empty</key>
 	<string>Clipboard is empty</string>
+	<key>No selected text found</key>
+	<string>No selected text found</string>
 	<key>Clipboard Action</key>
 	<string>Clipboard Action</string>
 	<key>Customize Clipboard Action Shortcuts</key>
@@ -1508,8 +1510,8 @@ Languages: English, Chinese</string>
 	<string>No matching AI Action yet</string>
 	<key>Please add a valid AI configuration first</key>
 	<string>Please add a valid AI configuration first</string>
-	<key>Run the current clipboard text through an AI Action and paste the result into the focused input.</key>
-	<string>Run the current clipboard text through an AI Action and paste the result into the focused input.</string>
+	<key>Copy the currently selected text, run it through an AI Action, and paste the result into the focused input.</key>
+	<string>Copy the currently selected text, run it through an AI Action, and paste the result into the focused input.</string>
 	<key>No AI Action assigned to shortcut %@</key>
 	<string>No AI Action assigned to shortcut %@</string>
 	<key>This feature is disabled by default. Once enabled, the shortcut works globally while HoAh is running.</key>
