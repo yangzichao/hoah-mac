@@ -172,6 +172,20 @@ class AppSettingsStore: ObservableObject {
     @Published var isClipboardEnhancementShortcutsEnabled: Bool {
         didSet { saveSettings() }
     }
+
+    /// Whether each Selection Action shortcut slot is individually enabled
+    @Published var clipboardEnhancementShortcutSlotEnabledStates: [Bool] {
+        didSet {
+            let normalized = Self.normalizedClipboardEnhancementShortcutSlotEnabledStates(
+                clipboardEnhancementShortcutSlotEnabledStates
+            )
+            if clipboardEnhancementShortcutSlotEnabledStates != normalized {
+                clipboardEnhancementShortcutSlotEnabledStates = normalized
+                return
+            }
+            saveSettings()
+        }
+    }
     
     // Storage for Selected Prompt ID
     @Published private var _selectedPromptId: String?
@@ -378,6 +392,19 @@ class AppSettingsStore: ObservableObject {
         return selectedHotkey1 != "none" || selectedHotkey2 != "none"
     }
 
+    func isClipboardEnhancementShortcutSlotEnabled(at index: Int) -> Bool {
+        guard clipboardEnhancementShortcutSlotEnabledStates.indices.contains(index) else { return false }
+        return clipboardEnhancementShortcutSlotEnabledStates[index]
+    }
+
+    func setClipboardEnhancementShortcutSlotEnabled(_ isEnabled: Bool, at index: Int) {
+        guard clipboardEnhancementShortcutSlotEnabledStates.indices.contains(index) else { return }
+
+        var updatedStates = clipboardEnhancementShortcutSlotEnabledStates
+        updatedStates[index] = isEnabled
+        clipboardEnhancementShortcutSlotEnabledStates = updatedStates
+    }
+
     // Publishers for settings properties (use backing storage publishers)
     var appInterfaceLanguagePublisher: Published<String>.Publisher { $_appInterfaceLanguage }
     var isAIEnhancementEnabledPublisher: Published<Bool>.Publisher { $_isAIEnhancementEnabled }
@@ -502,6 +529,9 @@ class AppSettingsStore: ObservableObject {
         self.isSystemMuteEnabled = state.isSystemMuteEnabled
         self._isAIEnhancementEnabled = state.isAIEnhancementEnabled // Initialize storage
         self.isClipboardEnhancementShortcutsEnabled = state.isClipboardEnhancementShortcutsEnabled
+        self.clipboardEnhancementShortcutSlotEnabledStates = Self.normalizedClipboardEnhancementShortcutSlotEnabledStates(
+            state.clipboardEnhancementShortcutSlotEnabledStates
+        )
         self._selectedPromptId = state.selectedPromptId // Initialize storage
         self.useScreenCaptureContext = state.useScreenCaptureContext
         self.userProfileContext = state.userProfileContext
@@ -678,6 +708,10 @@ class AppSettingsStore: ObservableObject {
             audioRetentionPeriod = 7
         }
     }
+
+    private static func normalizedClipboardEnhancementShortcutSlotEnabledStates(_ states: [Bool]) -> [Bool] {
+        AppSettingsState.normalizedClipboardEnhancementShortcutSlotEnabledStates(states)
+    }
     
     /// Validates AI provider and corrects if invalid
     /// Note: Custom and ElevenLabs have been removed from AIProvider enum
@@ -806,6 +840,7 @@ class AppSettingsStore: ObservableObject {
         newState.isMiddleClickToggleEnabled = self.isMiddleClickToggleEnabled
         newState.middleClickActivationDelay = self.middleClickActivationDelay
         newState.isClipboardEnhancementShortcutsEnabled = self.isClipboardEnhancementShortcutsEnabled
+        newState.clipboardEnhancementShortcutSlotEnabledStates = self.clipboardEnhancementShortcutSlotEnabledStates
         
         // E. App State (Preserve Onboarding status)
         newState.hasCompletedOnboarding = self.hasCompletedOnboarding
@@ -967,6 +1002,9 @@ class AppSettingsStore: ObservableObject {
         isSystemMuteEnabled = state.isSystemMuteEnabled
         _isAIEnhancementEnabled = state.isAIEnhancementEnabled // Storage
         isClipboardEnhancementShortcutsEnabled = state.isClipboardEnhancementShortcutsEnabled
+        clipboardEnhancementShortcutSlotEnabledStates = Self.normalizedClipboardEnhancementShortcutSlotEnabledStates(
+            state.clipboardEnhancementShortcutSlotEnabledStates
+        )
         _selectedPromptId = state.selectedPromptId // Storage
         useScreenCaptureContext = state.useScreenCaptureContext
         userProfileContext = state.userProfileContext
@@ -1039,6 +1077,10 @@ class AppSettingsStore: ObservableObject {
         UserDefaults.hoah.set(state.isSystemMuteEnabled, forKey: "isSystemMuteEnabled")
         UserDefaults.hoah.set(state.isAIEnhancementEnabled, forKey: "isAIEnhancementEnabled")
         UserDefaults.hoah.set(state.isClipboardEnhancementShortcutsEnabled, forKey: "isClipboardEnhancementShortcutsEnabled")
+        UserDefaults.hoah.set(
+            state.clipboardEnhancementShortcutSlotEnabledStates,
+            forKey: "clipboardEnhancementShortcutSlotEnabledStates"
+        )
         if let promptId = state.selectedPromptId {
             UserDefaults.hoah.set(promptId, forKey: "selectedPromptId")
         } else {
@@ -1086,6 +1128,7 @@ class AppSettingsStore: ObservableObject {
             // isPauseMediaEnabled removed
             isAIEnhancementEnabled: _isAIEnhancementEnabled,
             isClipboardEnhancementShortcutsEnabled: isClipboardEnhancementShortcutsEnabled,
+            clipboardEnhancementShortcutSlotEnabledStates: clipboardEnhancementShortcutSlotEnabledStates,
             selectedPromptId: _selectedPromptId,
             useScreenCaptureContext: useScreenCaptureContext,
             userProfileContext: userProfileContext,

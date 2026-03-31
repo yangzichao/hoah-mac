@@ -1510,6 +1510,8 @@ Languages: English, Chinese</string>
 	<string>Action %d</string>
 	<key>Shortcut Slot %d</key>
 	<string>Shortcut Slot %d</string>
+	<key>Enabled</key>
+	<string>Enabled</string>
 	<key>No matching AI Action yet</key>
 	<string>No matching AI Action yet</string>
 	<key>Please add a valid AI configuration first</key>

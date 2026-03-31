@@ -1773,9 +1773,9 @@ Disable for full control over the AI's system prompt (for advanced users).</key>
 	<key>No selected text found</key>
 	<string>未找到选中的文本</string>
 	<key>Selection Action</key>
-	<string>Selection Action</string>
+	<string>选中文本指令</string>
 	<key>Customize Selection Action Shortcuts</key>
-	<string>自定义 Selection Action 快捷键</string>
+	<string>自定义选中文本指令快捷键</string>
 	<key>Default is Option + Shift + number. Record a new shortcut for any action if you want a different mapping.</key>
 	<string>默认使用 Option + Shift + 数字。你可以为任意指令录制新的快捷键映射。</string>
 	<key>Default shortcuts use ⌥⇧%@. You can customize each action below.</key>
@@ -1790,6 +1790,8 @@ Disable for full control over the AI's system prompt (for advanced users).</key>
 	<string>指令 %d</string>
 	<key>Shortcut Slot %d</key>
 	<string>快捷键槽位 %d</string>
+	<key>Enabled</key>
+	<string>已启用</string>
 	<key>No matching AI Action yet</key>
 	<string>当前还没有对应的 AI 指令</string>
 	<key>Please add a valid AI configuration first</key>

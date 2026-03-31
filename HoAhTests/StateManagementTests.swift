@@ -49,6 +49,8 @@ struct AppSettingsStateTests {
         #expect(state.isSoundFeedbackEnabled == true)
         #expect(state.isSystemMuteEnabled == true) // Default is true
         #expect(state.isAIEnhancementEnabled == false)
+        #expect(state.clipboardEnhancementShortcutSlotEnabledStates.count == AppSettingsState.clipboardEnhancementShortcutSlotCount)
+        #expect(state.clipboardEnhancementShortcutSlotEnabledStates.allSatisfy { $0 })
         #expect(state.useScreenCaptureContext == false)
         #expect(state.arePromptTriggersEnabled == false)
     }
@@ -60,7 +62,8 @@ struct AppSettingsStateTests {
         state.appInterfaceLanguage = "en"
         state.recorderType = "notch"
         state.selectedHotkey1 = "option"
-        
+        state.clipboardEnhancementShortcutSlotEnabledStates = [true, false]
+
         let encoder = JSONEncoder()
         let data = try encoder.encode(state)
         
@@ -71,6 +74,9 @@ struct AppSettingsStateTests {
         #expect(decoded.appInterfaceLanguage == "en")
         #expect(decoded.recorderType == "notch")
         #expect(decoded.selectedHotkey1 == "option")
+        #expect(decoded.clipboardEnhancementShortcutSlotEnabledStates.count == AppSettingsState.clipboardEnhancementShortcutSlotCount)
+        #expect(decoded.clipboardEnhancementShortcutSlotEnabledStates[0] == true)
+        #expect(decoded.clipboardEnhancementShortcutSlotEnabledStates[1] == false)
     }
     
     @Test("State validation passes for valid state")
@@ -154,6 +160,19 @@ struct AppSettingsStateTests {
         #expect(safeState.isSoundFeedbackEnabled == false)
         #expect(safeState.selectedHotkey1 == "rightOption")
     }
+
+    @Test("State with safe defaults normalizes Selection Action slot states")
+    func withSafeDefaultsNormalizesSelectionActionSlotStates() {
+        var state = AppSettingsState()
+        state.clipboardEnhancementShortcutSlotEnabledStates = [false, true]
+
+        let safeState = state.withSafeDefaults()
+
+        #expect(safeState.clipboardEnhancementShortcutSlotEnabledStates.count == AppSettingsState.clipboardEnhancementShortcutSlotCount)
+        #expect(safeState.clipboardEnhancementShortcutSlotEnabledStates[0] == false)
+        #expect(safeState.clipboardEnhancementShortcutSlotEnabledStates[1] == true)
+        #expect(safeState.clipboardEnhancementShortcutSlotEnabledStates.dropFirst(2).allSatisfy { $0 })
+    }
 }
 
 @Suite("AppSettingsSnapshot Tests")
@@ -198,6 +217,7 @@ struct AppSettingsStoreTests {
         savedState.hasCompletedOnboarding = true
         savedState.appInterfaceLanguage = "en"
         savedState.recorderType = "notch"
+        savedState.clipboardEnhancementShortcutSlotEnabledStates = [true, false]
         mockStorage.savedState = savedState
         
         let store = AppSettingsStore(storage: mockStorage)
@@ -205,6 +225,9 @@ struct AppSettingsStoreTests {
         #expect(store.hasCompletedOnboarding == true)
         #expect(store.appInterfaceLanguage == "en")
         #expect(store.recorderType == "notch")
+        #expect(store.clipboardEnhancementShortcutSlotEnabledStates.count == AppSettingsState.clipboardEnhancementShortcutSlotCount)
+        #expect(store.clipboardEnhancementShortcutSlotEnabledStates[0] == true)
+        #expect(store.clipboardEnhancementShortcutSlotEnabledStates[1] == false)
     }
 
     @Test("Store syncs preserve clipboard setting to UserDefaults")
@@ -296,6 +319,19 @@ struct AppSettingsStoreTests {
         store.hasCompletedOnboarding = true
         
         #expect(mockStorage.saveCallCount > initialSaveCount)
+    }
+
+    @Test("Store toggles Selection Action slot enabled state")
+    func storeTogglesSelectionActionSlotEnabledState() {
+        let mockStorage = MockSettingsStorage()
+        let store = AppSettingsStore(storage: mockStorage)
+
+        #expect(store.isClipboardEnhancementShortcutSlotEnabled(at: 1) == true)
+
+        store.setClipboardEnhancementShortcutSlotEnabled(false, at: 1)
+
+        #expect(store.isClipboardEnhancementShortcutSlotEnabled(at: 1) == false)
+        #expect(mockStorage.savedState?.clipboardEnhancementShortcutSlotEnabledStates[1] == false)
     }
     
     @Test("Store validates language and resets invalid")

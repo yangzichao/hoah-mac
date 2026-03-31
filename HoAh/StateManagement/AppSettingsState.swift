@@ -8,6 +8,25 @@ struct AppSettingsState: Codable {
     
     /// Version number for migration support
     var version: Int = 1
+
+    static let clipboardEnhancementShortcutSlotCount = 10
+
+    static var defaultClipboardEnhancementShortcutSlotEnabledStates: [Bool] {
+        Array(repeating: true, count: clipboardEnhancementShortcutSlotCount)
+    }
+
+    static func normalizedClipboardEnhancementShortcutSlotEnabledStates(_ states: [Bool]) -> [Bool] {
+        var normalized = Array(states.prefix(clipboardEnhancementShortcutSlotCount))
+        if normalized.count < clipboardEnhancementShortcutSlotCount {
+            normalized.append(
+                contentsOf: repeatElement(
+                    true,
+                    count: clipboardEnhancementShortcutSlotCount - normalized.count
+                )
+            )
+        }
+        return normalized
+    }
     
     // MARK: - Application Settings
     
@@ -78,6 +97,9 @@ struct AppSettingsState: Codable {
 
     /// Whether global clipboard AI action shortcuts are enabled
     var isClipboardEnhancementShortcutsEnabled: Bool = false
+
+    /// Whether each Selection Action shortcut slot is individually enabled
+    var clipboardEnhancementShortcutSlotEnabledStates: [Bool] = Self.defaultClipboardEnhancementShortcutSlotEnabledStates
     
     /// Selected prompt ID (UUID string)
     var selectedPromptId: String? = nil
@@ -195,6 +217,7 @@ struct AppSettingsState: Codable {
         // isPauseMediaEnabled removed
         isAIEnhancementEnabled: Bool = false,
         isClipboardEnhancementShortcutsEnabled: Bool = false,
+        clipboardEnhancementShortcutSlotEnabledStates: [Bool] = Self.defaultClipboardEnhancementShortcutSlotEnabledStates,
         selectedPromptId: String? = nil,
         useScreenCaptureContext: Bool = false,
         userProfileContext: String = "",
@@ -244,6 +267,7 @@ struct AppSettingsState: Codable {
         // self.isPauseMediaEnabled = isPauseMediaEnabled removed
         self.isAIEnhancementEnabled = isAIEnhancementEnabled
         self.isClipboardEnhancementShortcutsEnabled = isClipboardEnhancementShortcutsEnabled
+        self.clipboardEnhancementShortcutSlotEnabledStates = Self.normalizedClipboardEnhancementShortcutSlotEnabledStates(clipboardEnhancementShortcutSlotEnabledStates)
         self.selectedPromptId = selectedPromptId
         self.useScreenCaptureContext = useScreenCaptureContext
         self.userProfileContext = userProfileContext
@@ -297,6 +321,7 @@ struct AppSettingsState: Codable {
         // case isPauseMediaEnabled removed
         case isAIEnhancementEnabled
         case isClipboardEnhancementShortcutsEnabled
+        case clipboardEnhancementShortcutSlotEnabledStates
         case selectedPromptId
         case useScreenCaptureContext
         case userProfileContext
@@ -350,6 +375,10 @@ struct AppSettingsState: Codable {
         // isPauseMediaEnabled removed
         isAIEnhancementEnabled = (try? container.decode(Bool.self, forKey: .isAIEnhancementEnabled)) ?? false
         isClipboardEnhancementShortcutsEnabled = (try? container.decode(Bool.self, forKey: .isClipboardEnhancementShortcutsEnabled)) ?? false
+        clipboardEnhancementShortcutSlotEnabledStates = Self.normalizedClipboardEnhancementShortcutSlotEnabledStates(
+            (try? container.decode([Bool].self, forKey: .clipboardEnhancementShortcutSlotEnabledStates))
+                ?? Self.defaultClipboardEnhancementShortcutSlotEnabledStates
+        )
         selectedPromptId = (try? container.decodeIfPresent(String.self, forKey: .selectedPromptId)) ?? nil
         useScreenCaptureContext = (try? container.decode(Bool.self, forKey: .useScreenCaptureContext)) ?? false
         userProfileContext = (try? container.decode(String.self, forKey: .userProfileContext)) ?? ""
@@ -435,6 +464,12 @@ struct AppSettingsState: Codable {
             errors.append("Invalid audioRetentionPeriod: \(audioRetentionPeriod). Must be at least 1.")
         }
 
+        if clipboardEnhancementShortcutSlotEnabledStates.count != Self.clipboardEnhancementShortcutSlotCount {
+            errors.append(
+                "Invalid clipboardEnhancementShortcutSlotEnabledStates count: \(clipboardEnhancementShortcutSlotEnabledStates.count). Must be \(Self.clipboardEnhancementShortcutSlotCount)."
+            )
+        }
+
         if let target = translationTargetLanguage,
            target.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             errors.append("Invalid translationTargetLanguage: value is empty.")
@@ -502,6 +537,10 @@ struct AppSettingsState: Codable {
         if audioRetentionPeriod < 1 {
             safe.audioRetentionPeriod = 7
         }
+
+        safe.clipboardEnhancementShortcutSlotEnabledStates = Self.normalizedClipboardEnhancementShortcutSlotEnabledStates(
+            clipboardEnhancementShortcutSlotEnabledStates
+        )
 
         let trimmedTarget = translationTargetLanguage?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         if trimmedTarget.isEmpty {

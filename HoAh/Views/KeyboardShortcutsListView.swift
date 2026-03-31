@@ -14,7 +14,17 @@ struct KeyboardShortcutsListView: View {
     @State private var toggleHotkey1: KeyboardShortcuts.Shortcut?
     @State private var toggleHotkey2: KeyboardShortcuts.Shortcut?
     @State private var clipboardActionShortcutsAreDefault = true
-    @State private var activeClipboardActionShortcutCount = 0
+
+    private var activeClipboardActionShortcutIndices: [Int] {
+        ClipboardAIActionShortcutManager.enabledShortcutIndices(
+            for: enhancementService.promptShortcutPrompts.count,
+            enabledStates: appSettings.clipboardEnhancementShortcutSlotEnabledStates
+        )
+    }
+
+    private var activeClipboardActionShortcutSummaryLabel: String {
+        ClipboardAIActionShortcutManager.shortcutSummaryLabel(for: activeClipboardActionShortcutIndices)
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -149,15 +159,15 @@ struct KeyboardShortcutsListView: View {
                         StaticKeysBadge(keys: ["⌘", "1–0"])
                     }
 
-                    if appSettings.isClipboardEnhancementShortcutsEnabled && activeClipboardActionShortcutCount > 0 {
+                    if appSettings.isClipboardEnhancementShortcutsEnabled && !activeClipboardActionShortcutIndices.isEmpty {
                         ShortcutCard(
                             icon: "doc.on.clipboard",
                             iconColor: .green,
                             title: "Run Selection Action",
-                            subtitle: "Run the matching AI Action on selected text with ⌥⇧\(ClipboardAIActionShortcutManager.shortcutRangeLabel(for: activeClipboardActionShortcutCount))"
+                            subtitle: "Run the matching AI Action on selected text with ⌥⇧\(activeClipboardActionShortcutSummaryLabel)"
                         ) {
                             if clipboardActionShortcutsAreDefault {
-                                StaticKeysBadge(keys: ["⌥", "⇧", ClipboardAIActionShortcutManager.shortcutRangeLabel(for: activeClipboardActionShortcutCount)])
+                                StaticKeysBadge(keys: ["⌥", "⇧", activeClipboardActionShortcutSummaryLabel])
                             } else {
                                 HotkeyBadge(text: "Custom")
                             }
@@ -197,14 +207,8 @@ struct KeyboardShortcutsListView: View {
         toggleHotkey1 = KeyboardShortcuts.getShortcut(for: .toggleMiniRecorder)
         toggleHotkey2 = KeyboardShortcuts.getShortcut(for: .toggleMiniRecorder2)
 
-        activeClipboardActionShortcutCount = ClipboardAIActionShortcutManager.activeShortcutCount(
-            for: enhancementService.promptShortcutPrompts.count
-        )
-
-        clipboardActionShortcutsAreDefault = ClipboardAIActionShortcutManager.configuredShortcutNames
-            .prefix(activeClipboardActionShortcutCount)
-            .enumerated()
-            .allSatisfy { index, name in
+        clipboardActionShortcutsAreDefault = activeClipboardActionShortcutIndices.allSatisfy { index in
+            let name = ClipboardAIActionShortcutManager.configuredShortcutNames[index]
             let resolvedShortcut = KeyboardShortcuts.getShortcut(for: name) ?? ClipboardAIActionShortcutManager.defaultShortcut(for: index)
             return resolvedShortcut == ClipboardAIActionShortcutManager.defaultShortcut(for: index)
         }

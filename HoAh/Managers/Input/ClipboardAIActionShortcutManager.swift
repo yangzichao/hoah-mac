@@ -96,6 +96,14 @@ final class ClipboardAIActionShortcutManager {
             }
             .store(in: &cancellables)
 
+        appSettings.$clipboardEnhancementShortcutSlotEnabledStates
+            .dropFirst()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.updateShortcutRegistration()
+            }
+            .store(in: &cancellables)
+
         enhancementService.$activePrompts
             .dropFirst()
             .receive(on: DispatchQueue.main)
@@ -181,7 +189,9 @@ final class ClipboardAIActionShortcutManager {
             let configuredName = Self.configuredShortcutNames[index]
             let activeName = Self.activeShortcutNames[index]
             let isSlotAvailable = index < availableShortcutCount
+            let isSlotEnabled = appSettings.isClipboardEnhancementShortcutSlotEnabled(at: index)
             let activeShortcut = appSettings.isClipboardEnhancementShortcutsEnabled && isSlotAvailable
+                && isSlotEnabled
                 ? resolvedShortcut(for: configuredName, index: index)
                 : nil
             KeyboardShortcuts.setShortcut(activeShortcut, for: activeName)
@@ -190,6 +200,7 @@ final class ClipboardAIActionShortcutManager {
 
     private func runClipboardAction(at index: Int) async {
         guard appSettings.isClipboardEnhancementShortcutsEnabled else { return }
+        guard appSettings.isClipboardEnhancementShortcutSlotEnabled(at: index) else { return }
 
         if isProcessingShortcut {
             NotificationManager.shared.showNotification(
@@ -348,6 +359,12 @@ final class ClipboardAIActionShortcutManager {
         min(max(promptCount, 0), configuredShortcutNames.count)
     }
 
+    static func enabledShortcutIndices(for promptCount: Int, enabledStates: [Bool]) -> [Int] {
+        let availableCount = activeShortcutCount(for: promptCount)
+        let normalizedStates = AppSettingsState.normalizedClipboardEnhancementShortcutSlotEnabledStates(enabledStates)
+        return Array(0..<availableCount).filter { normalizedStates[$0] }
+    }
+
     static func shortcutEditorSlots(for promptCount: Int) -> [(index: Int, name: KeyboardShortcuts.Name)] {
         Array(allShortcutEditorSlots.prefix(activeShortcutCount(for: promptCount)))
     }
@@ -365,5 +382,39 @@ final class ClipboardAIActionShortcutManager {
         default:
             return "1–\(resolvedCount)"
         }
+    }
+
+    static func shortcutSummaryLabel(for indices: [Int]) -> String {
+        let sortedIndices = indices.sorted()
+        guard let firstIndex = sortedIndices.first else { return "-" }
+
+        var components: [String] = []
+        var rangeStart = firstIndex
+        var previous = firstIndex
+
+        for index in sortedIndices.dropFirst() {
+            if index == previous + 1 {
+                previous = index
+                continue
+            }
+
+            components.append(formattedShortcutRange(start: rangeStart, end: previous))
+            rangeStart = index
+            previous = index
+        }
+
+        components.append(formattedShortcutRange(start: rangeStart, end: previous))
+        return components.joined(separator: ", ")
+    }
+
+    private static func formattedShortcutRange(start: Int, end: Int) -> String {
+        if start == end {
+            return shortcutSlotLabel(for: start)
+        }
+        return "\(shortcutSlotLabel(for: start))–\(shortcutSlotLabel(for: end))"
+    }
+
+    private static func shortcutSlotLabel(for index: Int) -> String {
+        index == 9 ? "0" : String(index + 1)
     }
 }

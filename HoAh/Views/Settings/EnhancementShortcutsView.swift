@@ -176,8 +176,15 @@ struct ClipboardActionShortcutsSection: View {
         ClipboardAIActionShortcutManager.activeShortcutCount(for: enhancementService.promptShortcutPrompts.count)
     }
 
-    private var shortcutRangeLabel: String {
-        ClipboardAIActionShortcutManager.shortcutRangeLabel(for: availableShortcutCount)
+    private var enabledShortcutIndices: [Int] {
+        ClipboardAIActionShortcutManager.enabledShortcutIndices(
+            for: enhancementService.promptShortcutPrompts.count,
+            enabledStates: appSettings.clipboardEnhancementShortcutSlotEnabledStates
+        )
+    }
+
+    private var enabledShortcutSummaryLabel: String {
+        ClipboardAIActionShortcutManager.shortcutSummaryLabel(for: enabledShortcutIndices)
     }
 
     var body: some View {
@@ -233,15 +240,45 @@ struct ClipboardActionShortcutsSection: View {
                 }
             }
 
-            HStack(spacing: 8) {
-                KeyChip(label: "⌥", isActive: appSettings.isClipboardEnhancementShortcutsEnabled && availableShortcutCount > 0)
-                KeyChip(label: "⇧", isActive: appSettings.isClipboardEnhancementShortcutsEnabled && availableShortcutCount > 0)
-                KeyChip(label: shortcutRangeLabel, isActive: appSettings.isClipboardEnhancementShortcutsEnabled && availableShortcutCount > 0)
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 8) {
+                    shortcutStatusPill(
+                        systemImage: appSettings.isClipboardEnhancementShortcutsEnabled ? "bolt.fill" : "pause.fill",
+                        tint: appSettings.isClipboardEnhancementShortcutsEnabled ? theme.accentColor : theme.textMuted,
+                        text: availableShortcutCount > 0
+                            ? "\(enabledShortcutIndices.count)/\(availableShortcutCount)"
+                            : "0"
+                    )
+
+                    if availableShortcutCount > 0 {
+                        shortcutStatusPill(
+                            systemImage: "square.grid.2x2",
+                            tint: theme.statusInfo,
+                            text: ClipboardAIActionShortcutManager.shortcutRangeLabel(for: availableShortcutCount)
+                        )
+                    }
+                }
+
+                HStack(spacing: 8) {
+                    KeyChip(label: "⌥", isActive: appSettings.isClipboardEnhancementShortcutsEnabled && !enabledShortcutIndices.isEmpty)
+                    KeyChip(label: "⇧", isActive: appSettings.isClipboardEnhancementShortcutsEnabled && !enabledShortcutIndices.isEmpty)
+                    KeyChip(label: enabledShortcutSummaryLabel, isActive: appSettings.isClipboardEnhancementShortcutsEnabled && !enabledShortcutIndices.isEmpty)
+                }
             }
+            .padding(12)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(theme.panelBackground.opacity(0.52))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .stroke(theme.panelBorder.opacity(0.8), lineWidth: 1)
+            )
 
             if isExpanded {
                 VStack(alignment: .leading, spacing: 14) {
-                    VStack(alignment: .leading, spacing: 6) {
+                    VStack(alignment: .leading, spacing: 8) {
                         Text(LocalizedStringKey("This feature is disabled by default. Once enabled, the shortcut works globally while HoAh is running."))
                             .font(theme.typography.caption)
                             .foregroundColor(theme.textSecondary)
@@ -250,13 +287,23 @@ struct ClipboardActionShortcutsSection: View {
                             Text(
                                 String(
                                     format: NSLocalizedString("Default shortcuts use ⌥⇧%@. You can customize each action below.", comment: "Explains the default selection action shortcut range based on the number of available AI actions"),
-                                    shortcutRangeLabel
+                                    ClipboardAIActionShortcutManager.shortcutRangeLabel(for: availableShortcutCount)
                                 )
                             )
                                 .font(theme.typography.caption)
                                 .foregroundColor(theme.textSecondary)
                         }
                     }
+                    .padding(12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(theme.inputBackground.opacity(0.58))
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .stroke(theme.inputBorder.opacity(0.75), lineWidth: 1)
+                    )
 
                     if appSettings.isClipboardEnhancementShortcutsEnabled {
                         if availableShortcutCount > 0 {
@@ -284,16 +331,39 @@ struct ClipboardActionShortcutsSection: View {
         .background(CardBackground(isSelected: false))
         .animation(.easeInOut(duration: 0.25), value: isExpanded)
     }
+
+    private func shortcutStatusPill(systemImage: String, tint: Color, text: String) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: systemImage)
+                .font(.system(size: 11, weight: .semibold))
+
+            Text(text)
+                .font(theme.typography.caption2)
+                .fontWeight(.semibold)
+                .lineLimit(1)
+        }
+        .foregroundColor(tint)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(
+            Capsule(style: .continuous)
+                .fill(tint.opacity(0.10))
+        )
+        .overlay(
+            Capsule(style: .continuous)
+                .stroke(tint.opacity(0.18), lineWidth: 1)
+        )
+    }
 }
 
 private struct ClipboardActionShortcutEditor: View {
+    @EnvironmentObject private var appSettings: AppSettingsStore
     @EnvironmentObject private var enhancementService: AIEnhancementService
     @Environment(\.theme) private var theme
     let slotCount: Int
 
     private let columns = [
-        GridItem(.flexible(), spacing: 12),
-        GridItem(.flexible(), spacing: 12)
+        GridItem(.adaptive(minimum: 280, maximum: 420), spacing: 14, alignment: .top)
     ]
 
     private var shortcutPrompts: [CustomPrompt] {
@@ -306,44 +376,37 @@ private struct ClipboardActionShortcutEditor: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(LocalizedStringKey("Customize Selection Action Shortcuts"))
-                .font(theme.typography.headline)
-                .foregroundColor(theme.textPrimary)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(LocalizedStringKey("Customize Selection Action Shortcuts"))
+                    .font(theme.typography.headline)
+                    .foregroundColor(theme.textPrimary)
 
-            Text(LocalizedStringKey("Default is Option + Shift + number. Record a new shortcut for any action if you want a different mapping."))
-                .font(theme.typography.caption)
-                .foregroundColor(theme.textSecondary)
+                Text(LocalizedStringKey("Default is Option + Shift + number. Record a new shortcut for any action if you want a different mapping."))
+                    .font(theme.typography.caption)
+                    .foregroundColor(theme.textSecondary)
+            }
 
-            LazyVGrid(columns: columns, spacing: 10) {
+            LazyVGrid(columns: columns, spacing: 14) {
                 ForEach(editorSlots, id: \.index) { slot in
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(promptTitle(for: slot.index))
-                                .font(theme.typography.caption)
-                                .foregroundColor(theme.textPrimary)
-                                .lineLimit(1)
-
-                            Text(String(format: NSLocalizedString("Shortcut Slot %d", comment: "Label for clipboard action shortcut position"), slot.index + 1))
-                                .font(theme.typography.caption2)
-                                .foregroundColor(theme.textSecondary)
-                                .lineLimit(1)
-                        }
-
-                        Spacer(minLength: 8)
-
-                        KeyboardShortcuts.Recorder(for: slot.name)
-                            .controlSize(.small)
-                    }
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 10)
-                    .background(theme.controlBackground.opacity(0.6))
-                    .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    ClipboardActionShortcutCard(
+                        slotIndex: slot.index,
+                        shortcutName: slot.name,
+                        promptTitle: promptTitle(for: slot.index),
+                        isEnabled: slotEnabledBinding(for: slot.index)
+                    )
                 }
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 14)
-        .background(CardBackground(isSelected: false))
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(theme.panelBackground.opacity(0.42))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(theme.panelBorder.opacity(0.75), lineWidth: 1)
+        )
     }
 
     private func promptTitle(for index: Int) -> String {
@@ -351,5 +414,114 @@ private struct ClipboardActionShortcutEditor: View {
             return shortcutPrompts[index].displayTitle
         }
         return String(format: NSLocalizedString("Action %d", comment: "Label for clipboard action shortcut slot"), index + 1)
+    }
+
+    private func slotEnabledBinding(for index: Int) -> Binding<Bool> {
+        Binding(
+            get: { appSettings.isClipboardEnhancementShortcutSlotEnabled(at: index) },
+            set: { appSettings.setClipboardEnhancementShortcutSlotEnabled($0, at: index) }
+        )
+    }
+}
+
+private struct ClipboardActionShortcutCard: View {
+    let slotIndex: Int
+    let shortcutName: KeyboardShortcuts.Name
+    let promptTitle: String
+    @Binding var isEnabled: Bool
+
+    @Environment(\.theme) private var theme
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .top, spacing: 12) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(promptTitle)
+                        .font(theme.typography.body)
+                        .foregroundColor(theme.textPrimary)
+                        .lineLimit(2)
+
+                    HStack(spacing: 6) {
+                        Image(systemName: isEnabled ? "checkmark.circle.fill" : "minus.circle")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundColor(isEnabled ? theme.accentColor : theme.textMuted)
+
+                        Text(String(format: NSLocalizedString("Shortcut Slot %d", comment: "Label for clipboard action shortcut position"), slotIndex + 1))
+                            .font(theme.typography.caption2)
+                            .foregroundColor(theme.textSecondary)
+                    }
+                }
+
+                Spacer(minLength: 12)
+
+                HStack(spacing: 10) {
+                    Text(isEnabled ? LocalizedStringKey("Enabled") : LocalizedStringKey("Disabled"))
+                        .font(theme.typography.caption2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(isEnabled ? theme.accentColor : theme.textMuted)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(
+                            Capsule(style: .continuous)
+                                .fill((isEnabled ? theme.accentColor : theme.textMuted).opacity(0.10))
+                        )
+                        .overlay(
+                            Capsule(style: .continuous)
+                                .stroke((isEnabled ? theme.accentColor : theme.textMuted).opacity(0.18), lineWidth: 1)
+                        )
+
+                    Toggle(isOn: $isEnabled) {
+                        EmptyView()
+                    }
+                    .toggleStyle(ThemedSwitchToggleStyle(theme: theme))
+                    .labelsHidden()
+                    .controlSize(.small)
+                }
+            }
+
+            Rectangle()
+                .fill(theme.separatorColor.opacity(0.85))
+                .frame(height: 1)
+
+            HStack(alignment: .center, spacing: 12) {
+                HStack(spacing: 8) {
+                    Image(systemName: "keyboard")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundColor(theme.textSecondary)
+
+                    Text(LocalizedStringKey("Keyboard Shortcut"))
+                        .font(theme.typography.caption)
+                        .foregroundColor(theme.textSecondary)
+                }
+
+                Spacer(minLength: 12)
+
+                KeyboardShortcuts.Recorder(for: shortcutName)
+                    .controlSize(.small)
+                    .labelsHidden()
+                    .frame(minWidth: 152, alignment: .trailing)
+                    .opacity(isEnabled ? 1.0 : disabledOpacity)
+            }
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill((isEnabled ? theme.inputBackground : theme.controlBackground).opacity(isEnabled ? 0.90 : 0.62))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(
+                    isEnabled ? theme.accentColor.opacity(0.18) : theme.inputBorder.opacity(0.85),
+                    lineWidth: 1
+                )
+        )
+        .shadow(color: theme.shadowColor.opacity(isEnabled ? 0.08 : 0.03), radius: 8, x: 0, y: 3)
+        .opacity(isEnabled ? 1.0 : disabledOpacity)
+        .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var disabledOpacity: CGFloat {
+        0.70
     }
 }
