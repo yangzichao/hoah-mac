@@ -363,7 +363,8 @@ private struct ClipboardActionShortcutEditor: View {
     let slotCount: Int
 
     private let columns = [
-        GridItem(.adaptive(minimum: 280, maximum: 420), spacing: 14, alignment: .top)
+        GridItem(.flexible(minimum: 0, maximum: .infinity), spacing: 12, alignment: .top),
+        GridItem(.flexible(minimum: 0, maximum: .infinity), spacing: 12, alignment: .top)
     ]
 
     private var shortcutPrompts: [CustomPrompt] {
@@ -375,7 +376,7 @@ private struct ClipboardActionShortcutEditor: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(LocalizedStringKey("Customize Selection Action Shortcuts"))
                     .font(theme.typography.headline)
@@ -386,7 +387,7 @@ private struct ClipboardActionShortcutEditor: View {
                     .foregroundColor(theme.textSecondary)
             }
 
-            LazyVGrid(columns: columns, spacing: 14) {
+            LazyVGrid(columns: columns, spacing: 12) {
                 ForEach(editorSlots, id: \.index) { slot in
                     ClipboardActionShortcutCard(
                         slotIndex: slot.index,
@@ -397,7 +398,7 @@ private struct ClipboardActionShortcutEditor: View {
                 }
             }
         }
-        .padding(16)
+        .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
@@ -433,13 +434,13 @@ private struct ClipboardActionShortcutCard: View {
     @Environment(\.theme) private var theme
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(alignment: .top, spacing: 12) {
-                VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(alignment: .top, spacing: 10) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(promptTitle)
-                        .font(theme.typography.body)
+                        .font(theme.typography.headline)
                         .foregroundColor(theme.textPrimary)
-                        .lineLimit(2)
+                        .lineLimit(1)
 
                     HStack(spacing: 6) {
                         Image(systemName: isEnabled ? "checkmark.circle.fill" : "minus.circle")
@@ -452,15 +453,15 @@ private struct ClipboardActionShortcutCard: View {
                     }
                 }
 
-                Spacer(minLength: 12)
+                Spacer(minLength: 8)
 
-                HStack(spacing: 10) {
+                HStack(spacing: 8) {
                     Text(isEnabled ? LocalizedStringKey("Enabled") : LocalizedStringKey("Disabled"))
                         .font(theme.typography.caption2)
                         .fontWeight(.semibold)
                         .foregroundColor(isEnabled ? theme.accentColor : theme.textMuted)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 5)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
                         .background(
                             Capsule(style: .continuous)
                                 .fill((isEnabled ? theme.accentColor : theme.textMuted).opacity(0.10))
@@ -479,44 +480,41 @@ private struct ClipboardActionShortcutCard: View {
                 }
             }
 
-            Rectangle()
-                .fill(theme.separatorColor.opacity(0.85))
-                .frame(height: 1)
-
-            HStack(alignment: .center, spacing: 12) {
-                HStack(spacing: 8) {
-                    Image(systemName: "keyboard")
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundColor(theme.textSecondary)
-
+            HStack(alignment: .center, spacing: 10) {
+                Label {
                     Text(LocalizedStringKey("Keyboard Shortcut"))
                         .font(theme.typography.caption)
                         .foregroundColor(theme.textSecondary)
+                } icon: {
+                    Image(systemName: "keyboard")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundColor(theme.textSecondary)
                 }
 
-                Spacer(minLength: 12)
+                Spacer(minLength: 8)
 
                 KeyboardShortcuts.Recorder(for: shortcutName)
                     .controlSize(.small)
                     .labelsHidden()
-                    .frame(minWidth: 152, alignment: .trailing)
+                    .frame(minWidth: 118, alignment: .trailing)
                     .opacity(isEnabled ? 1.0 : disabledOpacity)
             }
         }
-        .padding(14)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 11)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .fill((isEnabled ? theme.inputBackground : theme.controlBackground).opacity(isEnabled ? 0.90 : 0.62))
         )
         .overlay(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
                 .stroke(
                     isEnabled ? theme.accentColor.opacity(0.18) : theme.inputBorder.opacity(0.85),
                     lineWidth: 1
                 )
         )
-        .shadow(color: theme.shadowColor.opacity(isEnabled ? 0.08 : 0.03), radius: 8, x: 0, y: 3)
+        .shadow(color: theme.shadowColor.opacity(isEnabled ? 0.06 : 0.025), radius: 6, x: 0, y: 2)
         .opacity(isEnabled ? 1.0 : disabledOpacity)
         .fixedSize(horizontal: false, vertical: true)
     }

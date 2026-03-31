@@ -447,8 +447,8 @@ struct EnhancementSettingsView: View {
                         .background(CardBackground(isSelected: false))
                     }
                     
-                    EnhancementShortcutsSection()
                     ClipboardActionShortcutsSection()
+                    EnhancementShortcutsSection()
                 }
             }
             .padding(32)
