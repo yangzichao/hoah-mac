@@ -3,6 +3,22 @@
     <channel>
         <title>HoAh Releases</title>
         <item>
+            <title>3.7.4</title>
+            <pubDate>Mon, 30 Mar 2026 23:21:26 -0700</pubDate>
+            <sparkle:version>374</sparkle:version>
+            <sparkle:shortVersionString>3.7.4</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[
+                <h3>What's New in Version 3.7.4</h3>
+                <ul>
+                    <li>Added per-slot enable controls for Selection Action shortcuts so you can keep only the shortcuts you want active.</li>
+                    <li>Refreshed the Selection Action shortcut editor with clearer enabled and disabled states plus a denser card-based layout.</li>
+                    <li>Updated shortcut summaries and localizations so settings and keyboard shortcut references better match the active Selection Action slots.</li>
+                </ul>
+            ]]></description>
+            <enclosure url="https://github.com/yangzichao/hoah-release/releases/download/v3.7.4/HoAh-3.7.4.dmg" type="application/octet-stream"/>
+        </item>
+        <item>
             <title>3.7.3</title>
             <pubDate>Thu, 26 Mar 2026 15:50:50 -0700</pubDate>
             <sparkle:version>373</sparkle:version>

@@ -1,3 +1,12 @@
+# HoAh Dictation v3.7.4
+
+### Improvements
+* **Per-Slot Shortcut Controls**: Added individual enable toggles for Selection Action shortcut slots so you can keep only the mappings you want active.
+* **Shortcut Editor Refresh**: Reworked the Selection Action shortcut editor into a denser card layout with clearer enabled and disabled status.
+* **Shortcut Summary Accuracy**: Updated keyboard shortcut summaries and related localizations so they reflect the currently active Selection Action slots more clearly.
+
+---
+
 # HoAh Dictation v3.7.3
 
 ### Improvements

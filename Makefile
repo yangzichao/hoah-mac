@@ -11,7 +11,7 @@ INFO_PLIST := Config/Info.plist
 APP_STORE_INFO_PLIST := Config/Info-AppStore.plist
 
 .PHONY: all clean whisper setup build build-release build-debug ci-release help dev dev-debug run run-release run-debug reset-onboarding sync-prefs dmg release-dmg archive-mas export-mas check-mas bump-version tag-release
-DMG_VERSION ?= $(shell /usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" $(INFO_PLIST) 2>/dev/null || echo 0.0.0)
+DMG_VERSION ?= 3.7.4
 MAS_VERSION ?= $(shell /usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" $(APP_STORE_INFO_PLIST) 2>/dev/null || echo $(DMG_VERSION))
 
 # Default target
