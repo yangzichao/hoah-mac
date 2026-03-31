@@ -170,7 +170,6 @@ struct ClipboardActionShortcutsSection: View {
     @EnvironmentObject private var appSettings: AppSettingsStore
     @EnvironmentObject private var enhancementService: AIEnhancementService
     @Environment(\.theme) private var theme
-    @State private var isExpanded = false
 
     private var availableShortcutCount: Int {
         ClipboardAIActionShortcutManager.activeShortcutCount(for: enhancementService.promptShortcutPrompts.count)
@@ -181,10 +180,6 @@ struct ClipboardActionShortcutsSection: View {
             for: enhancementService.promptShortcutPrompts.count,
             enabledStates: appSettings.clipboardEnhancementShortcutSlotEnabledStates
         )
-    }
-
-    private var enabledShortcutSummaryLabel: String {
-        ClipboardAIActionShortcutManager.shortcutSummaryLabel(for: enabledShortcutIndices)
     }
 
     var body: some View {
@@ -222,50 +217,17 @@ struct ClipboardActionShortcutsSection: View {
                     Toggle("", isOn: $appSettings.isClipboardEnhancementShortcutsEnabled)
                         .toggleStyle(ThemedSwitchToggleStyle(theme: theme))
                         .labelsHidden()
-
-                    Button {
-                        withAnimation(.spring(response: 0.35, dampingFraction: 0.88)) {
-                            isExpanded.toggle()
-                        }
-                    } label: {
-                        Image(systemName: "chevron.down")
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundColor(theme.textSecondary)
-                            .rotationEffect(.degrees(isExpanded ? 0 : -90))
-                            .frame(width: 28, height: 28)
-                            .background(theme.controlBackground.opacity(0.55))
-                            .clipShape(Circle())
-                    }
-                    .buttonStyle(.plain)
                 }
             }
 
-            VStack(alignment: .leading, spacing: 10) {
-                HStack(spacing: 8) {
-                    shortcutStatusPill(
-                        systemImage: appSettings.isClipboardEnhancementShortcutsEnabled ? "bolt.fill" : "pause.fill",
-                        tint: appSettings.isClipboardEnhancementShortcutsEnabled ? theme.accentColor : theme.textMuted,
-                        text: availableShortcutCount > 0
-                            ? "\(enabledShortcutIndices.count)/\(availableShortcutCount)"
-                            : "0"
-                    )
-
-                    if availableShortcutCount > 0 {
-                        shortcutStatusPill(
-                            systemImage: "square.grid.2x2",
-                            tint: theme.statusInfo,
-                            text: ClipboardAIActionShortcutManager.shortcutRangeLabel(for: availableShortcutCount)
-                        )
-                    }
-                }
-
-                HStack(spacing: 8) {
-                    KeyChip(label: "⌥", isActive: appSettings.isClipboardEnhancementShortcutsEnabled && !enabledShortcutIndices.isEmpty)
-                    KeyChip(label: "⇧", isActive: appSettings.isClipboardEnhancementShortcutsEnabled && !enabledShortcutIndices.isEmpty)
-                    KeyChip(label: enabledShortcutSummaryLabel, isActive: appSettings.isClipboardEnhancementShortcutsEnabled && !enabledShortcutIndices.isEmpty)
-                }
-            }
-            .padding(12)
+            compactShortcutSummary(
+                title: LocalizedStringKey("Enabled"),
+                value: availableShortcutCount > 0 ? "\(enabledShortcutIndices.count)/\(availableShortcutCount)" : "0",
+                systemImage: appSettings.isClipboardEnhancementShortcutsEnabled ? "bolt.fill" : "pause.fill",
+                tint: appSettings.isClipboardEnhancementShortcutsEnabled ? theme.accentColor : theme.textMuted
+            )
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
@@ -276,83 +238,58 @@ struct ClipboardActionShortcutsSection: View {
                     .stroke(theme.panelBorder.opacity(0.8), lineWidth: 1)
             )
 
-            if isExpanded {
-                VStack(alignment: .leading, spacing: 14) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(LocalizedStringKey("This feature is disabled by default. Once enabled, the shortcut works globally while HoAh is running."))
+            VStack(alignment: .leading, spacing: 10) {
+                if appSettings.isClipboardEnhancementShortcutsEnabled {
+                    if availableShortcutCount > 0 {
+                        Text(
+                            String(
+                                format: NSLocalizedString("Default shortcuts use ⌥⇧%@. You can customize each action below.", comment: "Explains the default selection action shortcut range based on the number of available AI actions"),
+                                ClipboardAIActionShortcutManager.shortcutRangeLabel(for: availableShortcutCount)
+                            )
+                        )
+                        .font(theme.typography.caption)
+                        .foregroundColor(theme.textSecondary)
+
+                        ClipboardActionShortcutEditor(slotCount: availableShortcutCount)
+                    } else {
+                        Text(LocalizedStringKey("No AI Actions available yet. Add or enable an AI Action to create Selection Action shortcuts."))
                             .font(theme.typography.caption)
                             .foregroundColor(theme.textSecondary)
-
-                        if availableShortcutCount > 0 {
-                            Text(
-                                String(
-                                    format: NSLocalizedString("Default shortcuts use ⌥⇧%@. You can customize each action below.", comment: "Explains the default selection action shortcut range based on the number of available AI actions"),
-                                    ClipboardAIActionShortcutManager.shortcutRangeLabel(for: availableShortcutCount)
-                                )
-                            )
-                                .font(theme.typography.caption)
-                                .foregroundColor(theme.textSecondary)
-                        }
-                    }
-                    .padding(12)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .fill(theme.inputBackground.opacity(0.58))
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .stroke(theme.inputBorder.opacity(0.75), lineWidth: 1)
-                    )
-
-                    if appSettings.isClipboardEnhancementShortcutsEnabled {
-                        if availableShortcutCount > 0 {
-                            ClipboardActionShortcutEditor(slotCount: availableShortcutCount)
-                        } else {
-                            Text(LocalizedStringKey("No AI Actions available yet. Add or enable an AI Action to create Selection Action shortcuts."))
-                                .font(theme.typography.caption)
-                                .foregroundColor(theme.textSecondary)
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 14)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(CardBackground(isSelected: false))
-                        }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 14)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(CardBackground(isSelected: false))
                     }
                 }
-                .transition(
-                    .asymmetric(
-                        insertion: .opacity.combined(with: .move(edge: .top)),
-                        removal: .opacity
-                    )
-                )
             }
         }
         .padding(16)
         .background(CardBackground(isSelected: false))
-        .animation(.easeInOut(duration: 0.25), value: isExpanded)
     }
 
-    private func shortcutStatusPill(systemImage: String, tint: Color, text: String) -> some View {
-        HStack(spacing: 6) {
+    private func compactShortcutSummary(title: LocalizedStringKey, value: String, systemImage: String, tint: Color) -> some View {
+        HStack(spacing: 10) {
             Image(systemName: systemImage)
-                .font(.system(size: 11, weight: .semibold))
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundColor(tint)
+                .frame(width: 22, height: 22)
+                .background(
+                    Circle()
+                        .fill(tint.opacity(0.10))
+                )
 
-            Text(text)
-                .font(theme.typography.caption2)
-                .fontWeight(.semibold)
-                .lineLimit(1)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(theme.typography.caption2)
+                    .foregroundColor(theme.textSecondary)
+
+                Text(value)
+                    .font(theme.typography.caption)
+                    .fontWeight(.semibold)
+                    .foregroundColor(tint)
+                    .lineLimit(1)
+            }
         }
-        .foregroundColor(tint)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 6)
-        .background(
-            Capsule(style: .continuous)
-                .fill(tint.opacity(0.10))
-        )
-        .overlay(
-            Capsule(style: .continuous)
-                .stroke(tint.opacity(0.18), lineWidth: 1)
-        )
     }
 }
 
@@ -377,16 +314,6 @@ private struct ClipboardActionShortcutEditor: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(LocalizedStringKey("Customize Selection Action Shortcuts"))
-                    .font(theme.typography.headline)
-                    .foregroundColor(theme.textPrimary)
-
-                Text(LocalizedStringKey("Default is Option + Shift + number. Record a new shortcut for any action if you want a different mapping."))
-                    .font(theme.typography.caption)
-                    .foregroundColor(theme.textSecondary)
-            }
-
             LazyVGrid(columns: columns, spacing: 12) {
                 ForEach(editorSlots, id: \.index) { slot in
                     ClipboardActionShortcutCard(
@@ -398,16 +325,7 @@ private struct ClipboardActionShortcutEditor: View {
                 }
             }
         }
-        .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(theme.panelBackground.opacity(0.42))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .stroke(theme.panelBorder.opacity(0.75), lineWidth: 1)
-        )
     }
 
     private func promptTitle(for index: Int) -> String {
