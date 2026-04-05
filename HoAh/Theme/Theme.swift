@@ -347,7 +347,7 @@ extension ThemePalette {
         // Sidebar - Slightly distinct from main content
         sidebarBackground: Color(NSColor.alternatingContentBackgroundColors[1]),
         sidebarItemBackground: Color.clear,
-        sidebarItemBackgroundSelected: ThemePalette.systemAccent.opacity(0.18), // Native-like selection
+        sidebarItemBackgroundSelected: ThemePalette.systemAccent, // Solid accent to match toggles and pickers
         sidebarItemText: Color(NSColor.labelColor),
         sidebarItemTextSelected: .white, // White text for contrast on blue selection
         sidebarItemIcon: Color(NSColor.secondaryLabelColor),

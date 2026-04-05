@@ -18,7 +18,7 @@ struct ThemedSwitchToggleStyle: ToggleStyle {
             Button(action: { configuration.isOn.toggle() }) {
                 ZStack {
                     Capsule()
-                        .fill(configuration.isOn ? theme.accentColor : theme.panelBackground)
+                        .fill(configuration.isOn ? theme.accentColor : Color.gray.opacity(0.3))
                         .overlay(
                             Capsule()
                                 .stroke(theme.panelBorder, lineWidth: 1)
