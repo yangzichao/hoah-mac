@@ -87,7 +87,7 @@ class AIEnhancementService: ObservableObject {
     var allPrompts: [CustomPrompt] { activePrompts }
 
     let aiService: AIService
-    let baseTimeout: TimeInterval = 30 // Increased from 10s to 30s for better stability
+    let baseTimeout: TimeInterval = 15
     let rateLimitInterval: TimeInterval = 1.0
     var lastRequestTime: Date?
     private let modelContext: ModelContext
