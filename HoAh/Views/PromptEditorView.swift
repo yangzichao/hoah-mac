@@ -4,7 +4,7 @@ struct PromptEditorView: View {
     enum Mode: Equatable {
         case add(kind: PromptKind)
         case edit(CustomPrompt)
-        
+
         static func == (lhs: Mode, rhs: Mode) -> Bool {
             switch (lhs, rhs) {
             case let (.add(kind1), .add(kind2)):
@@ -16,7 +16,7 @@ struct PromptEditorView: View {
             }
         }
     }
-    
+
     let mode: Mode
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var enhancementService: AIEnhancementService
@@ -37,7 +37,7 @@ struct PromptEditorView: View {
         }
         return false
     }
-    
+
     init(mode: Mode) {
         self.mode = mode
         switch mode {
@@ -55,18 +55,20 @@ struct PromptEditorView: View {
             _triggerWords = State(initialValue: prompt.triggerWords)
         }
     }
-    
+
     private var headerTitle: String {
         switch mode {
         case .add:
             return NSLocalizedString("New Prompt", comment: "Title for creating a new prompt")
         case .edit:
-            return isEditingPredefinedPrompt 
+            return isEditingPredefinedPrompt
                 ? NSLocalizedString("Edit Built-in Prompt", comment: "Title for editing a built-in prompt")
                 : NSLocalizedString("Edit Prompt", comment: "Title for editing a custom prompt")
         }
     }
-    
+
+    // MARK: - Body
+
     var body: some View {
         VStack(spacing: 0) {
             headerBar
@@ -77,6 +79,8 @@ struct PromptEditorView: View {
         }
         .frame(minWidth: 700, minHeight: 500)
     }
+
+    // MARK: - Sections
 
     private var headerBar: some View {
         HStack {
@@ -90,7 +94,7 @@ struct PromptEditorView: View {
                 }
                 .buttonStyle(.plain)
                 .foregroundColor(theme.textSecondary)
-                
+
                 Button {
                     save()
                     dismiss()
@@ -116,6 +120,13 @@ struct PromptEditorView: View {
             builtInNotice
             titleAndIcon
             descriptionField
+            Divider().padding(.horizontal)
+            PromptTestSection(
+                promptText: promptText,
+                title: title,
+                icon: selectedIcon,
+                description: description.isEmpty ? nil : description
+            )
             promptTextSection
             if shouldShowTriggerWordsEditor {
                 TriggerWordsEditor(triggerWords: $triggerWords)
@@ -157,12 +168,12 @@ struct PromptEditorView: View {
                     .font(theme.typography.body)
             }
             .frame(maxWidth: .infinity)
-            
+
             VStack(alignment: .leading, spacing: 8) {
                 Text(NSLocalizedString("Icon", comment: ""))
                     .font(theme.typography.headline)
                     .foregroundColor(theme.textSecondary)
-                
+
                 Button(action: {
                     showingIconPicker = true
                 }) {
@@ -192,11 +203,11 @@ struct PromptEditorView: View {
             Text(NSLocalizedString("Description", comment: ""))
                 .font(theme.typography.headline)
                 .foregroundColor(theme.textSecondary)
-            
+
             Text(NSLocalizedString("Add a brief description of what this prompt does", comment: ""))
                 .font(theme.typography.subheadline)
                 .foregroundColor(theme.textSecondary)
-            
+
             TextField(NSLocalizedString("Enter a description", comment: ""), text: $description)
                 .textFieldStyle(.roundedBorder)
                 .font(theme.typography.body)
@@ -209,11 +220,11 @@ struct PromptEditorView: View {
             Text(NSLocalizedString("Prompt Instructions", comment: ""))
                 .font(theme.typography.headline)
                 .foregroundColor(theme.textSecondary)
-            
+
             Text(NSLocalizedString("Define how AI should enhance your transcriptions", comment: ""))
                 .font(theme.typography.subheadline)
                 .foregroundColor(theme.textSecondary)
-            
+
             TextEditor(text: $promptText)
                 .font(.system(.body, design: .monospaced))
                 .frame(minHeight: 200)
@@ -230,12 +241,8 @@ struct PromptEditorView: View {
         .padding(.horizontal)
     }
 
-    @ViewBuilder
-    private var templatePicker: some View {
-        EmptyView() // Removed as requested
-    }
+    // MARK: - Actions
 
-    
     private func save() {
         switch mode {
         case .add(let kind):
@@ -274,153 +281,7 @@ struct PromptEditorView: View {
         selectedIcon = template.icon
         description = template.description ?? ""
         triggerWords = template.triggerWords
-        // useSystemInstructions is deprecated/removed from view state, ignoring template value
-        
+
         enhancementService.resetPromptToDefault(prompt)
-    }
-}
-
-// Reusable Trigger Words Editor Component
-struct TriggerWordsEditor: View {
-    @Binding var triggerWords: [String]
-    @State private var newTriggerWord: String = ""
-    @Environment(\.theme) private var theme
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(NSLocalizedString("Trigger Words", comment: ""))
-                .font(theme.typography.headline)
-                .foregroundColor(theme.textSecondary)
-            
-            Text(NSLocalizedString("Add multiple words that can activate this prompt", comment: ""))
-                .font(theme.typography.subheadline)
-                .foregroundColor(theme.textSecondary)
-            
-            // Display existing trigger words as tags
-            if !triggerWords.isEmpty {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 140, maximum: 220))], spacing: 8) {
-                    ForEach(triggerWords, id: \.self) { word in
-                        TriggerWordItemView(word: word) {
-                            triggerWords.removeAll { $0 == word }
-                        }
-                    }
-                }
-            }
-            
-            // Input for new trigger word
-            HStack {
-                TextField(NSLocalizedString("Add trigger word", comment: ""), text: $newTriggerWord)
-                    .textFieldStyle(.roundedBorder)
-                    .font(theme.typography.body)
-                    .onSubmit {
-                        addTriggerWord()
-                    }
-                
-                Button(NSLocalizedString("Add", comment: "")) {
-                    addTriggerWord()
-                }
-                .disabled(newTriggerWord.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-            }
-        }
-    }
-    
-    private func addTriggerWord() {
-        let trimmedWord = newTriggerWord.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmedWord.isEmpty else { return }
-        
-        // Check for duplicates (case insensitive)
-        let lowerCaseWord = trimmedWord.lowercased()
-        guard !triggerWords.contains(where: { $0.lowercased() == lowerCaseWord }) else { return }
-        
-        triggerWords.append(trimmedWord)
-        newTriggerWord = ""
-    }
-}
-
-
-struct TriggerWordItemView: View {
-    let word: String
-    let onDelete: () -> Void
-    @State private var isHovered = false
-    @Environment(\.theme) private var theme
-    
-    var body: some View {
-        HStack(spacing: 6) {
-            Text(word)
-                .font(theme.typography.caption)
-                .lineLimit(1)
-                .foregroundColor(theme.textPrimary)
-            
-            Spacer(minLength: 8)
-            
-            Button(action: onDelete) {
-                Image(systemName: "xmark.circle.fill")
-                    .symbolRenderingMode(.hierarchical)
-                    .foregroundStyle(isHovered ? theme.statusError : theme.textSecondary)
-                    .contentTransition(.symbolEffect(.replace))
-            }
-            .buttonStyle(.borderless)
-            .help(NSLocalizedString("Remove word", comment: ""))
-            .onHover { hover in
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    isHovered = hover
-                }
-            }
-        }
-        .padding(.horizontal, 8)
-        .padding(.vertical, 6)
-        .background {
-            RoundedRectangle(cornerRadius: 6)
-                .fill(theme.inputBackground)
-        }
-        .overlay {
-            RoundedRectangle(cornerRadius: 6)
-                .stroke(theme.inputBorder, lineWidth: 1)
-        }
-    }
-}
-
-// Icon Picker Popover - shows icons in a grid format without category labels
-struct IconPickerPopover: View {
-    @Binding var selectedIcon: PromptIcon
-    @Binding var isPresented: Bool
-    @Environment(\.theme) private var theme
-    
-    var body: some View {
-        let columns = [
-            GridItem(.adaptive(minimum: 45, maximum: 52), spacing: 14)
-        ]
-        
-        ScrollView {
-            LazyVGrid(columns: columns, spacing: 14) {
-                ForEach(PromptIcon.allCases, id: \.self) { icon in
-                    Button(action: {
-                        withAnimation(.spring(response: 0.2, dampingFraction: 0.7)) {
-                            selectedIcon = icon
-                            isPresented = false
-                        }
-                    }) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(selectedIcon == icon ? theme.windowBackground : theme.controlBackground)
-                                .frame(width: 52, height: 52)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(selectedIcon == icon ? theme.separatorColor : theme.panelBorder, lineWidth: selectedIcon == icon ? 2 : 1)
-                                )
-                            
-                            Image(systemName: icon)
-                                .font(.system(size: 24, weight: .medium))
-                                .foregroundColor(theme.textPrimary)
-                        }
-                        .scaleEffect(selectedIcon == icon ? 1.1 : 1.0)
-                        .animation(.spring(response: 0.2, dampingFraction: 0.7), value: selectedIcon == icon)
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-            .padding(20)
-        }
-        .frame(width: 400, height: 400)
     }
 }

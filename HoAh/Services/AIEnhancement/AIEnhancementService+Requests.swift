@@ -32,19 +32,18 @@ extension AIEnhancementService {
 
         if let resolvedPrompt {
             var promptText = resolvedPrompt.finalPromptText
-            
+
             // Handle Polish mode with enhancement toggles
             if resolvedPrompt.id == PredefinedPrompts.polishPromptId {
                 let formalWriting = appSettings?.isPolishFormalWritingEnabled ?? false
                 let professional = appSettings?.isPolishProfessionalEnabled ?? false
-                
+
                 // If any toggle is enabled, use the generated prompt instead of the base Polish prompt
                 if formalWriting || professional {
                     let generatedPromptText = PredefinedPrompts.generatePolishPromptText(
                         formalWriting: formalWriting,
                         professional: professional
                     )
-                    // System instructions wrapper is deprecated; prompts are now self-contained.
                     promptText = generatedPromptText
                 }
             }
