@@ -396,6 +396,13 @@ class WhisperState: NSObject, ObservableObject {
 
         var finalPastedText = text
 
+        // Immediately copy raw transcript to clipboard so user can paste without waiting for AI
+        if let enhancementService = enhancementService,
+           enhancementService.isEnhancementEnabled,
+           enhancementService.isConfigured {
+            let _ = ClipboardManager.copyToClipboard(text)
+        }
+
         if let enhancementService = enhancementService,
            enhancementService.isEnhancementEnabled,
            enhancementService.isConfigured {
