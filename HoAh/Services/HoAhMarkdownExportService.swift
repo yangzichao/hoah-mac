@@ -79,8 +79,8 @@ class HoAhMarkdownExportService {
                     content += "> Source: Selection AI Action\n\n"
                 }
                 
-                // Prioritize enhanced text, fallback to original
-                if let enhanced = transcription.enhancedText, !enhanced.isEmpty {
+                // Prioritize successful enhanced text, fallback to original
+                if let enhanced = transcription.copyableEnhancedText {
                     content += "\(enhanced)\n\n"
                 } else {
                     content += "\(transcription.text)\n\n"

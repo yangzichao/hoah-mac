@@ -369,7 +369,7 @@ struct RecentTranscriptionsPopover: View {
     }
     
     private func handleSelection(_ transcription: Transcription) {
-        let text = transcription.enhancedText?.isEmpty == false ? transcription.enhancedText! : transcription.text
+        let text = transcription.copyableEnhancedText ?? transcription.text
         let success = ClipboardManager.copyToClipboard(text)
         
         Task { @MainActor in

@@ -49,6 +49,16 @@ struct TranscriptionResultView: View {
             return result.isEmpty ? transcription.text : result
         }
     }
+
+    /// For copy/save: use successful enhanced text, fall back to original transcript on AI failure.
+    private var copyTextForSelectedTab: String {
+        switch selectedTab {
+        case .enhanced:
+            return transcription.copyableEnhancedText ?? transcription.text
+        default:
+            return textForSelectedTab
+        }
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -63,16 +73,16 @@ struct TranscriptionResultView: View {
                                   action: { selectedTab = tab })
                     }
                     Spacer()
-                    AnimatedCopyButton(textToCopy: textForSelectedTab)
-                    AnimatedSaveButton(textToSave: textForSelectedTab)
+                    AnimatedCopyButton(textToCopy: copyTextForSelectedTab)
+                    AnimatedSaveButton(textToSave: copyTextForSelectedTab)
                 }
                 .padding(.vertical, 8)
                 .padding(.horizontal, 4)
             } else {
                 HStack {
                     Spacer()
-                    AnimatedCopyButton(textToCopy: textForSelectedTab)
-                    AnimatedSaveButton(textToSave: textForSelectedTab)
+                    AnimatedCopyButton(textToCopy: copyTextForSelectedTab)
+                    AnimatedSaveButton(textToSave: copyTextForSelectedTab)
                 }
             }
             

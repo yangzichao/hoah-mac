@@ -344,10 +344,10 @@ class WhisperState: NSObject, ObservableObject {
         // Auto export to daily log if enabled
         AutoExportService.shared.appendTranscriptionIfEnabled(
             text: transcription.text,
-            enhancedText: transcription.enhancedText,
+            enhancedText: transcription.copyableEnhancedText,
             timestamp: transcription.timestamp
         )
-        
+
         if transcription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
             NotificationCenter.default.post(name: .transcriptionCompleted, object: transcription)
         }
@@ -396,10 +396,19 @@ class WhisperState: NSObject, ObservableObject {
 
         var finalPastedText = text
 
-        // Immediately copy raw transcript to clipboard so user can paste without waiting for AI
+        // Intentional: copy raw transcript to clipboard immediately so user can paste without
+        // waiting for AI enhancement. This deliberately overwrites the pre-recording clipboard.
+        // Known tradeoffs:
+        //   - If user manually Cmd+V during AI processing, auto-paste on completion will add
+        //     the text a second time. Acceptable: the window is small and manual paste is a
+        //     conscious choice.
+        //   - If user cancels during AI enhancement, raw transcript stays in clipboard. This is
+        //     useful: the cancel targets the AI step, not the transcription itself.
+        // Guard on non-empty text so noisy/empty transcriptions don't clobber the clipboard.
         if let enhancementService = enhancementService,
            enhancementService.isEnhancementEnabled,
-           enhancementService.isConfigured {
+           enhancementService.isConfigured,
+           !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             let _ = ClipboardManager.copyToClipboard(text)
         }
 
@@ -706,7 +715,7 @@ class WhisperState: NSObject, ObservableObject {
 
         AutoExportService.shared.appendTranscriptionIfEnabled(
             text: transcription.text,
-            enhancedText: transcription.enhancedText,
+            enhancedText: transcription.copyableEnhancedText,
             timestamp: transcription.timestamp
         )
 

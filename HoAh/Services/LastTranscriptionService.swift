@@ -54,9 +54,9 @@ class LastTranscriptionService: ObservableObject {
             return
         }
         
-        // Prefer enhanced text; fallback to original text
+        // Prefer successful enhanced text; fallback to original text
         let textToCopy: String = {
-            if let enhancedText = lastTranscription.enhancedText, !enhancedText.isEmpty {
+            if let enhancedText = lastTranscription.copyableEnhancedText {
                 return enhancedText
             } else {
                 return lastTranscription.text
@@ -109,9 +109,9 @@ class LastTranscriptionService: ObservableObject {
             return
         }
         
-        // Prefer enhanced text; if unavailable, fallback to original text (which may contain an error message)
+        // Prefer successful enhanced text; fallback to original text
         let textToPaste: String = {
-            if let enhancedText = lastTranscription.enhancedText, !enhancedText.isEmpty {
+            if let enhancedText = lastTranscription.copyableEnhancedText {
                 return enhancedText
             } else {
                 return lastTranscription.text
@@ -148,7 +148,7 @@ class LastTranscriptionService: ObservableObject {
             do {
                 let newTranscription = try await transcriptionService.retranscribeAudio(from: audioURL, using: currentModel)
                 
-                let textToCopy = newTranscription.enhancedText?.isEmpty == false ? newTranscription.enhancedText! : newTranscription.text
+                let textToCopy = newTranscription.copyableEnhancedText ?? newTranscription.text
                 _ = ClipboardManager.copyToClipboard(textToCopy)
                 
                 NotificationManager.shared.showNotification(

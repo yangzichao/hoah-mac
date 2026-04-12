@@ -71,7 +71,7 @@ struct TranscriptionCard: View {
         case .original:
             return transcription.text
         case .enhanced:
-            return transcription.enhancedText ?? transcription.text
+            return transcription.copyableEnhancedText ?? transcription.text
         case .aiRequest:
             var result = ""
             if let systemMsg = transcription.aiRequestSystemMessage, !systemMsg.isEmpty {
@@ -274,7 +274,7 @@ struct TranscriptionCard: View {
         .cornerRadius(12)
         .shadow(color: theme.shadowColor.opacity(0.05), radius: 3, x: 0, y: 2)
         .contextMenu {
-            if let enhancedText = transcription.enhancedText {
+            if let enhancedText = transcription.copyableEnhancedText {
                 Button {
                     let _ = ClipboardManager.copyToClipboard(enhancedText)
                 } label: {

@@ -68,4 +68,13 @@ final class Transcription {
     var isClipboardAction: Bool {
         sourceKind == .clipboardAction
     }
+
+    /// Returns enhancedText only when enhancement actually succeeded (has a duration).
+    /// When AI fails, enhancedText stores the error message for display, but copy
+    /// operations should fall back to the original transcript.
+    var copyableEnhancedText: String? {
+        guard let enhanced = enhancedText, !enhanced.isEmpty else { return nil }
+        guard enhancementDuration != nil else { return nil }
+        return enhanced
+    }
 }
