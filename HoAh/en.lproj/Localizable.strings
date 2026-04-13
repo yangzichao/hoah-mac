@@ -378,8 +378,10 @@
 	<string>Done</string>
 	<key>Double-click to edit • Right-click for more options</key>
 	<string>Double-click to edit • Right-click for more options</string>
-	<key>Double-Press to Auto-Send</key>
-	<string>Double-Press to Auto-Send</string>
+	<key>Double-Press Right Option to Auto-Send</key>
+	<string>Double-Press Right Option to Auto-Send</string>
+	<key>Double-press the right Option key to auto-paste and send (Enter) after transcription, even if you change the main recording shortcut.</key>
+	<string>Double-press the right Option key to auto-paste and send (Enter) after transcription, even if you change the main recording shortcut.</string>
 	<key>Double-press hotkey to auto-paste and send (Enter) after transcription.</key>
 	<string>Double-press hotkey to auto-paste and send (Enter) after transcription.</string>
 	<key>Download AI Model</key>

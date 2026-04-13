@@ -183,8 +183,8 @@ struct SettingsView: View {
 
                             // Multi-Press Gestures
                             SettingsToggleRow(
-                                "Double-Press to Auto-Send",
-                                subtitle: "Double-press hotkey to auto-paste and send (Enter) after transcription.",
+                                "Double-Press Right Option to Auto-Send",
+                                subtitle: "Double-press the right Option key to auto-paste and send (Enter) after transcription, even if you change the main recording shortcut.",
                                 isOn: $appSettings.multiPressGestureAutoSendEnabled.animation()
                             )
 

@@ -1,13 +1,13 @@
-# Multi-Press Option Gesture Spec
+# Multi-Press Right Option Gesture Spec
 
 ## Overview
 
-Extend the Option hotkey to support **double-press auto-send** in addition to the existing single-press behavior. Inspired by AirPods multi-press gestures.
+Extend the right Option hotkey to support **double-press auto-send** in addition to the existing single-press behavior. Inspired by AirPods multi-press gestures.
 
 ## Motivation
 
 Users often dictate directly into chat inputs or message boxes. This feature lets them:
-- **Auto-send** a transcription by pasting + pressing Enter with a quick double-press
+- **Auto-send** a transcription by pasting + pressing Enter with a quick double-press of the right Option key
 - **Append** a recording onto the previous transcription with a dedicated optional shortcut
 
 ## Gesture Definitions
@@ -59,8 +59,8 @@ First Press↓ → Start recording + open 500ms window
 ```
 
 After the detection window expires and mode is locked:
-- **Cases 1, 3**: Next Option press toggles recording off
-- **Cases 2, 4**: Option release stops recording
+- **Cases 1, 3**: Next right Option press toggles recording off
+- **Cases 2, 4**: Right Option release stops recording
 
 Presses beyond 2 within the window are capped at auto-send mode (count = 2).
 
@@ -68,7 +68,7 @@ Presses beyond 2 within the window are capped at auto-send mode (count = 2).
 
 The multi-press detection window only opens when **double-press auto-send** is enabled.
 
-When the setting is disabled, the app keeps the legacy hotkey behavior. This ensures no behavior changes for users who do not opt in.
+When the setting is disabled, the app keeps the legacy hotkey behavior. This ensures no behavior changes for users who do not opt in. The dedicated auto-send gesture is always tied to the right Option key and does not follow custom recording shortcuts.
 
 ## Mode Behaviors
 
@@ -98,7 +98,7 @@ Two controls under the Hotkey settings section:
 
 | Setting | Key | Default | Description |
 |---------|-----|---------|-------------|
-| Double-press to auto-send | `multiPressGestureAutoSendEnabled` | `false` | Enable double-press Option to auto-paste and send |
+| Double-press right Option to auto-send | `multiPressGestureAutoSendEnabled` | `false` | Enable double-press right Option to auto-paste and send |
 | Append shortcut | `toggleMiniRecorderAppend` | not set | Start/stop a recording in append mode using a user-assigned shortcut |
 
 ## Visual Feedback

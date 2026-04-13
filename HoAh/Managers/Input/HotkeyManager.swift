@@ -72,6 +72,7 @@ class HotkeyManager: ObservableObject {
     
     // Key state tracking
     private var currentKeyState = false
+    private var optionAutoSendKeyState = false
     private var keyPressStartTime: Date?
     private let briefPressThreshold = 1.7
     private var isHandsFreeMode = false
@@ -255,6 +256,14 @@ class HotkeyManager: ObservableObject {
             }
             .store(in: &cancellables)
 
+        appSettings.$multiPressGestureAutoSendEnabled
+            .dropFirst()
+            .sink { [weak self] _ in
+                self?.objectWillChange.send()
+                self?.setupHotkeyMonitoring()
+            }
+            .store(in: &cancellables)
+
         whisperState.$isMiniRecorderVisible
             .dropFirst()
             .sink { [weak self] isVisible in
@@ -303,8 +312,8 @@ class HotkeyManager: ObservableObject {
     }
     
     private func setupModifierKeyMonitoring() {
-        // Only set up if at least one hotkey is a modifier key
-        guard (selectedHotkey1.isModifierKey && selectedHotkey1 != .none) || (selectedHotkey2.isModifierKey && selectedHotkey2 != .none) else { return }
+        let hasModifierRecordingHotkey = (selectedHotkey1.isModifierKey && selectedHotkey1 != .none) || (selectedHotkey2.isModifierKey && selectedHotkey2 != .none)
+        guard hasModifierRecordingHotkey || appSettings.multiPressGestureAutoSendEnabled else { return }
 
         globalEventMonitor = NSEvent.addGlobalMonitorForEvents(matching: .flagsChanged) { [weak self] event in
             guard let self = self else { return }
@@ -410,6 +419,7 @@ class HotkeyManager: ObservableObject {
     
     private func resetKeyStates() {
         currentKeyState = false
+        optionAutoSendKeyState = false
         keyPressStartTime = nil
         isHandsFreeMode = false
         shortcutCurrentKeyState = false
@@ -426,6 +436,10 @@ class HotkeyManager: ObservableObject {
     private func handleModifierKeyEvent(_ event: NSEvent) async {
         let keycode = event.keyCode
         let flags = event.modifierFlags
+
+        if appSettings.multiPressGestureAutoSendEnabled, keycode == HotkeyOption.rightOption.keyCode {
+            await processOptionAutoSendKeyPress(isKeyPressed: !optionAutoSendKeyState)
+        }
         
         // Determine which hotkey (if any) is being triggered
         let activeHotkey: HotkeyOption?
@@ -438,6 +452,9 @@ class HotkeyManager: ObservableObject {
         }
         
         guard let hotkey = activeHotkey else { return }
+        if appSettings.multiPressGestureAutoSendEnabled, hotkey == .rightOption {
+            return
+        }
         
         var isKeyPressed = false
         
@@ -468,17 +485,17 @@ class HotkeyManager: ObservableObject {
 
         await processKeyPress(isKeyPressed: isKeyPressed)
     }
-    
+
     private func processKeyPress(isKeyPressed: Bool) async {
         guard isKeyPressed != currentKeyState else { return }
         currentKeyState = isKeyPressed
-
-        if appSettings.multiPressGestureAutoSendEnabled {
-            await processMultiPressGestureKeyPress(isKeyPressed: isKeyPressed)
-            return
-        }
-
         await processLegacyKeyPress(isKeyPressed: isKeyPressed)
+    }
+
+    private func processOptionAutoSendKeyPress(isKeyPressed: Bool) async {
+        guard isKeyPressed != optionAutoSendKeyState else { return }
+        optionAutoSendKeyState = isKeyPressed
+        await processMultiPressGestureKeyPress(isKeyPressed: isKeyPressed)
     }
 
     private func processLegacyKeyPress(isKeyPressed: Bool) async {
@@ -568,15 +585,8 @@ class HotkeyManager: ObservableObject {
         multiPressWindowTask?.cancel()
         multiPressWindowTask = nil
     }
-    
-    private func handleCustomShortcutKeyDown() async {
-        if appSettings.multiPressGestureAutoSendEnabled {
-            guard !shortcutCurrentKeyState else { return }
-            shortcutCurrentKeyState = true
-            await processMultiPressGestureKeyPress(isKeyPressed: true)
-            return
-        }
 
+    private func handleCustomShortcutKeyDown() async {
         if let lastTrigger = lastShortcutTriggerTime,
            Date().timeIntervalSince(lastTrigger) < shortcutCooldownInterval {
             return
@@ -601,13 +611,6 @@ class HotkeyManager: ObservableObject {
     }
     
     private func handleCustomShortcutKeyUp() async {
-        if appSettings.multiPressGestureAutoSendEnabled {
-            guard shortcutCurrentKeyState else { return }
-            shortcutCurrentKeyState = false
-            await processMultiPressGestureKeyPress(isKeyPressed: false)
-            return
-        }
-
         guard shortcutCurrentKeyState else { return }
         shortcutCurrentKeyState = false
         
