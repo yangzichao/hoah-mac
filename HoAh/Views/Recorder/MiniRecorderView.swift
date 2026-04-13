@@ -320,7 +320,8 @@ struct MiniRecorderView: View {
             } else {
                 RecorderStatusDisplay(
                     currentState: whisperState.recordingState,
-                    audioMeter: recorder.audioMeter
+                    audioMeter: recorder.audioMeter,
+                    recordingMode: whisperState.recordingMode
                 )
             }
         }

@@ -16,9 +16,17 @@ enum RecordingState: Equatable {
     case busy
 }
 
+/// Recording mode determined by multi-press gesture.
+/// See docs/specs/MULTI_PRESS_GESTURE.md for full specification.
+enum RecordingMode: Equatable {
+    case normal
+    case autoSend   // Double-press: paste + send Enter after transcription
+}
+
 @MainActor
 class WhisperState: NSObject, ObservableObject {
     @Published var recordingState: RecordingState = .idle
+    @Published var recordingMode: RecordingMode = .normal
     @Published var isModelLoaded = false
     @Published var loadedLocalModel: WhisperModel?
     @Published var currentTranscriptionModel: (any TranscriptionModel)?
@@ -340,7 +348,7 @@ class WhisperState: NSObject, ObservableObject {
 
         // --- Finalize and save ---
         try? modelContext.save()
-        
+
         // Auto export to daily log if enabled
         AutoExportService.shared.appendTranscriptionIfEnabled(
             text: transcription.text,
@@ -354,9 +362,24 @@ class WhisperState: NSObject, ObservableObject {
 
         if await checkCancellationAndCleanup() { return }
 
+        let shouldAutoSend = recordingMode == .autoSend
+
         if let textToPaste = finalPastedText, transcription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 CursorPaster.pasteAtCursor(textToPaste + " ")
+                if shouldAutoSend {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        CursorPaster.pressEnter()
+                    }
+                }
+            }
+        } else if shouldAutoSend, transcription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
+            let textToSend = transcription.copyableEnhancedText ?? transcription.text
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                CursorPaster.pasteAtCursor(textToSend + " ")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    CursorPaster.pressEnter()
+                }
             }
         }
 
@@ -364,7 +387,6 @@ class WhisperState: NSObject, ObservableObject {
 
         shouldCancelRecording = false
     }
-
     private func processTranscriptionResult(
         rawText: String,
         audioURL: URL,
@@ -723,9 +745,24 @@ class WhisperState: NSObject, ObservableObject {
             NotificationCenter.default.post(name: .transcriptionCompleted, object: transcription)
         }
 
+        let shouldAutoSend = recordingMode == .autoSend
+
         if let textToPaste = finalPastedText, transcription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 CursorPaster.pasteAtCursor(textToPaste)
+                if shouldAutoSend {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        CursorPaster.pressEnter()
+                    }
+                }
+            }
+        } else if shouldAutoSend, transcription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
+            let textToSend = transcription.copyableEnhancedText ?? transcription.text
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                CursorPaster.pasteAtCursor(textToSend + " ")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    CursorPaster.pressEnter()
+                }
             }
         }
 

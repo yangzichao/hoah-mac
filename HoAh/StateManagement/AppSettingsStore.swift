@@ -133,12 +133,17 @@ class AppSettingsStore: ObservableObject {
     
     /// Middle-click activation delay in milliseconds (0-5000)
     @Published var middleClickActivationDelay: Int {
-        didSet { 
+        didSet {
             validateDelay()
-            saveSettings() 
+            saveSettings()
         }
     }
-    
+
+    /// Whether double-press hotkey auto-sends (paste + Enter) after transcription
+    @Published var multiPressGestureAutoSendEnabled: Bool {
+        didSet { saveSettings() }
+    }
+
     // Audio Settings
     
     /// Whether sound feedback is enabled
@@ -525,6 +530,7 @@ class AppSettingsStore: ObservableObject {
         self.selectedHotkey2 = state.selectedHotkey2
         self.isMiddleClickToggleEnabled = state.isMiddleClickToggleEnabled
         self.middleClickActivationDelay = state.middleClickActivationDelay
+        self.multiPressGestureAutoSendEnabled = state.multiPressGestureAutoSendEnabled
         self.isSoundFeedbackEnabled = state.isSoundFeedbackEnabled
         self.isSystemMuteEnabled = state.isSystemMuteEnabled
         self._isAIEnhancementEnabled = state.isAIEnhancementEnabled // Initialize storage
@@ -839,6 +845,7 @@ class AppSettingsStore: ObservableObject {
         newState.selectedHotkey2 = self.selectedHotkey2
         newState.isMiddleClickToggleEnabled = self.isMiddleClickToggleEnabled
         newState.middleClickActivationDelay = self.middleClickActivationDelay
+        newState.multiPressGestureAutoSendEnabled = self.multiPressGestureAutoSendEnabled
         newState.isClipboardEnhancementShortcutsEnabled = self.isClipboardEnhancementShortcutsEnabled
         newState.clipboardEnhancementShortcutSlotEnabledStates = self.clipboardEnhancementShortcutSlotEnabledStates
         
@@ -998,6 +1005,7 @@ class AppSettingsStore: ObservableObject {
         selectedHotkey2 = state.selectedHotkey2
         isMiddleClickToggleEnabled = state.isMiddleClickToggleEnabled
         middleClickActivationDelay = state.middleClickActivationDelay
+        multiPressGestureAutoSendEnabled = state.multiPressGestureAutoSendEnabled
         isSoundFeedbackEnabled = state.isSoundFeedbackEnabled
         isSystemMuteEnabled = state.isSystemMuteEnabled
         _isAIEnhancementEnabled = state.isAIEnhancementEnabled // Storage
@@ -1123,6 +1131,7 @@ class AppSettingsStore: ObservableObject {
             selectedHotkey2: selectedHotkey2,
             isMiddleClickToggleEnabled: isMiddleClickToggleEnabled,
             middleClickActivationDelay: middleClickActivationDelay,
+            multiPressGestureAutoSendEnabled: multiPressGestureAutoSendEnabled,
             isSoundFeedbackEnabled: isSoundFeedbackEnabled,
             isSystemMuteEnabled: isSystemMuteEnabled,
             // isPauseMediaEnabled removed

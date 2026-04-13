@@ -78,9 +78,12 @@ struct AppSettingsState: Codable {
     
     /// Whether middle-click toggle is enabled
     var isMiddleClickToggleEnabled: Bool = false
-    
+
     /// Middle-click activation delay in milliseconds (0-5000)
     var middleClickActivationDelay: Int = 200
+
+    /// Whether double-press hotkey auto-sends (paste + Enter) after transcription
+    var multiPressGestureAutoSendEnabled: Bool = false
     
     // MARK: - Audio Settings
     
@@ -212,6 +215,7 @@ struct AppSettingsState: Codable {
         selectedHotkey2: String = "none",
         isMiddleClickToggleEnabled: Bool = false,
         middleClickActivationDelay: Int = 200,
+        multiPressGestureAutoSendEnabled: Bool = false,
         isSoundFeedbackEnabled: Bool = true,
         isSystemMuteEnabled: Bool = true,
         // isPauseMediaEnabled removed
@@ -262,6 +266,7 @@ struct AppSettingsState: Codable {
         self.selectedHotkey2 = selectedHotkey2
         self.isMiddleClickToggleEnabled = isMiddleClickToggleEnabled
         self.middleClickActivationDelay = middleClickActivationDelay
+        self.multiPressGestureAutoSendEnabled = multiPressGestureAutoSendEnabled
         self.isSoundFeedbackEnabled = isSoundFeedbackEnabled
         self.isSystemMuteEnabled = isSystemMuteEnabled
         // self.isPauseMediaEnabled = isPauseMediaEnabled removed
@@ -316,6 +321,7 @@ struct AppSettingsState: Codable {
         case selectedHotkey2
         case isMiddleClickToggleEnabled
         case middleClickActivationDelay
+        case multiPressGestureAutoSendEnabled
         case isSoundFeedbackEnabled
         case isSystemMuteEnabled
         // case isPauseMediaEnabled removed
@@ -350,8 +356,13 @@ struct AppSettingsState: Codable {
         case audioRetentionPeriod
     }
     
+    private enum LegacyCodingKeys: String, CodingKey {
+        case multiPressGestureMergeEnabled
+    }
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        let legacyContainer = try decoder.container(keyedBy: LegacyCodingKeys.self)
         
         version = (try? container.decode(Int.self, forKey: .version)) ?? 1
         hasCompletedOnboarding = (try? container.decode(Bool.self, forKey: .hasCompletedOnboarding)) ?? false
@@ -370,6 +381,8 @@ struct AppSettingsState: Codable {
         selectedHotkey2 = (try? container.decode(String.self, forKey: .selectedHotkey2)) ?? "none"
         isMiddleClickToggleEnabled = (try? container.decode(Bool.self, forKey: .isMiddleClickToggleEnabled)) ?? false
         middleClickActivationDelay = (try? container.decode(Int.self, forKey: .middleClickActivationDelay)) ?? 200
+        let legacyMergeEnabled = (try? legacyContainer.decode(Bool.self, forKey: .multiPressGestureMergeEnabled)) ?? false
+        multiPressGestureAutoSendEnabled = (try? container.decode(Bool.self, forKey: .multiPressGestureAutoSendEnabled)) ?? legacyMergeEnabled
         isSoundFeedbackEnabled = (try? container.decode(Bool.self, forKey: .isSoundFeedbackEnabled)) ?? true
         isSystemMuteEnabled = (try? container.decode(Bool.self, forKey: .isSystemMuteEnabled)) ?? true
         // isPauseMediaEnabled removed

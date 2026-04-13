@@ -90,7 +90,8 @@ struct NotchRecorderView: View {
         RecorderStatusDisplay(
             currentState: whisperState.recordingState,
             audioMeter: recorder.audioMeter,
-            menuBarHeight: menuBarHeight
+            menuBarHeight: menuBarHeight,
+            recordingMode: whisperState.recordingMode
         )
         .frame(width: 70)
         .padding(.trailing, 8)

@@ -157,14 +157,14 @@ struct SettingsView: View {
                                     subtitle: "Use middle mouse button to toggle HoAh recording.",
                                     isOn: $hotkeyManager.isMiddleClickToggleEnabled.animation()
                                 )
-                                
+
                                 if hotkeyManager.isMiddleClickToggleEnabled {
                                     HStack(spacing: 4) {
                                         Spacer()
                                         Text("Delay:")
                                             .font(theme.typography.caption)
                                             .foregroundColor(theme.textSecondary)
-                                        
+
                                         TextField("", value: $hotkeyManager.middleClickActivationDelay, formatter: NumberFormatter())
                                             .textFieldStyle(PlainTextFieldStyle())
                                             .padding(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))
@@ -172,13 +172,20 @@ struct SettingsView: View {
                                             .cornerRadius(4)
                                             .frame(width: 50)
                                             .multilineTextAlignment(.trailing)
-                                        
+
                                         Text("ms")
                                             .font(theme.typography.caption)
                                             .foregroundColor(theme.textSecondary)
                                     }
                                 }
                             }
+
+                            // Multi-Press Gestures
+                            SettingsToggleRow(
+                                "Double-Press to Auto-Send",
+                                subtitle: "Double-press hotkey to auto-paste and send (Enter) after transcription.",
+                                isOn: $appSettings.multiPressGestureAutoSendEnabled.animation()
+                            )
                         }
                     }
                 }

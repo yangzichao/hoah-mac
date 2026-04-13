@@ -38,7 +38,7 @@ extension WhisperState {
     
     // MARK: - Mini Recorder Management
     
-    func toggleMiniRecorder() async {
+    func toggleMiniRecorder(mode: RecordingMode = .normal) async {
         if isMiniRecorderVisible {
             if recordingState == .recording {
                 await toggleRecord()
@@ -79,10 +79,11 @@ extension WhisperState {
         await cleanupModelResources()
         
         await MainActor.run {
+            recordingMode = .normal
             recordingState = .idle
         }
     }
-    
+
     func resetOnLaunch() async {
         logger.notice("🔄 Resetting recording state on launch")
         cancelRecordingTimeout()
@@ -92,6 +93,7 @@ extension WhisperState {
             isMiniRecorderVisible = false
             shouldCancelRecording = false
             miniRecorderError = nil
+            recordingMode = .normal
             recordingState = .idle
         }
         await cleanupModelResources()
@@ -119,7 +121,7 @@ extension WhisperState {
         isTogglingRecorder = true
         Task {
             defer { isTogglingRecorder = false }
-            await toggleMiniRecorder()
+            await toggleMiniRecorder(mode: recordingMode)
         }
     }
 

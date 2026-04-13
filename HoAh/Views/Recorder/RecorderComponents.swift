@@ -444,14 +444,16 @@ private struct RecentTranscriptionRow: View {
 // MARK: - Status Display Component
 struct RecorderStatusDisplay: View {
     let currentState: RecordingState
+    let recordingMode: RecordingMode
     let audioMeter: AudioMeter
     let menuBarHeight: CGFloat?
     @Environment(\.theme) private var theme
-    
-    init(currentState: RecordingState, audioMeter: AudioMeter, menuBarHeight: CGFloat? = nil) {
+
+    init(currentState: RecordingState, audioMeter: AudioMeter, menuBarHeight: CGFloat? = nil, recordingMode: RecordingMode = .normal) {
         self.currentState = currentState
         self.audioMeter = audioMeter
         self.menuBarHeight = menuBarHeight
+        self.recordingMode = recordingMode
     }
     
     var body: some View {
@@ -489,13 +491,26 @@ struct RecorderStatusDisplay: View {
                     ProgressAnimation(animationSpeed: 0.12)
                 }
             } else if currentState == .recording {
-                AudioVisualizer(
-                    audioMeter: audioMeter,
-                    color: theme.textPrimary,
-                    isActive: currentState == .recording,
-                    spec: visualizerSpec
-                )
-                .scaleEffect(y: menuBarHeight != nil ? min(1.0, (menuBarHeight! - 8) / 25) : 1.0, anchor: .center)
+                VStack(spacing: 2) {
+                    if recordingMode != .normal {
+                        HStack(spacing: 3) {
+                            Image(systemName: "paperplane.fill")
+                                .font(.system(size: 8, weight: .semibold))
+                            Text("Send")
+                                .font(.system(size: 9, weight: .semibold))
+                        }
+                        .foregroundColor(theme.accentColor)
+                        .transition(.opacity.combined(with: .scale))
+                        .animation(.easeInOut(duration: 0.2), value: recordingMode)
+                    }
+                    AudioVisualizer(
+                        audioMeter: audioMeter,
+                        color: theme.textPrimary,
+                        isActive: currentState == .recording,
+                        spec: visualizerSpec
+                    )
+                    .scaleEffect(y: menuBarHeight != nil ? min(1.0, (menuBarHeight! - 8) / 25) : 1.0, anchor: .center)
+                }
             } else {
                 StaticVisualizer(
                     color: theme.textPrimary,

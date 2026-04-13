@@ -74,6 +74,12 @@ class HotkeyManager: ObservableObject {
     private var keyPressStartTime: Date?
     private let briefPressThreshold = 1.7
     private var isHandsFreeMode = false
+
+    // Multi-press gesture detection (AirPods-style)
+    // See docs/specs/MULTI_PRESS_GESTURE.md
+    private var multiPressGesture = MultiPressGestureStateMachine()
+    private var multiPressWindowTask: Task<Void, Never>?
+    private let multiPressWindow: TimeInterval = 0.5
     
     // Debounce for Fn key
     private var fnDebounceTask: Task<Void, Never>?
@@ -244,6 +250,15 @@ class HotkeyManager: ObservableObject {
             }
             .store(in: &cancellables)
 
+        whisperState.$isMiniRecorderVisible
+            .dropFirst()
+            .sink { [weak self] isVisible in
+                guard let self, !isVisible else { return }
+                self.cancelMultiPressWindowTimer()
+                self.multiPressGesture.reset()
+            }
+            .store(in: &cancellables)
+
         NotificationCenter.default.publisher(for: Notification.Name("KeyboardShortcuts_shortcutByNameDidChange"))
             .sink { [weak self] notification in
                 guard let self = self,
@@ -385,6 +400,9 @@ class HotkeyManager: ObservableObject {
         shortcutCurrentKeyState = false
         shortcutKeyPressStartTime = nil
         isShortcutHandsFreeMode = false
+        multiPressWindowTask?.cancel()
+        multiPressWindowTask = nil
+        multiPressGesture.reset()
     }
     
     private func handleModifierKeyEvent(_ event: NSEvent) async {
@@ -437,11 +455,20 @@ class HotkeyManager: ObservableObject {
         guard isKeyPressed != currentKeyState else { return }
         currentKeyState = isKeyPressed
 
+        if appSettings.multiPressGestureAutoSendEnabled {
+            await processMultiPressGestureKeyPress(isKeyPressed: isKeyPressed)
+            return
+        }
+
+        await processLegacyKeyPress(isKeyPressed: isKeyPressed)
+    }
+
+    private func processLegacyKeyPress(isKeyPressed: Bool) async {
         if isKeyPressed {
             keyPressStartTime = Date()
-
             if isHandsFreeMode {
                 isHandsFreeMode = false
+                keyPressStartTime = nil
                 guard canProcessHotkeyAction else { return }
                 await whisperState.handleToggleMiniRecorder()
                 return
@@ -452,24 +479,86 @@ class HotkeyManager: ObservableObject {
                 await whisperState.handleToggleMiniRecorder()
             }
         } else {
-            let now = Date()
-
             if let startTime = keyPressStartTime {
-                let pressDuration = now.timeIntervalSince(startTime)
+                let pressDuration = Date().timeIntervalSince(startTime)
 
                 if pressDuration < briefPressThreshold {
                     isHandsFreeMode = true
                 } else {
+                    keyPressStartTime = nil
                     guard canProcessHotkeyAction else { return }
                     await whisperState.handleToggleMiniRecorder()
+                    return
                 }
             }
 
             keyPressStartTime = nil
         }
     }
+
+    private func processMultiPressGestureKeyPress(isKeyPressed: Bool) async {
+        let actions = if isKeyPressed {
+            multiPressGesture.handleKeyDown(isRecorderVisible: whisperState.isMiniRecorderVisible)
+        } else {
+            multiPressGesture.handleKeyUp()
+        }
+
+        await applyMultiPressGestureActions(actions)
+    }
+
+    private func applyMultiPressGestureActions(_ actions: [MultiPressGestureAction]) async {
+        for action in actions {
+            switch action {
+            case .startRecording(let mode):
+                guard canProcessHotkeyAction else {
+                    cancelMultiPressWindowTimer()
+                    multiPressGesture.reset()
+                    return
+                }
+                whisperState.recordingMode = mode
+                await whisperState.handleToggleMiniRecorder()
+            case .updateMode(let mode):
+                whisperState.recordingMode = mode
+            case .restartWindowTimer:
+                resetMultiPressWindowTimer()
+            case .cancelWindowTimer:
+                cancelMultiPressWindowTimer()
+            case .stopRecording:
+                cancelMultiPressWindowTimer()
+                guard canProcessHotkeyAction else {
+                    multiPressGesture.reset()
+                    return
+                }
+                await whisperState.handleToggleMiniRecorder()
+                multiPressGesture.reset()
+            }
+        }
+    }
+
+    private func resetMultiPressWindowTimer() {
+        cancelMultiPressWindowTimer()
+        multiPressWindowTask = Task { [weak self] in
+            let window = self?.multiPressWindow ?? 0.5
+            try? await Task.sleep(nanoseconds: UInt64(window * 1_000_000_000))
+            guard let self, !Task.isCancelled else { return }
+            let actions = self.multiPressGesture.handleWindowExpired()
+            await self.applyMultiPressGestureActions(actions)
+        }
+    }
+
+    private func cancelMultiPressWindowTimer() {
+        multiPressWindowTask?.cancel()
+        multiPressWindowTask = nil
+    }
     
     private func handleCustomShortcutKeyDown() async {
+        if appSettings.multiPressGestureAutoSendEnabled {
+            guard !shortcutCurrentKeyState else { return }
+            shortcutCurrentKeyState = true
+            await processMultiPressGestureKeyPress(isKeyPressed: true)
+            return
+        }
+
         if let lastTrigger = lastShortcutTriggerTime,
            Date().timeIntervalSince(lastTrigger) < shortcutCooldownInterval {
             return
@@ -494,6 +583,13 @@ class HotkeyManager: ObservableObject {
     }
     
     private func handleCustomShortcutKeyUp() async {
+        if appSettings.multiPressGestureAutoSendEnabled {
+            guard shortcutCurrentKeyState else { return }
+            shortcutCurrentKeyState = false
+            await processMultiPressGestureKeyPress(isKeyPressed: false)
+            return
+        }
+
         guard shortcutCurrentKeyState else { return }
         shortcutCurrentKeyState = false
         
