@@ -493,10 +493,11 @@ struct RecorderStatusDisplay: View {
             } else if currentState == .recording {
                 VStack(spacing: 2) {
                     if recordingMode != .normal {
+                        let isAppendMode = recordingMode == .append
                         HStack(spacing: 3) {
-                            Image(systemName: "paperplane.fill")
+                            Image(systemName: isAppendMode ? "link" : "paperplane.fill")
                                 .font(.system(size: 8, weight: .semibold))
-                            Text("Send")
+                            Text(isAppendMode ? "Append" : "Send")
                                 .font(.system(size: 9, weight: .semibold))
                         }
                         .foregroundColor(theme.accentColor)

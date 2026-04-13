@@ -8,6 +8,7 @@ Extend the Option hotkey to support **double-press auto-send** in addition to th
 
 Users often dictate directly into chat inputs or message boxes. This feature lets them:
 - **Auto-send** a transcription by pasting + pressing Enter with a quick double-press
+- **Append** a recording onto the previous transcription with a dedicated optional shortcut
 
 ## Gesture Definitions
 
@@ -93,11 +94,12 @@ Transcribe and automatically send:
 
 ## Settings
 
-One new toggle under the Hotkey settings section:
+Two controls under the Hotkey settings section:
 
 | Setting | Key | Default | Description |
 |---------|-----|---------|-------------|
 | Double-press to auto-send | `multiPressGestureAutoSendEnabled` | `false` | Enable double-press Option to auto-paste and send |
+| Append shortcut | `toggleMiniRecorderAppend` | not set | Start/stop a recording in append mode using a user-assigned shortcut |
 
 ## Visual Feedback
 
@@ -105,6 +107,7 @@ The mini recorder should indicate the current mode during the detection window:
 
 - **Normal**: Current appearance (no change)
 - **Auto-Send**: Show send indicator (e.g., arrow-up icon or "Send" badge)
+- **Append**: Show append indicator (e.g., link icon or "Append" badge) when the append shortcut starts recording
 
 Mode indicator should animate in when mode changes during multi-press detection.
 
@@ -114,7 +117,8 @@ Mode indicator should animate in when mode changes during multi-press detection.
 |-----------|------|---------|
 | Gesture detection | `HoAh/Managers/Input/HotkeyManager.swift` | Multi-press counting, window timer, mode determination |
 | Recording mode enum | `HoAh/Whisper/WhisperState.swift` | `RecordingMode` enum, mode-aware transcription flow |
+| Append logic | `HoAh/Whisper/WhisperState.swift` | Append text/enhancement to the previous `Transcription` and refresh clipboard |
 | Auto-send logic | `HoAh/Whisper/WhisperState.swift` | Paste + simulate Enter after transcription |
-| Settings | `HoAh/Models/AppSettings.swift` (or equivalent) | One new boolean setting |
-| Settings UI | Settings view | One new toggle |
+| Settings | `HoAh/Models/AppSettings.swift` (or equivalent) | One boolean setting plus one dedicated shortcut binding |
+| Settings UI | Settings view | Auto-send toggle plus append shortcut recorder |
 | Mini recorder UI | `HoAh/Views/Recorder/` | Mode indicator display |

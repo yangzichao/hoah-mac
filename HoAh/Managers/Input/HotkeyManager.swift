@@ -7,6 +7,7 @@ import Combine
 extension KeyboardShortcuts.Name {
     static let toggleMiniRecorder = Self("toggleMiniRecorder")
     static let toggleMiniRecorder2 = Self("toggleMiniRecorder2")
+    static let toggleMiniRecorderAppend = Self("toggleMiniRecorderAppend")
     static let pasteLastTranscription = Self("pasteLastTranscription")
     static let pasteLastEnhancement = Self("pasteLastEnhancement")
     static let retryLastTranscription = Self("retryLastTranscription")
@@ -90,6 +91,10 @@ class HotkeyManager: ObservableObject {
     private var isShortcutHandsFreeMode = false
     private var shortcutCurrentKeyState = false
     private var lastShortcutTriggerTime: Date?
+    private var appendShortcutKeyPressStartTime: Date?
+    private var isAppendShortcutHandsFreeMode = false
+    private var appendShortcutCurrentKeyState = false
+    private var lastAppendShortcutTriggerTime: Date?
     private let shortcutCooldownInterval: TimeInterval = 0.5
     
     enum HotkeyOption: String, CaseIterable {
@@ -263,7 +268,7 @@ class HotkeyManager: ObservableObject {
             .sink { [weak self] notification in
                 guard let self = self,
                       let name = Self.shortcutName(from: notification),
-                      name == .toggleMiniRecorder || name == .toggleMiniRecorder2 else { return }
+                      name == .toggleMiniRecorder || name == .toggleMiniRecorder2 || name == .toggleMiniRecorderAppend else { return }
                 self.objectWillChange.send()
                 self.updateShortcutStatus()
             }
@@ -294,6 +299,7 @@ class HotkeyManager: ObservableObject {
     private func removeCustomShortcutHandlers() {
         KeyboardShortcuts.removeHandler(for: .toggleMiniRecorder)
         KeyboardShortcuts.removeHandler(for: .toggleMiniRecorder2)
+        KeyboardShortcuts.removeHandler(for: .toggleMiniRecorderAppend)
     }
     
     private func setupModifierKeyMonitoring() {
@@ -369,6 +375,15 @@ class HotkeyManager: ObservableObject {
                 Task { @MainActor in await self?.handleCustomShortcutKeyUp() }
             }
         }
+
+        if KeyboardShortcuts.getShortcut(for: .toggleMiniRecorderAppend) != nil {
+            KeyboardShortcuts.onKeyDown(for: .toggleMiniRecorderAppend) { [weak self] in
+                Task { @MainActor in await self?.handleAppendShortcutKeyDown() }
+            }
+            KeyboardShortcuts.onKeyUp(for: .toggleMiniRecorderAppend) { [weak self] in
+                Task { @MainActor in await self?.handleAppendShortcutKeyUp() }
+            }
+        }
     }
     
     private func removeAllMonitoring() {
@@ -400,6 +415,9 @@ class HotkeyManager: ObservableObject {
         shortcutCurrentKeyState = false
         shortcutKeyPressStartTime = nil
         isShortcutHandsFreeMode = false
+        appendShortcutCurrentKeyState = false
+        appendShortcutKeyPressStartTime = nil
+        isAppendShortcutHandsFreeMode = false
         multiPressWindowTask?.cancel()
         multiPressWindowTask = nil
         multiPressGesture.reset()
@@ -607,6 +625,53 @@ class HotkeyManager: ObservableObject {
         }
         
         shortcutKeyPressStartTime = nil
+    }
+
+    private func handleAppendShortcutKeyDown() async {
+        if let lastTrigger = lastAppendShortcutTriggerTime,
+           Date().timeIntervalSince(lastTrigger) < shortcutCooldownInterval {
+            return
+        }
+
+        guard !appendShortcutCurrentKeyState else { return }
+        appendShortcutCurrentKeyState = true
+        lastAppendShortcutTriggerTime = Date()
+        appendShortcutKeyPressStartTime = Date()
+
+        if isAppendShortcutHandsFreeMode {
+            isAppendShortcutHandsFreeMode = false
+            guard canProcessHotkeyAction else { return }
+            whisperState.recordingMode = .append
+            await whisperState.handleToggleMiniRecorder()
+            return
+        }
+
+        if !whisperState.isMiniRecorderVisible {
+            guard canProcessHotkeyAction else { return }
+            whisperState.recordingMode = .append
+            await whisperState.handleToggleMiniRecorder()
+        }
+    }
+
+    private func handleAppendShortcutKeyUp() async {
+        guard appendShortcutCurrentKeyState else { return }
+        appendShortcutCurrentKeyState = false
+
+        let now = Date()
+
+        if let startTime = appendShortcutKeyPressStartTime {
+            let pressDuration = now.timeIntervalSince(startTime)
+
+            if pressDuration < briefPressThreshold {
+                isAppendShortcutHandsFreeMode = true
+            } else {
+                guard canProcessHotkeyAction else { return }
+                whisperState.recordingMode = .append
+                await whisperState.handleToggleMiniRecorder()
+            }
+        }
+
+        appendShortcutKeyPressStartTime = nil
     }
     
     // Computed property for backward compatibility with UI

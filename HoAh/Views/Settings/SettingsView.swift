@@ -16,6 +16,7 @@ struct SettingsView: View {
     @ObservedObject private var mediaController = MediaController.shared
     @State private var currentShortcut = KeyboardShortcuts.getShortcut(for: .toggleMiniRecorder)
     @State private var isCustomCancelEnabled = false
+    @State private var isAppendShortcutEnabled = false
     @State private var isCustomSoundsExpanded = false
 
     private let durationOptions: [Int] = [30, 60, 90, 0]
@@ -186,6 +187,29 @@ struct SettingsView: View {
                                 subtitle: "Double-press hotkey to auto-paste and send (Enter) after transcription.",
                                 isOn: $appSettings.multiPressGestureAutoSendEnabled.animation()
                             )
+
+                            VStack(spacing: 8) {
+                                SettingsToggleRow(
+                                    "Append Shortcut",
+                                    subtitle: "Use a separate shortcut to append the current recording onto the previous transcription. No default shortcut is assigned.",
+                                    isOn: $isAppendShortcutEnabled.animation()
+                                )
+                                .onChange(of: isAppendShortcutEnabled) { _, newValue in
+                                    if !newValue {
+                                        KeyboardShortcuts.setShortcut(nil, for: .toggleMiniRecorderAppend)
+                                    }
+                                }
+
+                                if isAppendShortcutEnabled {
+                                    HStack {
+                                        Spacer()
+                                        KeyboardShortcuts.Recorder(for: .toggleMiniRecorderAppend) { _ in
+                                            hotkeyManager.updateShortcutStatus()
+                                        }
+                                        .controlSize(.small)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -348,6 +372,7 @@ struct SettingsView: View {
         .background(theme.controlBackground)
         .onAppear {
             isCustomCancelEnabled = KeyboardShortcuts.getShortcut(for: .cancelRecorder) != nil
+            isAppendShortcutEnabled = KeyboardShortcuts.getShortcut(for: .toggleMiniRecorderAppend) != nil
             if appSettings.uiTheme == UITheme.liquidGlass.rawValue {
                 appSettings.uiTheme = UITheme.vintage.rawValue
             }

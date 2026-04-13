@@ -13,6 +13,7 @@ struct KeyboardShortcutsListView: View {
     @State private var retryShortcut: KeyboardShortcuts.Shortcut?
     @State private var toggleHotkey1: KeyboardShortcuts.Shortcut?
     @State private var toggleHotkey2: KeyboardShortcuts.Shortcut?
+    @State private var appendShortcut: KeyboardShortcuts.Shortcut?
     @State private var clipboardActionShortcutsAreDefault = true
 
     private var activeClipboardActionShortcutIndices: [Int] {
@@ -93,6 +94,19 @@ struct KeyboardShortcutsListView: View {
                             subtitle: "Hold to record"
                         ) {
                             MouseBadge()
+                        }
+                    }
+
+                    ShortcutCard(
+                        icon: "link",
+                        iconColor: .teal,
+                        title: "Append Recording",
+                        subtitle: "Append to the previous transcription"
+                    ) {
+                        if let appendShortcut = appendShortcut {
+                            KeyboardShortcutBadge(shortcut: appendShortcut)
+                        } else {
+                            NotSetBadge()
                         }
                     }
 
@@ -206,6 +220,7 @@ struct KeyboardShortcutsListView: View {
         retryShortcut = KeyboardShortcuts.getShortcut(for: .retryLastTranscription)
         toggleHotkey1 = KeyboardShortcuts.getShortcut(for: .toggleMiniRecorder)
         toggleHotkey2 = KeyboardShortcuts.getShortcut(for: .toggleMiniRecorder2)
+        appendShortcut = KeyboardShortcuts.getShortcut(for: .toggleMiniRecorderAppend)
 
         clipboardActionShortcutsAreDefault = activeClipboardActionShortcutIndices.allSatisfy { index in
             let name = ClipboardAIActionShortcutManager.configuredShortcutNames[index]

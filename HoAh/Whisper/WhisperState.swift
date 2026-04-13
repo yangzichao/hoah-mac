@@ -20,6 +20,7 @@ enum RecordingState: Equatable {
 /// See docs/specs/MULTI_PRESS_GESTURE.md for full specification.
 enum RecordingMode: Equatable {
     case normal
+    case append     // Shortcut-triggered: append to previous transcription
     case autoSend   // Double-press: paste + send Enter after transcription
 }
 
@@ -346,25 +347,39 @@ class WhisperState: NSObject, ObservableObject {
             return
         }
 
+        var activeTranscription = transcription
+        if recordingMode == .append,
+           transcription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
+            if let appended = appendToPreviousTranscription(newTranscription: transcription) {
+                activeTranscription = appended
+            }
+        }
+
         // --- Finalize and save ---
         try? modelContext.save()
 
         // Auto export to daily log if enabled
         AutoExportService.shared.appendTranscriptionIfEnabled(
-            text: transcription.text,
-            enhancedText: transcription.copyableEnhancedText,
-            timestamp: transcription.timestamp
+            text: activeTranscription.text,
+            enhancedText: activeTranscription.copyableEnhancedText,
+            timestamp: activeTranscription.timestamp
         )
 
-        if transcription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
-            NotificationCenter.default.post(name: .transcriptionCompleted, object: transcription)
+        if activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
+            NotificationCenter.default.post(name: .transcriptionCompleted, object: activeTranscription)
         }
 
         if await checkCancellationAndCleanup() { return }
 
+        if recordingMode == .append,
+           activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
+            let appendedText = activeTranscription.copyableEnhancedText ?? activeTranscription.text
+            let _ = ClipboardManager.copyToClipboard(appendedText)
+        }
+
         let shouldAutoSend = recordingMode == .autoSend
 
-        if let textToPaste = finalPastedText, transcription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
+        if let textToPaste = finalPastedText, activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 CursorPaster.pasteAtCursor(textToPaste + " ")
                 if shouldAutoSend {
@@ -373,8 +388,8 @@ class WhisperState: NSObject, ObservableObject {
                     }
                 }
             }
-        } else if shouldAutoSend, transcription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
-            let textToSend = transcription.copyableEnhancedText ?? transcription.text
+        } else if shouldAutoSend, activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
+            let textToSend = activeTranscription.copyableEnhancedText ?? activeTranscription.text
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 CursorPaster.pasteAtCursor(textToSend + " ")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -386,6 +401,69 @@ class WhisperState: NSObject, ObservableObject {
         await self.dismissMiniRecorder()
 
         shouldCancelRecording = false
+    }
+
+    /// Appends a newly transcribed entry into the most recent previous dictation transcription.
+    /// Returns the surviving transcription on success, or nil if no append target was found.
+    @discardableResult
+    private func appendToPreviousTranscription(newTranscription: Transcription) -> Transcription? {
+        let currentId = newTranscription.id
+        let clipboardSourceRawValue = TranscriptionSource.clipboardAction.rawValue
+        var descriptor = FetchDescriptor<Transcription>(
+            predicate: #Predicate<Transcription> {
+                $0.source == nil || $0.source != clipboardSourceRawValue
+            },
+            sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
+        )
+        descriptor.fetchLimit = 5
+
+        guard let recents = try? modelContext.fetch(descriptor),
+              let previous = recents.first(where: {
+                  $0.id != currentId &&
+                  $0.transcriptionStatus == TranscriptionStatus.completed.rawValue
+              }) else {
+            logger.notice("⚠️ Append mode: no previous dictation transcription found, keeping as new entry")
+            return nil
+        }
+
+        let previousOriginalText = previous.text
+        previous.text = previousOriginalText + "\n\n" + newTranscription.text
+
+        let oldEnhanced = previous.copyableEnhancedText
+        let newEnhanced = newTranscription.copyableEnhancedText
+        if oldEnhanced != nil || newEnhanced != nil {
+            let effectiveOldPart = oldEnhanced ?? previousOriginalText
+            let effectiveNewPart = newEnhanced ?? newTranscription.text
+            previous.enhancedText = effectiveOldPart + "\n\n" + effectiveNewPart
+            previous.enhancementDuration = (previous.enhancementDuration ?? 0) + (newTranscription.enhancementDuration ?? 0)
+            if previous.aiEnhancementModelName == nil {
+                previous.aiEnhancementModelName = newTranscription.aiEnhancementModelName
+                previous.promptName = newTranscription.promptName
+            }
+        }
+
+        previous.duration += newTranscription.duration
+
+        let previousAudioFileURL = previous.audioFileURL
+        let newAudioFileURL = newTranscription.audioFileURL
+        previous.audioFileURL = nil
+        removeAudioFileIfPresent(previousAudioFileURL)
+        removeAudioFileIfPresent(newAudioFileURL)
+
+        modelContext.delete(newTranscription)
+
+        logger.notice("✅ Append mode: appended to previous transcription")
+        return previous
+    }
+
+    private func removeAudioFileIfPresent(_ urlString: String?) {
+        guard let urlString, let url = URL(string: urlString) else { return }
+        guard FileManager.default.fileExists(atPath: url.path) else { return }
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            logger.error("Failed to remove appended audio file: \(error.localizedDescription, privacy: .public)")
+        }
     }
     private func processTranscriptionResult(
         rawText: String,
@@ -427,7 +505,8 @@ class WhisperState: NSObject, ObservableObject {
         //   - If user cancels during AI enhancement, raw transcript stays in clipboard. This is
         //     useful: the cancel targets the AI step, not the transcription itself.
         // Guard on non-empty text so noisy/empty transcriptions don't clobber the clipboard.
-        if let enhancementService = enhancementService,
+        if recordingMode != .append,
+           let enhancementService = enhancementService,
            enhancementService.isEnhancementEnabled,
            enhancementService.isConfigured,
            !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -733,21 +812,35 @@ class WhisperState: NSObject, ObservableObject {
             }
         }
 
+        var activeTranscription = transcription
+        if recordingMode == .append,
+           transcription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
+            if let appended = appendToPreviousTranscription(newTranscription: transcription) {
+                activeTranscription = appended
+            }
+        }
+
         try? modelContext.save()
 
         AutoExportService.shared.appendTranscriptionIfEnabled(
-            text: transcription.text,
-            enhancedText: transcription.copyableEnhancedText,
-            timestamp: transcription.timestamp
+            text: activeTranscription.text,
+            enhancedText: activeTranscription.copyableEnhancedText,
+            timestamp: activeTranscription.timestamp
         )
 
-        if transcription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
-            NotificationCenter.default.post(name: .transcriptionCompleted, object: transcription)
+        if activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
+            NotificationCenter.default.post(name: .transcriptionCompleted, object: activeTranscription)
+        }
+
+        if recordingMode == .append,
+           activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
+            let appendedText = activeTranscription.copyableEnhancedText ?? activeTranscription.text
+            let _ = ClipboardManager.copyToClipboard(appendedText)
         }
 
         let shouldAutoSend = recordingMode == .autoSend
 
-        if let textToPaste = finalPastedText, transcription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
+        if let textToPaste = finalPastedText, activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 CursorPaster.pasteAtCursor(textToPaste)
                 if shouldAutoSend {
@@ -756,8 +849,8 @@ class WhisperState: NSObject, ObservableObject {
                     }
                 }
             }
-        } else if shouldAutoSend, transcription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
-            let textToSend = transcription.copyableEnhancedText ?? transcription.text
+        } else if shouldAutoSend, activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
+            let textToSend = activeTranscription.copyableEnhancedText ?? activeTranscription.text
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 CursorPaster.pasteAtCursor(textToSend + " ")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
