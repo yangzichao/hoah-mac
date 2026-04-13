@@ -304,7 +304,10 @@ class AppSettingsStore: ObservableObject {
 
     /// Whether the second translation mode is enabled (shows in prompt grid)
     @Published var isSecondTranslationEnabled: Bool {
-        didSet { saveSettings() }
+        didSet {
+            handleSecondTranslationModeChange()
+            saveSettings()
+        }
     }
 
     /// Preferred target language for second translation mode
@@ -717,6 +720,15 @@ class AppSettingsStore: ObservableObject {
 
     private static func normalizedClipboardEnhancementShortcutSlotEnabledStates(_ states: [Bool]) -> [Bool] {
         AppSettingsState.normalizedClipboardEnhancementShortcutSlotEnabledStates(states)
+    }
+
+    private func handleSecondTranslationModeChange() {
+        guard !isSecondTranslationEnabled,
+              _selectedPromptId == PredefinedPrompts.translatePrompt2Id.uuidString else {
+            return
+        }
+
+        selectedPromptId = PredefinedPrompts.translatePromptId.uuidString
     }
     
     /// Validates AI provider and corrects if invalid

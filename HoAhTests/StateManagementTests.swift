@@ -626,6 +626,19 @@ struct AppSettingsStoreTests {
         store.translationLanguage = .simplifiedChinese
         #expect(store.translationLanguage == .simplifiedChinese)
     }
+
+    @Test("Disabling second translation falls back to primary translation prompt")
+    func disablingSecondTranslationFallsBackToPrimaryPrompt() {
+        let mockStorage = MockSettingsStorage()
+        let store = AppSettingsStore(storage: mockStorage)
+
+        store.isSecondTranslationEnabled = true
+        store.selectedPromptId = PredefinedPrompts.translatePrompt2Id.uuidString
+
+        store.isSecondTranslationEnabled = false
+
+        #expect(store.selectedPromptId == PredefinedPrompts.translatePromptId.uuidString)
+    }
 }
 
 // MARK: - UserDefaultsStorage Tests
