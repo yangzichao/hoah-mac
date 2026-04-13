@@ -47,7 +47,6 @@ struct AIEnhancementPromptPersistenceTests {
                 isPredefined: true,
                 triggerWords: polishPrompt.triggerWords,
                 useSystemInstructions: false,
-                isReadOnly: polishPrompt.isReadOnly,
                 hasUserModifiedTemplate: true
             )
         )
@@ -97,7 +96,7 @@ struct AIEnhancementPromptPersistenceTests {
             isPredefined: true,
             triggerWords: template.triggerWords,
             useSystemInstructions: template.useSystemInstructions,
-            isReadOnly: template.isReadOnly
+            hasUserModifiedTemplate: false
         )
 
         let data = try JSONEncoder().encode([legacyPrompt])

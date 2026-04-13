@@ -85,7 +85,6 @@ struct CustomPrompt: Identifiable, Codable, Equatable {
     let isPredefined: Bool
     let triggerWords: [String]
     let useSystemInstructions: Bool
-    let isReadOnly: Bool
     let hasUserModifiedTemplate: Bool
 
     init(
@@ -98,7 +97,6 @@ struct CustomPrompt: Identifiable, Codable, Equatable {
         isPredefined: Bool = false,
         triggerWords: [String] = [],
         useSystemInstructions: Bool = false,
-        isReadOnly: Bool = false,
         hasUserModifiedTemplate: Bool = false
     ) {
         self.id = id
@@ -110,12 +108,11 @@ struct CustomPrompt: Identifiable, Codable, Equatable {
         self.isPredefined = isPredefined
         self.triggerWords = triggerWords
         self.useSystemInstructions = useSystemInstructions
-        self.isReadOnly = isReadOnly
         self.hasUserModifiedTemplate = hasUserModifiedTemplate
     }
 
     enum CodingKeys: String, CodingKey {
-        case id, title, promptText, isActive, icon, description, isPredefined, triggerWords, useSystemInstructions, isReadOnly, hasUserModifiedTemplate
+        case id, title, promptText, isActive, icon, description, isPredefined, triggerWords, useSystemInstructions, hasUserModifiedTemplate
     }
 
     init(from decoder: Decoder) throws {
@@ -130,7 +127,6 @@ struct CustomPrompt: Identifiable, Codable, Equatable {
         isPredefined = try container.decode(Bool.self, forKey: .isPredefined)
         triggerWords = try container.decode([String].self, forKey: .triggerWords)
         let rawUseSystemInstructions = try container.decodeIfPresent(Bool.self, forKey: .useSystemInstructions) ?? false
-        isReadOnly = try container.decodeIfPresent(Bool.self, forKey: .isReadOnly) ?? false
         hasUserModifiedTemplate = try container.decodeIfPresent(Bool.self, forKey: .hasUserModifiedTemplate) ?? false
         
         // Migration: Bake in legacy system instructions for stored prompts that previously relied on a shared wrapper.

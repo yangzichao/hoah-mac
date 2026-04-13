@@ -210,7 +210,6 @@ class AIEnhancementService: ObservableObject {
                         isPredefined: p.isPredefined,
                         triggerWords: p.triggerWords,
                         useSystemInstructions: false,
-                        isReadOnly: p.isReadOnly,
                         hasUserModifiedTemplate: p.hasUserModifiedTemplate
                     )
                 }
@@ -235,7 +234,6 @@ class AIEnhancementService: ObservableObject {
                         isPredefined: p.isPredefined,
                         triggerWords: p.triggerWords,
                         useSystemInstructions: false,
-                        isReadOnly: p.isReadOnly,
                         hasUserModifiedTemplate: p.hasUserModifiedTemplate
                     )
                 }
@@ -374,7 +372,6 @@ class AIEnhancementService: ObservableObject {
             isPredefined: true,
             triggerWords: template.triggerWords,
             useSystemInstructions: template.useSystemInstructions,
-            isReadOnly: template.isReadOnly,
             hasUserModifiedTemplate: shouldPreserveUserFields
         )
     }

@@ -52,7 +52,6 @@ extension AIEnhancementService {
                 isPredefined: true,
                 triggerWords: template.triggerWords,
                 useSystemInstructions: template.useSystemInstructions,
-                isReadOnly: template.isReadOnly,
                 hasUserModifiedTemplate: false
             )
             activePrompts[index] = restoredPrompt
@@ -80,7 +79,6 @@ extension AIEnhancementService {
                     isPredefined: true,
                     triggerWords: template.triggerWords,
                     useSystemInstructions: template.useSystemInstructions,
-                    isReadOnly: template.isReadOnly,
                     hasUserModifiedTemplate: false
                 )
             } else {

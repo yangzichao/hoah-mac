@@ -128,7 +128,7 @@ extension CustomPrompt {
         }
         .contextMenu {
             if onEdit != nil || onDelete != nil {
-                if let onEdit = onEdit, !isReadOnly {
+                if let onEdit = onEdit {
                     Button {
                         onEdit(self)
                     } label: {

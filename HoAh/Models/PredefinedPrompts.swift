@@ -401,8 +401,7 @@ Answer the question in <TRANSCRIPT>.
                 description: t("prompt_qna_description"),
                 isPredefined: true,
                 triggerWords: [],
-                useSystemInstructions: false,
-                isReadOnly: true
+                useSystemInstructions: false
             ),
             // NOTE: Writing mode (formalPromptId) and Professional mode (professionalPromptId)
             // have been merged into Polish mode as enhancement toggles.

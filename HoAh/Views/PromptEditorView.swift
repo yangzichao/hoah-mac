@@ -287,7 +287,6 @@ struct PromptEditorView: View {
                 isPredefined: prompt.isPredefined,
                 triggerWords: cleanedTriggers,
                 useSystemInstructions: false,
-                isReadOnly: prompt.isReadOnly,
                 hasUserModifiedTemplate: hasUserModifiedTemplate
             )
             enhancementService.updatePrompt(updatedPrompt)
