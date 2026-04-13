@@ -442,6 +442,10 @@
 	<string>完成</string>
 	<key>Double-click to edit • Right-click for more options</key>
 	<string>双击进行编辑 • 右键查看更多选项</string>
+	<key>Double-Press to Auto-Send</key>
+	<string>双击自动发送</string>
+	<key>Double-press hotkey to auto-paste and send (Enter) after transcription.</key>
+	<string>双击快捷键可在转录后自动粘贴并发送（回车）。</string>
 	<key>Download AI Model</key>
 	<string>下载 AI 模型</string>
 	<key>Download Model</key>
