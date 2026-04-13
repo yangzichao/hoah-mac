@@ -51,7 +51,9 @@ extension AIEnhancementService {
                 description: template.description,
                 isPredefined: true,
                 triggerWords: template.triggerWords,
-                useSystemInstructions: template.useSystemInstructions
+                useSystemInstructions: template.useSystemInstructions,
+                isReadOnly: template.isReadOnly,
+                hasUserModifiedTemplate: false
             )
             activePrompts[index] = restoredPrompt
             if selectedPromptId == nil {
@@ -77,7 +79,9 @@ extension AIEnhancementService {
                     description: template.description,
                     isPredefined: true,
                     triggerWords: template.triggerWords,
-                    useSystemInstructions: template.useSystemInstructions
+                    useSystemInstructions: template.useSystemInstructions,
+                    isReadOnly: template.isReadOnly,
+                    hasUserModifiedTemplate: false
                 )
             } else {
                 updatedActive.append(template)
@@ -107,18 +111,7 @@ extension AIEnhancementService {
         for template in predefinedTemplates {
             if let existingIndex = activePrompts.firstIndex(where: { $0.id == template.id }) {
                 let existingPrompt = activePrompts[existingIndex]
-                let mergedPrompt = CustomPrompt(
-                    id: existingPrompt.id,
-                    title: template.title,
-                    promptText: template.promptText,
-                    isActive: existingPrompt.isActive,
-                    icon: template.icon,
-                    description: template.description,
-                    isPredefined: true,
-                    triggerWords: template.triggerWords,
-                    useSystemInstructions: template.useSystemInstructions
-                )
-                activePrompts[existingIndex] = mergedPrompt
+                activePrompts[existingIndex] = mergedPredefinedPrompt(existing: existingPrompt, template: template)
             } else {
                 activePrompts.append(template)
             }

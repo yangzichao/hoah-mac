@@ -38,6 +38,11 @@ struct PromptEditorView: View {
         return false
     }
 
+    private var predefinedTemplate: CustomPrompt? {
+        guard case .edit(let prompt) = mode, prompt.isPredefined else { return nil }
+        return PredefinedPrompts.createDefaultPrompts().first(where: { $0.id == prompt.id })
+    }
+
     init(mode: Mode) {
         self.mode = mode
         switch mode {
@@ -258,16 +263,32 @@ struct PromptEditorView: View {
             )
         case .edit(let prompt):
             let cleanedTriggers: [String] = []
+            let normalizedDescription = description.isEmpty ? nil : description
+            let hasUserModifiedTemplate: Bool
+
+            if let template = predefinedTemplate {
+                let matchesTemplate =
+                    title == template.title &&
+                    promptText == template.promptText &&
+                    selectedIcon == template.icon &&
+                    normalizedDescription == template.description
+                hasUserModifiedTemplate = !matchesTemplate
+            } else {
+                hasUserModifiedTemplate = prompt.hasUserModifiedTemplate
+            }
+
             let updatedPrompt = CustomPrompt(
                 id: prompt.id,
                 title: title,
                 promptText: promptText,
                 isActive: prompt.isActive,
                 icon: selectedIcon,
-                description: description.isEmpty ? nil : description,
+                description: normalizedDescription,
                 isPredefined: prompt.isPredefined,
                 triggerWords: cleanedTriggers,
-                useSystemInstructions: false
+                useSystemInstructions: false,
+                isReadOnly: prompt.isReadOnly,
+                hasUserModifiedTemplate: hasUserModifiedTemplate
             )
             enhancementService.updatePrompt(updatedPrompt)
         }
@@ -281,7 +302,5 @@ struct PromptEditorView: View {
         selectedIcon = template.icon
         description = template.description ?? ""
         triggerWords = template.triggerWords
-
-        enhancementService.resetPromptToDefault(prompt)
     }
 }

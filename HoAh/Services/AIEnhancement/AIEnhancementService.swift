@@ -210,7 +210,8 @@ class AIEnhancementService: ObservableObject {
                         isPredefined: p.isPredefined,
                         triggerWords: p.triggerWords,
                         useSystemInstructions: false,
-                        isReadOnly: p.isReadOnly
+                        isReadOnly: p.isReadOnly,
+                        hasUserModifiedTemplate: p.hasUserModifiedTemplate
                     )
                 }
                 self.activePrompts = migrated
@@ -234,7 +235,8 @@ class AIEnhancementService: ObservableObject {
                         isPredefined: p.isPredefined,
                         triggerWords: p.triggerWords,
                         useSystemInstructions: false,
-                        isReadOnly: p.isReadOnly
+                        isReadOnly: p.isReadOnly,
+                        hasUserModifiedTemplate: p.hasUserModifiedTemplate
                     )
                 }
                 self.activePrompts = migrated
@@ -349,21 +351,32 @@ class AIEnhancementService: ObservableObject {
             for idx in prompts.indices {
                 let p = prompts[idx]
                 guard p.isPredefined, let template = templateMap[p.id] else { continue }
-                prompts[idx] = CustomPrompt(
-                    id: p.id,
-                    title: template.title,
-                    promptText: template.promptText,
-                    isActive: p.isActive,
-                    icon: p.icon,
-                    description: template.description,
-                    isPredefined: true,
-                    triggerWords: template.triggerWords,
-                    useSystemInstructions: false
-                )
+                prompts[idx] = mergedPredefinedPrompt(existing: p, template: template)
             }
         }
 
         relocalize(&activePrompts)
+    }
+
+    func mergedPredefinedPrompt(existing: CustomPrompt, template: CustomPrompt) -> CustomPrompt {
+        let shouldPreserveUserFields =
+            existing.hasUserModifiedTemplate ||
+            existing.promptText != template.promptText ||
+            existing.icon != template.icon
+
+        return CustomPrompt(
+            id: existing.id,
+            title: shouldPreserveUserFields ? existing.title : template.title,
+            promptText: shouldPreserveUserFields ? existing.promptText : template.promptText,
+            isActive: existing.isActive,
+            icon: shouldPreserveUserFields ? existing.icon : template.icon,
+            description: shouldPreserveUserFields ? existing.description : template.description,
+            isPredefined: true,
+            triggerWords: template.triggerWords,
+            useSystemInstructions: template.useSystemInstructions,
+            isReadOnly: template.isReadOnly,
+            hasUserModifiedTemplate: shouldPreserveUserFields
+        )
     }
 
     func getAIService() -> AIService? {
