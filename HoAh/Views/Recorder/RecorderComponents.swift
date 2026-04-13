@@ -497,7 +497,7 @@ struct RecorderStatusDisplay: View {
                         HStack(spacing: 3) {
                             Image(systemName: isAppendMode ? "link" : "paperplane.fill")
                                 .font(.system(size: 8, weight: .semibold))
-                            Text(isAppendMode ? "Append" : "Send")
+                            Text(isAppendMode ? LocalizedStringKey("Append") : LocalizedStringKey("AutoSend"))
                                 .font(.system(size: 9, weight: .semibold))
                         }
                         .foregroundColor(theme.accentColor)

@@ -100,8 +100,8 @@ struct KeyboardShortcutsListView: View {
                     ShortcutCard(
                         icon: "link",
                         iconColor: .teal,
-                        title: "Append Recording",
-                        subtitle: "Append to the previous transcription"
+                        title: String(localized: "Append Recording"),
+                        subtitle: String(localized: "Append to the previous transcription")
                     ) {
                         if let appendShortcut = appendShortcut {
                             KeyboardShortcutBadge(shortcut: appendShortcut)

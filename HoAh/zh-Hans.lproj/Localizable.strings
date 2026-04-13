@@ -1810,5 +1810,17 @@ Disable for full control over the AI's system prompt (for advanced users).</key>
 	<string>来源</string>
 	<key>Selection AI Action</key>
 	<string>选中文本 AI 指令</string>
+	<key>Append Shortcut</key>
+	<string>追加快捷键</string>
+	<key>Use a separate shortcut to append the current recording onto the previous transcription. No default shortcut is assigned.</key>
+	<string>使用单独的快捷键将当前录音追加到上一条转录结果。默认不分配快捷键。</string>
+	<key>Append Recording</key>
+	<string>追加录音</string>
+	<key>Append to the previous transcription</key>
+	<string>追加到上一条转录结果</string>
+	<key>Append</key>
+	<string>追加</string>
+	<key>AutoSend</key>
+	<string>自动发送</string>
 </dict>
 </plist>

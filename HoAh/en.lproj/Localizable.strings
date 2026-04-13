@@ -1530,5 +1530,17 @@ Languages: English, Chinese</string>
 	<string>Source</string>
 	<key>Selection AI Action</key>
 	<string>Selection AI Action</string>
+	<key>Append Shortcut</key>
+	<string>Append Shortcut</string>
+	<key>Use a separate shortcut to append the current recording onto the previous transcription. No default shortcut is assigned.</key>
+	<string>Use a separate shortcut to append the current recording onto the previous transcription. No default shortcut is assigned.</string>
+	<key>Append Recording</key>
+	<string>Append Recording</string>
+	<key>Append to the previous transcription</key>
+	<string>Append to the previous transcription</string>
+	<key>Append</key>
+	<string>Append</string>
+	<key>AutoSend</key>
+	<string>AutoSend</string>
 </dict>
 </plist>

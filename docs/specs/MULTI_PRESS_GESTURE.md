@@ -106,7 +106,7 @@ Two controls under the Hotkey settings section:
 The mini recorder should indicate the current mode during the detection window:
 
 - **Normal**: Current appearance (no change)
-- **Auto-Send**: Show send indicator (e.g., arrow-up icon or "Send" badge)
+- **Auto-Send**: Show send indicator (e.g., arrow-up icon or "AutoSend" badge)
 - **Append**: Show append indicator (e.g., link icon or "Append" badge) when the append shortcut starts recording
 
 Mode indicator should animate in when mode changes during multi-press detection.
