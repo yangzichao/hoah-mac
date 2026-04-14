@@ -385,22 +385,10 @@ class WhisperState: NSObject, ObservableObject {
 
         if let textToPaste = appendOutputText ?? finalPastedText,
            activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                CursorPaster.pasteAtCursor(textToPaste + " ")
-                if shouldAutoSend {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        CursorPaster.pressEnter()
-                    }
-                }
-            }
+            enqueuePaste(textToPaste + " ", autoSend: shouldAutoSend)
         } else if shouldAutoSend, activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
             let textToSend = activeTranscription.copyableEnhancedText ?? activeTranscription.text
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                CursorPaster.pasteAtCursor(textToSend + " ")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    CursorPaster.pressEnter()
-                }
-            }
+            enqueuePaste(textToSend + " ", autoSend: true)
         }
 
         await self.dismissMiniRecorder()
@@ -851,22 +839,10 @@ class WhisperState: NSObject, ObservableObject {
 
         if let textToPaste = appendOutputText ?? finalPastedText,
            activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                CursorPaster.pasteAtCursor(textToPaste)
-                if shouldAutoSend {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        CursorPaster.pressEnter()
-                    }
-                }
-            }
+            enqueuePaste(textToPaste, autoSend: shouldAutoSend)
         } else if shouldAutoSend, activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
             let textToSend = activeTranscription.copyableEnhancedText ?? activeTranscription.text
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                CursorPaster.pasteAtCursor(textToSend + " ")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    CursorPaster.pressEnter()
-                }
-            }
+            enqueuePaste(textToSend + " ", autoSend: true)
         }
 
         await cleanupRealtimeStreamingSession()
@@ -893,6 +869,21 @@ class WhisperState: NSObject, ObservableObject {
     func cancelRecordingTimeout() {
         recordingTimeoutTask?.cancel()
         recordingTimeoutTask = nil
+    }
+
+    private func enqueuePaste(_ text: String, autoSend: Bool) {
+        if autoSend {
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 50_000_000)
+                await CursorPaster.pasteAtCursorAndWait(text)
+                CursorPaster.pressEnter()
+            }
+            return
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+            CursorPaster.pasteAtCursor(text)
+        }
     }
     
     @MainActor
