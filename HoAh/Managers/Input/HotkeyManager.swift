@@ -641,10 +641,8 @@ class HotkeyManager: ObservableObject {
     }
     
     func updateShortcutStatus() {
-        // Called when a custom shortcut changes
-        if selectedHotkey1 == .custom || selectedHotkey2 == .custom {
-            setupHotkeyMonitoring()
-        }
+        // Re-register monitors whenever any relevant shortcut changes, including append.
+        setupHotkeyMonitoring()
     }
     
     deinit {

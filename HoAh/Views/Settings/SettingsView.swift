@@ -161,7 +161,7 @@ struct SettingsView: View {
                             VStack(spacing: 8) {
                                 SettingsToggleRow(
                                     "Append Shortcut",
-                                    subtitle: "Use a separate shortcut to append the current recording onto the previous transcription. No default shortcut is assigned.",
+                                    subtitle: "Use a separate shortcut to start append recording. Press the same shortcut again to stop and append the result to the previous transcription. No default shortcut is assigned.",
                                     isOn: $isAppendShortcutEnabled.animation()
                                 )
                                 .onChange(of: isAppendShortcutEnabled) { _, newValue in

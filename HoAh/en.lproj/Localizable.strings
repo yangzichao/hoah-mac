@@ -1534,8 +1534,8 @@ Languages: English, Chinese</string>
 	<string>Selection AI Action</string>
 	<key>Append Shortcut</key>
 	<string>Append Shortcut</string>
-	<key>Use a separate shortcut to append the current recording onto the previous transcription. No default shortcut is assigned.</key>
-	<string>Use a separate shortcut to append the current recording onto the previous transcription. No default shortcut is assigned.</string>
+	<key>Use a separate shortcut to start append recording. Press the same shortcut again to stop and append the result to the previous transcription. No default shortcut is assigned.</key>
+	<string>Use a separate shortcut to start append recording. Press the same shortcut again to stop and append the result to the previous transcription. No default shortcut is assigned.</string>
 	<key>Append Recording</key>
 	<string>Append Recording</string>
 	<key>Append to the previous transcription</key>

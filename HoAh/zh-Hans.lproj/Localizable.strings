@@ -1814,8 +1814,8 @@ Disable for full control over the AI's system prompt (for advanced users).</key>
 	<string>选中文本 AI 指令</string>
 	<key>Append Shortcut</key>
 	<string>追加快捷键</string>
-	<key>Use a separate shortcut to append the current recording onto the previous transcription. No default shortcut is assigned.</key>
-	<string>使用单独的快捷键将当前录音追加到上一条转录结果。默认不分配快捷键。</string>
+	<key>Use a separate shortcut to start append recording. Press the same shortcut again to stop and append the result to the previous transcription. No default shortcut is assigned.</key>
+	<string>使用单独的快捷键开始追加录音；再次按下同一个快捷键结束录音，并将结果追加到上一条转录。默认不分配快捷键。</string>
 	<key>Append Recording</key>
 	<string>追加录音</string>
 	<key>Append to the previous transcription</key>
