@@ -151,36 +151,6 @@ struct SettingsView: View {
                                 }
                             }
 
-                            // Middle Click
-                            VStack(spacing: 8) {
-                                SettingsToggleRow(
-                                    "Middle-Click Toggle",
-                                    subtitle: "Use middle mouse button to toggle HoAh recording.",
-                                    isOn: $hotkeyManager.isMiddleClickToggleEnabled.animation()
-                                )
-
-                                if hotkeyManager.isMiddleClickToggleEnabled {
-                                    HStack(spacing: 4) {
-                                        Spacer()
-                                        Text("Delay:")
-                                            .font(theme.typography.caption)
-                                            .foregroundColor(theme.textSecondary)
-
-                                        TextField("", value: $hotkeyManager.middleClickActivationDelay, formatter: NumberFormatter())
-                                            .textFieldStyle(PlainTextFieldStyle())
-                                            .padding(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))
-                                            .background(theme.controlBackground)
-                                            .cornerRadius(4)
-                                            .frame(width: 50)
-                                            .multilineTextAlignment(.trailing)
-
-                                        Text("ms")
-                                            .font(theme.typography.caption)
-                                            .foregroundColor(theme.textSecondary)
-                                    }
-                                }
-                            }
-
                             // Multi-Press Gestures
                             SettingsToggleRow(
                                 "Double-Press Right Option to Auto-Send",

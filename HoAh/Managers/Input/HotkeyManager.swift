@@ -92,9 +92,6 @@ class HotkeyManager: ObservableObject {
     private var isShortcutHandsFreeMode = false
     private var shortcutCurrentKeyState = false
     private var lastShortcutTriggerTime: Date?
-    private var appendShortcutKeyPressStartTime: Date?
-    private var isAppendShortcutHandsFreeMode = false
-    private var appendShortcutCurrentKeyState = false
     private var lastAppendShortcutTriggerTime: Date?
     private let shortcutCooldownInterval: TimeInterval = 0.5
     
@@ -386,11 +383,8 @@ class HotkeyManager: ObservableObject {
         }
 
         if KeyboardShortcuts.getShortcut(for: .toggleMiniRecorderAppend) != nil {
-            KeyboardShortcuts.onKeyDown(for: .toggleMiniRecorderAppend) { [weak self] in
-                Task { @MainActor in await self?.handleAppendShortcutKeyDown() }
-            }
             KeyboardShortcuts.onKeyUp(for: .toggleMiniRecorderAppend) { [weak self] in
-                Task { @MainActor in await self?.handleAppendShortcutKeyUp() }
+                Task { @MainActor in await self?.handleAppendShortcutTrigger() }
             }
         }
     }
@@ -425,9 +419,6 @@ class HotkeyManager: ObservableObject {
         shortcutCurrentKeyState = false
         shortcutKeyPressStartTime = nil
         isShortcutHandsFreeMode = false
-        appendShortcutCurrentKeyState = false
-        appendShortcutKeyPressStartTime = nil
-        isAppendShortcutHandsFreeMode = false
         multiPressWindowTask?.cancel()
         multiPressWindowTask = nil
         multiPressGesture.reset()
@@ -630,51 +621,16 @@ class HotkeyManager: ObservableObject {
         shortcutKeyPressStartTime = nil
     }
 
-    private func handleAppendShortcutKeyDown() async {
+    private func handleAppendShortcutTrigger() async {
         if let lastTrigger = lastAppendShortcutTriggerTime,
            Date().timeIntervalSince(lastTrigger) < shortcutCooldownInterval {
             return
         }
 
-        guard !appendShortcutCurrentKeyState else { return }
-        appendShortcutCurrentKeyState = true
         lastAppendShortcutTriggerTime = Date()
-        appendShortcutKeyPressStartTime = Date()
-
-        if isAppendShortcutHandsFreeMode {
-            isAppendShortcutHandsFreeMode = false
-            guard canProcessHotkeyAction else { return }
-            whisperState.recordingMode = .append
-            await whisperState.handleToggleMiniRecorder()
-            return
-        }
-
-        if !whisperState.isMiniRecorderVisible {
-            guard canProcessHotkeyAction else { return }
-            whisperState.recordingMode = .append
-            await whisperState.handleToggleMiniRecorder()
-        }
-    }
-
-    private func handleAppendShortcutKeyUp() async {
-        guard appendShortcutCurrentKeyState else { return }
-        appendShortcutCurrentKeyState = false
-
-        let now = Date()
-
-        if let startTime = appendShortcutKeyPressStartTime {
-            let pressDuration = now.timeIntervalSince(startTime)
-
-            if pressDuration < briefPressThreshold {
-                isAppendShortcutHandsFreeMode = true
-            } else {
-                guard canProcessHotkeyAction else { return }
-                whisperState.recordingMode = .append
-                await whisperState.handleToggleMiniRecorder()
-            }
-        }
-
-        appendShortcutKeyPressStartTime = nil
+        guard canProcessHotkeyAction else { return }
+        whisperState.recordingMode = .append
+        await whisperState.handleToggleMiniRecorder()
     }
     
     // Computed property for backward compatibility with UI

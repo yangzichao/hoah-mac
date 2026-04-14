@@ -378,8 +378,13 @@ class WhisperState: NSObject, ObservableObject {
         }
 
         let shouldAutoSend = recordingMode == .autoSend
+        let appendOutputText =
+            recordingMode == .append && activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue
+            ? (activeTranscription.copyableEnhancedText ?? activeTranscription.text)
+            : nil
 
-        if let textToPaste = finalPastedText, activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
+        if let textToPaste = appendOutputText ?? finalPastedText,
+           activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 CursorPaster.pasteAtCursor(textToPaste + " ")
                 if shouldAutoSend {
@@ -839,8 +844,13 @@ class WhisperState: NSObject, ObservableObject {
         }
 
         let shouldAutoSend = recordingMode == .autoSend
+        let appendOutputText =
+            recordingMode == .append && activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue
+            ? (activeTranscription.copyableEnhancedText ?? activeTranscription.text)
+            : nil
 
-        if let textToPaste = finalPastedText, activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
+        if let textToPaste = appendOutputText ?? finalPastedText,
+           activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                 CursorPaster.pasteAtCursor(textToPaste)
                 if shouldAutoSend {
