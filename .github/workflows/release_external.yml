@@ -63,11 +63,6 @@ jobs:
           
           echo "Release Target: $VERSION ($INTERNAL_VERSION)"
 
-      - name: Install Dependencies
-        run: |
-          brew install graphicsmagick imagemagick
-          mkdir -p ~/HoAh-Dependencies
-
       - name: Import Signing Certificate
         if: env.SECRET_P12_BASE64 != ''
         uses: apple-actions/import-codesign-certs@v3
