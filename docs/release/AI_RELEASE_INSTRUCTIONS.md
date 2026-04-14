@@ -40,10 +40,10 @@
 **修改内容**：
 ```xml
 <key>CFBundleShortVersionString</key>
-<string>3.6.1</string>  <!-- 改为新版本号 -->
+<string>3.7.5</string>  <!-- 改为新版本号 -->
 
 <key>CFBundleVersion</key>
-<string>361</string>     <!-- 改为新的内部版本号 -->
+<string>375</string>     <!-- 改为新的内部版本号 -->
 ```
 
 **查找方式**：
@@ -58,14 +58,14 @@
 
 **修改内容**（有 2 处，Debug 和 Release）：
 ```
-MARKETING_VERSION = 3.6.1;        <!-- 改为新版本号 -->
-CURRENT_PROJECT_VERSION = 361;    <!-- 改为新的内部版本号 -->
+MARKETING_VERSION = 3.7.5;        <!-- 改为新版本号 -->
+CURRENT_PROJECT_VERSION = 375;    <!-- 改为新的内部版本号 -->
 ```
 
 **使用 sed 命令快速修改**：
 ```bash
-sed -i '' 's/MARKETING_VERSION = [0-9.]*;/MARKETING_VERSION = 3.6.1;/g' HoAh.xcodeproj/project.pbxproj
-sed -i '' 's/CURRENT_PROJECT_VERSION = [0-9]*;/CURRENT_PROJECT_VERSION = 361;/g' HoAh.xcodeproj/project.pbxproj
+sed -i '' 's/MARKETING_VERSION = [0-9.]*;/MARKETING_VERSION = 3.7.5;/g' HoAh.xcodeproj/project.pbxproj
+sed -i '' 's/CURRENT_PROJECT_VERSION = [0-9]*;/CURRENT_PROJECT_VERSION = 375;/g' HoAh.xcodeproj/project.pbxproj
 ```
 
 ### 步骤 3: 修改 appcast.xml
@@ -77,20 +77,20 @@ sed -i '' 's/CURRENT_PROJECT_VERSION = [0-9]*;/CURRENT_PROJECT_VERSION = 361;/g'
 **模板**：
 ```xml
 <item>
-    <title>3.6.1</title>
+    <title>3.7.5</title>
     <pubDate>Fri, 09 Jan 2026 00:00:00 +0800</pubDate>
-    <sparkle:version>361</sparkle:version>
-    <sparkle:shortVersionString>3.6.1</sparkle:shortVersionString>
+    <sparkle:version>375</sparkle:version>
+    <sparkle:shortVersionString>3.7.5</sparkle:shortVersionString>
     <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
     <description><![CDATA[
-        <h3>What's New in Version 3.6.1</h3>
+        <h3>What's New in Version 3.7.5</h3>
         <ul>
             <li>Feature or fix description 1</li>
             <li>Feature or fix description 2</li>
             <li>Feature or fix description 3</li>
         </ul>
     ]]></description>
-    <enclosure url="https://github.com/yangzichao/hoah-dictation/releases/download/v3.6.1/HoAh-3.6.1.dmg" length="0" type="application/octet-stream" sparkle:edSignature=""/>
+    <enclosure url="https://github.com/yangzichao/hoah-dictation/releases/download/v3.7.5/HoAh-3.7.5.dmg" length="0" type="application/octet-stream" sparkle:edSignature=""/>
 </item>
 ```
 
@@ -122,7 +122,7 @@ git add appcast.xml
 git add RELEASE_NOTES.md  # 如果有修改
 
 # 提交
-git commit -m "Bump version to 3.6.1"
+git commit -m "Bump version to 3.7.5"
 
 # 推送到 main 分支
 git push origin main
@@ -132,10 +132,10 @@ git push origin main
 
 ```bash
 # 创建 tag（格式必须是 v{VERSION}）
-git tag -a v3.6.1 -m "Release version 3.6.1"
+git tag -a v3.7.5 -m "Release version 3.7.5"
 
 # 推送 tag（这会触发 GitHub Actions 自动构建）
-git push origin v3.6.1
+git push origin v3.7.5
 ```
 
 **关键点**：
@@ -181,7 +181,7 @@ git push origin v3.6.1
 
 ```bash
 # 运行脚本
-./scripts/release/bump_version.sh 3.6.1
+./scripts/release/bump_version.sh 3.7.5
 
 # 脚本会自动更新：
 # - Config/Info.plist
@@ -197,13 +197,13 @@ git push origin v3.6.1
 ## 🚨 常见错误
 
 ### 错误 1: Tag 格式不正确
-- ❌ 错误：`3.6.1`、`release-3.6.1`
-- ✅ 正确：`v3.6.1`
+- ❌ 错误：`3.7.5`、`release-3.7.5`
+- ✅ 正确：`v3.7.5`
 
 ### 错误 2: 版本号不一致
 - 确保 4 个文件中的版本号完全一致
-- 语义化版本：`3.6.1`
-- 内部版本号：`361`
+- 语义化版本：`3.7.5`
+- 内部版本号：`375`
 
 ### 错误 3: appcast.xml 新版本位置错误
 - 新版本必须在 `<channel>` 内的最前面
@@ -215,27 +215,27 @@ git push origin v3.6.1
 
 ## 📋 完整示例
 
-假设要发布版本 `3.6.1`：
+假设要发布版本 `3.7.5`：
 
 ```bash
 # 1. 使用脚本更新版本号
-./scripts/release/bump_version.sh 3.6.1
+./scripts/release/bump_version.sh 3.7.5
 
 # 2. 手动更新 appcast.xml（添加新的 <item>）
 
 # 3. 提交更改
 git add Config/Info.plist HoAh.xcodeproj/project.pbxproj appcast.xml
-git commit -m "Bump version to 3.6.1"
+git commit -m "Bump version to 3.7.5"
 git push origin main
 
 # 4. 创建并推送 tag
-git tag -a v3.6.1 -m "Release version 3.6.1"
-git push origin v3.6.1
+git tag -a v3.7.5 -m "Release version 3.7.5"
+git push origin v3.7.5
 
 # 5. 等待自动构建完成（约 10-15 分钟）
 
 # 6. 验证发布
-open https://github.com/yangzichao/hoah-dictation/releases/tag/v3.6.1
+open https://github.com/yangzichao/hoah-dictation/releases/tag/v3.7.5
 ```
 
 ## 📚 相关文件

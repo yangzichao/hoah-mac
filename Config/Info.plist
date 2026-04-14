@@ -33,9 +33,9 @@
 		</dict>
 	</array>
 	<key>CFBundleShortVersionString</key>
-	<string>3.7.4</string>
+	<string>3.7.5</string>
 	<key>CFBundleVersion</key>
-	<string>374</string>
+	<string>375</string>
 	<key>LSUIElement</key>
 	<false/>
 	<key>NSAppTransportSecurity</key>

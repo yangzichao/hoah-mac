@@ -3,6 +3,22 @@
     <channel>
         <title>HoAh Releases</title>
         <item>
+            <title>3.7.5</title>
+            <pubDate>Mon, 13 Apr 2026 12:00:00 -0700</pubDate>
+            <sparkle:version>375</sparkle:version>
+            <sparkle:shortVersionString>3.7.5</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <description><![CDATA[
+                <h3>What's New in Version 3.7.5</h3>
+                <ul>
+                    <li>Changed AutoSend to a dedicated double-press of the right Option key, so the gesture stays consistent even if you customize the main recording shortcut.</li>
+                    <li>Restored Append as a separate optional recording shortcut and now copy the appended result back to the clipboard while showing the combined text in history.</li>
+                    <li>Updated recorder badges, advanced trigger copy, and localizations so AutoSend and Append are labeled more clearly throughout the app.</li>
+                </ul>
+            ]]></description>
+            <enclosure url="https://github.com/yangzichao/hoah-release/releases/download/v3.7.5/HoAh-3.7.5.dmg" type="application/octet-stream"/>
+        </item>
+        <item>
             <title>3.7.4</title>
             <pubDate>Mon, 30 Mar 2026 23:21:26 -0700</pubDate>
             <sparkle:version>374</sparkle:version>

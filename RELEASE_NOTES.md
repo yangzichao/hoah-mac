@@ -1,3 +1,12 @@
+# HoAh Dictation v3.7.5
+
+### Improvements
+* **Right Option AutoSend**: AutoSend now uses a dedicated double-press of the right Option key, so the gesture stays consistent even if you customize the main recording shortcut.
+* **Append Shortcut Return**: Restored Append as an optional separate recording shortcut and now write the appended result back to the clipboard while showing the combined text in history.
+* **Trigger Copy Cleanup**: Updated recorder badges, settings copy, and localizations so AutoSend and Append are described more clearly throughout the app.
+
+---
+
 # HoAh Dictation v3.7.4
 
 ### Improvements
