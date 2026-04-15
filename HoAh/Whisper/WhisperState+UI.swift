@@ -46,20 +46,27 @@ extension WhisperState {
                 await cancelRecording()
             }
         } else {
+            guard currentTranscriptionModel != nil else {
+                await toggleRecord()
+                return
+            }
+
             SoundManager.shared.playStartSound()
 
-            await toggleRecord()
-
             await MainActor.run {
+                recordingState = .preparing
                 isMiniRecorderVisible = true // This will call showRecorderPanel() via didSet
             }
+            MemoryPressureMonitor.shared.notifyIfElevatedForRecordingStart()
+            startRecordingFromPanel()
         }
     }
     
     func dismissMiniRecorder() async {
         if recordingState == .busy { return }
 
-        let wasRecording = recordingState == .recording
+        let wasRecording = recordingState == .recording || recordingState == .preparing
+        cancelRecordingStartup()
 
         await MainActor.run {
             self.recordingState = .busy
@@ -86,6 +93,7 @@ extension WhisperState {
 
     func resetOnLaunch() async {
         logger.notice("🔄 Resetting recording state on launch")
+        cancelRecordingStartup()
         cancelRecordingTimeout()
         await recorder.stopRecording()
         hideRecorderPanel()

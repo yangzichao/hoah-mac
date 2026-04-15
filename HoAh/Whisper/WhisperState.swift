@@ -9,6 +9,7 @@ import os
 // MARK: - Recording State Machine
 enum RecordingState: Equatable {
     case idle
+    case preparing
     case recording
     case finishing
     case transcribing
@@ -42,6 +43,7 @@ class WhisperState: NSObject, ObservableObject {
     @Published var livePartialTranscript = ""
     @Published var liveStreamingError: String?
     private var recordingTimeoutTask: Task<Void, Never>?
+    private var recordingStartupTask: Task<Void, Never>?
 
     // Recorder type is managed by AppSettingsStore
     // This computed property provides read access for compatibility
@@ -182,77 +184,108 @@ class WhisperState: NSObject, ObservableObject {
                 return
             }
             shouldCancelRecording = false
-            requestRecordPermission { [self] granted in
-                if granted {
-                    Task {
-                        do {
-                            guard let selectedModel = self.currentTranscriptionModel else {
-                                throw WhisperStateError.transcriptionFailed
-                            }
+            let granted = await requestRecordPermission()
+            guard granted else {
+                logger.error("❌ Recording permission denied.")
+                if recordingState == .preparing {
+                    await dismissMiniRecorder()
+                }
+                return
+            }
 
-                            // --- Prepare permanent file URL ---
-                            let fileName = "\(UUID().uuidString).wav"
-                            let permanentURL = self.recordingsDirectory.appendingPathComponent(fileName)
-                            self.recordedFile = permanentURL
-                            self.recordingSessionModel = selectedModel
-                            self.lastRealtimeStreamingFailure = nil
+            do {
+                guard let selectedModel = self.currentTranscriptionModel else {
+                    throw WhisperStateError.transcriptionFailed
+                }
 
-                            if self.supportsRealtimeStreaming(for: selectedModel) {
-                                do {
-                                    try await self.startRealtimeRecording(with: selectedModel, toOutputFile: permanentURL)
-                                } catch {
-                                    if let fallbackModel = self.offlineFallbackLocalModel(for: selectedModel, error: error) {
-                                        self.logger.warning(
-                                            "Realtime start failed with connectivity issue. Falling back to local model \(fallbackModel.name, privacy: .public)"
-                                        )
-                                        self.recordingSessionModel = fallbackModel
-                                        await self.cleanupRealtimeStreamingSession()
-                                        try await self.recorder.startRecording(toOutputFile: permanentURL)
-                                        await self.showOfflineFallbackNotification(from: selectedModel, to: fallbackModel)
-                                    } else {
-                                        throw error
-                                    }
-                                }
-                            } else {
-                                try await self.recorder.startRecording(toOutputFile: permanentURL)
-                            }
-                            
-                            await MainActor.run {
-                                self.recordingState = .recording
-                                self.startRecordingTimeoutIfNeeded()
-                            }
-                            
-                            // Only load model if it's a local model and not already loaded
-                            if let model = self.recordingSessionModel, model.provider == .local {
-                                if let localWhisperModel = self.availableModels.first(where: { $0.name == model.name }),
-                                   self.whisperContext == nil {
-                                    do {
-                                        try await self.loadModel(localWhisperModel)
-                                    } catch {
-                                        self.logger.error("❌ Model loading failed: \(error.localizedDescription)")
-                                    }
-                                }
-                            }
-        
-                        } catch {
-                            self.logger.error("❌ Failed to start recording: \(error.localizedDescription)")
-                            await NotificationManager.shared.showNotification(title: "Recording failed to start", type: .error)
-                            await self.dismissMiniRecorder()
-                            // Do not remove the file on a failed start, to preserve all recordings.
-                            self.recordedFile = nil
-                            self.recordingSessionModel = nil
-                            self.lastRealtimeStreamingFailure = nil
+                try Task.checkCancellation()
+
+                let fileName = "\(UUID().uuidString).wav"
+                let permanentURL = self.recordingsDirectory.appendingPathComponent(fileName)
+                self.recordedFile = permanentURL
+                self.recordingSessionModel = selectedModel
+                self.lastRealtimeStreamingFailure = nil
+
+                if self.supportsRealtimeStreaming(for: selectedModel) {
+                    do {
+                        try await self.startRealtimeRecording(with: selectedModel, toOutputFile: permanentURL)
+                    } catch {
+                        if let fallbackModel = self.offlineFallbackLocalModel(for: selectedModel, error: error) {
+                            self.logger.warning(
+                                "Realtime start failed with connectivity issue. Falling back to local model \(fallbackModel.name, privacy: .public)"
+                            )
+                            self.recordingSessionModel = fallbackModel
+                            await self.cleanupRealtimeStreamingSession()
+                            try await self.recorder.startRecording(toOutputFile: permanentURL)
+                            await self.showOfflineFallbackNotification(from: selectedModel, to: fallbackModel)
+                        } else {
+                            throw error
                         }
                     }
                 } else {
-                    logger.error("❌ Recording permission denied.")
+                    try await self.recorder.startRecording(toOutputFile: permanentURL)
                 }
+
+                try Task.checkCancellation()
+
+                await MainActor.run {
+                    self.recordingState = .recording
+                    self.startRecordingTimeoutIfNeeded()
+                }
+
+                // Only load model if it's a local model and not already loaded.
+                if let model = self.recordingSessionModel, model.provider == .local {
+                    if let localWhisperModel = self.availableModels.first(where: { $0.name == model.name }),
+                       self.whisperContext == nil {
+                        do {
+                            try await self.loadModel(localWhisperModel)
+                        } catch {
+                            self.logger.error("❌ Model loading failed: \(error.localizedDescription)")
+                        }
+                    }
+                }
+            } catch is CancellationError {
+                logger.notice("Recording startup cancelled")
+                await cancelPendingRecordingStartup()
+            } catch {
+                self.logger.error("❌ Failed to start recording: \(error.localizedDescription)")
+                await NotificationManager.shared.showNotification(title: "Recording failed to start", type: .error)
+                await self.dismissMiniRecorder()
+                // Do not remove the file on a failed start, to preserve all recordings.
+                self.recordedFile = nil
+                self.recordingSessionModel = nil
+                self.lastRealtimeStreamingFailure = nil
             }
         }
     }
     
-    private func requestRecordPermission(response: @escaping (Bool) -> Void) {
-        response(true)
+    private func requestRecordPermission() async -> Bool {
+        true
+    }
+
+    func startRecordingFromPanel() {
+        recordingStartupTask?.cancel()
+        recordingStartupTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            defer { self.recordingStartupTask = nil }
+            await self.toggleRecord()
+        }
+    }
+
+    func cancelRecordingStartup() {
+        recordingStartupTask?.cancel()
+        recordingStartupTask = nil
+    }
+
+    private func cancelPendingRecordingStartup() async {
+        cancelRecordingTimeout()
+        await recorder.stopRecording()
+        await cleanupRealtimeStreamingSession()
+        recordingSessionModel = nil
+        lastRealtimeStreamingFailure = nil
+        if recordingState != .busy {
+            recordingState = .idle
+        }
     }
     
     private func transcribeAudio(on transcription: Transcription) async {

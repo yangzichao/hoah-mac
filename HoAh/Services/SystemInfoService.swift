@@ -197,3 +197,86 @@ class SystemInfoService {
     }
 
 }
+
+@MainActor
+final class MemoryPressureMonitor: ObservableObject {
+    enum Level: Equatable {
+        case normal
+        case warning
+        case critical
+    }
+
+    static let shared = MemoryPressureMonitor()
+
+    @Published private(set) var currentLevel: Level = .normal
+
+    private var pressureSource: DispatchSourceMemoryPressure?
+    private var lastRecordingNotificationAt: Date?
+    private let notificationCooldown: TimeInterval = 5 * 60
+
+    private init() {}
+
+    func startMonitoring() {
+        guard pressureSource == nil else { return }
+
+        let source = DispatchSource.makeMemoryPressureSource(
+            eventMask: [.normal, .warning, .critical],
+            queue: .main
+        )
+
+        source.setEventHandler { [weak self] in
+            guard let self else { return }
+            self.handlePressureEvent(source.data)
+        }
+
+        source.resume()
+        pressureSource = source
+    }
+
+    func stopMonitoring() {
+        pressureSource?.cancel()
+        pressureSource = nil
+        currentLevel = .normal
+        lastRecordingNotificationAt = nil
+    }
+
+    func notifyIfElevatedForRecordingStart() {
+        guard currentLevel != .normal else { return }
+
+        let now = Date()
+        if let lastRecordingNotificationAt,
+           now.timeIntervalSince(lastRecordingNotificationAt) < notificationCooldown {
+            return
+        }
+
+        lastRecordingNotificationAt = now
+
+        let title: String
+        switch currentLevel {
+        case .warning:
+            title = NSLocalizedString("System memory pressure is high. Recording may feel slower than usual.", comment: "")
+        case .critical:
+            title = NSLocalizedString("System memory pressure is critical. Recording and transcription may lag noticeably.", comment: "")
+        case .normal:
+            return
+        }
+
+        NotificationManager.shared.showNotification(
+            title: title,
+            type: .warning
+        )
+    }
+
+    private func handlePressureEvent(_ event: DispatchSource.MemoryPressureEvent) {
+        let newLevel: Level
+        if event.contains(.critical) {
+            newLevel = .critical
+        } else if event.contains(.warning) {
+            newLevel = .warning
+        } else {
+            newLevel = .normal
+        }
+
+        currentLevel = newLevel
+    }
+}

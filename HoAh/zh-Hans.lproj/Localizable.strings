@@ -1824,5 +1824,11 @@ Disable for full control over the AI's system prompt (for advanced users).</key>
 	<string>追加</string>
 	<key>AutoSend</key>
 	<string>自动发送</string>
+	<key>Preparing</key>
+	<string>准备中</string>
+	<key>System memory pressure is high. Recording may feel slower than usual.</key>
+	<string>系统内存压力较高，录音响应可能会比平时更慢。</string>
+	<key>System memory pressure is critical. Recording and transcription may lag noticeably.</key>
+	<string>系统内存压力严重，录音和转录可能会出现明显卡顿。</string>
 </dict>
 </plist>

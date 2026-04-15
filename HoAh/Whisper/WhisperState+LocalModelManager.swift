@@ -3,6 +3,7 @@ import os
 import Zip
 import SwiftUI
 import Atomics
+import Darwin
 
 
 struct WhisperModel: Identifiable {
@@ -404,6 +405,8 @@ extension WhisperState {
         await whisperContext?.releaseResources()
         whisperContext = nil
         isModelLoaded = false
+        // Encourage malloc to return large freed arenas after model teardown.
+        let _ = malloc_zone_pressure_relief(malloc_default_zone(), 0)
     }
     
     // MARK: - Helper Methods

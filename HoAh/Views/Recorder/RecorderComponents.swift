@@ -460,7 +460,17 @@ struct RecorderStatusDisplay: View {
         let visualizerSpec = theme.visualizer
 
         Group {
-            if currentState == .enhancing {
+            if currentState == .preparing {
+                VStack(spacing: 2) {
+                    Text(LocalizedStringKey("Preparing"))
+                        .foregroundColor(theme.textPrimary)
+                        .font(.system(size: 11, weight: .medium, design: .default))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
+
+                    ProgressAnimation(animationSpeed: 0.1)
+                }
+            } else if currentState == .enhancing {
                 VStack(spacing: 2) {
                     Text(LocalizedStringKey("Enhancing"))
                         .foregroundColor(theme.textPrimary)

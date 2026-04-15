@@ -382,6 +382,7 @@ struct HoAhApp: App {
                     // Configure audio services with centralized settings
                     SoundManager.shared.configure(with: appSettings)
                     MediaController.shared.configure(with: appSettings)
+                    MemoryPressureMonitor.shared.startMonitoring()
                     
                     // Configure AI services with centralized settings
                     aiService.configure(with: appSettings)
@@ -440,6 +441,7 @@ struct HoAhApp: App {
                     
                     // Stop the automatic audio cleanup process
                     audioCleanupManager.stopAutomaticCleanup()
+                    MemoryPressureMonitor.shared.stopMonitoring()
                 }
                 .onChange(of: appSettings.appInterfaceLanguage) { _, newValue in
                     guard !RuntimeEnvironment.isRunningTests else { return }

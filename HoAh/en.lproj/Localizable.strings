@@ -1544,5 +1544,11 @@ Languages: English, Chinese</string>
 	<string>Append</string>
 	<key>AutoSend</key>
 	<string>AutoSend</string>
+	<key>Preparing</key>
+	<string>Preparing</string>
+	<key>System memory pressure is high. Recording may feel slower than usual.</key>
+	<string>System memory pressure is high. Recording may feel slower than usual.</string>
+	<key>System memory pressure is critical. Recording and transcription may lag noticeably.</key>
+	<string>System memory pressure is critical. Recording and transcription may lag noticeably.</string>
 </dict>
 </plist>
