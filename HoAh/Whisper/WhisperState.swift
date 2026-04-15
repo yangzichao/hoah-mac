@@ -875,7 +875,12 @@ class WhisperState: NSObject, ObservableObject {
         if autoSend {
             Task { @MainActor in
                 try? await Task.sleep(nanoseconds: 50_000_000)
-                await CursorPaster.pasteAtCursorAndWait(text)
+                // Auto-send must leave enough time for slow apps to consume Cmd+V
+                // before we synthesize Return.
+                await CursorPaster.pasteAtCursorAndWait(
+                    text,
+                    completionDelayOverride: CursorPaster.autoSendPasteCompletionDelay
+                )
                 CursorPaster.pressEnter()
             }
             return
