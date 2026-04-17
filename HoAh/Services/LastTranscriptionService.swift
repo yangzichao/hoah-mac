@@ -93,11 +93,11 @@ class LastTranscriptionService: ObservableObject {
         
         let textToPaste = lastTranscription.text
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-            CursorPaster.pasteAtCursor(textToPaste)
+        Task { @MainActor in
+            PasteFlow.run(.init(text: textToPaste))
         }
     }
-    
+
     static func pasteLastEnhancement(from modelContext: ModelContext) {
         guard let lastTranscription = getLastTranscription(from: modelContext) else {
             Task { @MainActor in
@@ -118,8 +118,8 @@ class LastTranscriptionService: ObservableObject {
             }
         }()
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-            CursorPaster.pasteAtCursor(textToPaste)
+        Task { @MainActor in
+            PasteFlow.run(.init(text: textToPaste))
         }
     }
     

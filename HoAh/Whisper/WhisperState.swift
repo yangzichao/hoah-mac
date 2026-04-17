@@ -44,6 +44,7 @@ class WhisperState: NSObject, ObservableObject {
     @Published var liveStreamingError: String?
     private var recordingTimeoutTask: Task<Void, Never>?
     private var recordingStartupTask: Task<Void, Never>?
+    private var pasteFlowTask: Task<Void, Never>?
 
     // Recorder type is managed by AppSettingsStore
     // This computed property provides read access for compatibility
@@ -905,23 +906,13 @@ class WhisperState: NSObject, ObservableObject {
     }
 
     private func enqueuePaste(_ text: String, autoSend: Bool) {
-        if autoSend {
-            Task { @MainActor in
-                try? await Task.sleep(nanoseconds: 50_000_000)
-                // Auto-send must leave enough time for slow apps to consume Cmd+V
-                // before we synthesize Return.
-                await CursorPaster.pasteAtCursorAndWait(
-                    text,
-                    completionDelayOverride: CursorPaster.autoSendPasteCompletionDelay
-                )
-                CursorPaster.pressEnter()
-            }
-            return
-        }
+        pasteFlowTask?.cancel()
+        pasteFlowTask = PasteFlow.run(.init(text: text, autoSend: autoSend))
+    }
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            CursorPaster.pasteAtCursor(text)
-        }
+    func cancelPendingPaste() {
+        pasteFlowTask?.cancel()
+        pasteFlowTask = nil
     }
     
     @MainActor

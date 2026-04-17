@@ -136,6 +136,26 @@ class HotkeyManager: ObservableObject {
         var isModifierKey: Bool {
             return self != .custom && self != .none
         }
+
+        // Device-dependent mask for precise left/right distinction.
+        // Bits map to IOKit NX_DEVICE* constants as exposed via NSEvent.modifierFlags.rawValue.
+        var deviceMask: UInt? {
+            switch self {
+            case .leftControl:  return 0x00000001
+            case .rightShift:   return 0x00000004
+            case .rightCommand: return 0x00000010
+            case .leftOption:   return 0x00000020
+            case .rightOption:  return 0x00000040
+            case .rightControl: return 0x00002000
+            case .fn, .custom, .none: return nil
+            }
+        }
+
+        func isPressed(in flags: NSEvent.ModifierFlags) -> Bool {
+            if self == .fn { return flags.contains(.function) }
+            guard let mask = deviceMask else { return false }
+            return (flags.rawValue & mask) != 0
+        }
     }
 
     // MARK: - Display Helpers
@@ -429,9 +449,9 @@ class HotkeyManager: ObservableObject {
         let flags = event.modifierFlags
 
         if appSettings.multiPressGestureAutoSendEnabled, keycode == HotkeyOption.rightOption.keyCode {
-            await processOptionAutoSendKeyPress(isKeyPressed: !optionAutoSendKeyState)
+            await processOptionAutoSendKeyPress(isKeyPressed: HotkeyOption.rightOption.isPressed(in: flags))
         }
-        
+
         // Determine which hotkey (if any) is being triggered
         let activeHotkey: HotkeyOption?
         if selectedHotkey1.isModifierKey && selectedHotkey1.keyCode == keycode {
@@ -441,22 +461,14 @@ class HotkeyManager: ObservableObject {
         } else {
             activeHotkey = nil
         }
-        
+
         guard let hotkey = activeHotkey else { return }
         if appSettings.multiPressGestureAutoSendEnabled, hotkey == .rightOption {
             return
         }
-        
-        var isKeyPressed = false
-        
-        switch hotkey {
-        case .rightOption, .leftOption:
-            isKeyPressed = flags.contains(.option)
-        case .leftControl, .rightControl:
-            isKeyPressed = flags.contains(.control)
-        case .fn:
-            isKeyPressed = flags.contains(.function)
-            // Debounce Fn key
+
+        if hotkey == .fn {
+            let isKeyPressed = flags.contains(.function)
             pendingFnKeyState = isKeyPressed
             fnDebounceTask?.cancel()
             fnDebounceTask = Task { [pendingState = isKeyPressed] in
@@ -466,15 +478,9 @@ class HotkeyManager: ObservableObject {
                 }
             }
             return
-        case .rightCommand:
-            isKeyPressed = flags.contains(.command)
-        case .rightShift:
-            isKeyPressed = flags.contains(.shift)
-        case .custom, .none:
-            return // Should not reach here
         }
 
-        await processKeyPress(isKeyPressed: isKeyPressed)
+        await processKeyPress(isKeyPressed: hotkey.isPressed(in: flags))
     }
 
     private func processKeyPress(isKeyPressed: Bool) async {

@@ -68,8 +68,8 @@ class AppSettingsStore: ObservableObject {
     @Published var preserveTranscriptInClipboard: Bool {
         didSet {
             // Keep the legacy key in sync during the state-management migration.
-            // CursorPaster is still a static utility with no injected AppSettingsStore,
-            // so paste behavior must continue to work even before all callers are moved over.
+            // ClipboardIO reads this key directly because it has no injected
+            // AppSettingsStore and is reachable from low-level paste flows.
             UserDefaults.hoah.set(preserveTranscriptInClipboard, forKey: "preserveTranscriptInClipboard")
             saveSettings()
         }
@@ -521,7 +521,7 @@ class AppSettingsStore: ObservableObject {
         self.isMenuBarOnly = state.isMenuBarOnly
         self.recorderType = state.recorderType
         self.preserveTranscriptInClipboard = state.preserveTranscriptInClipboard
-        // Sync with legacy key consumed at runtime by CursorPaster.
+        // Sync with legacy key consumed at runtime by ClipboardIO.
         UserDefaults.hoah.set(state.preserveTranscriptInClipboard, forKey: "preserveTranscriptInClipboard")
         self.maxRecordingDurationMinutes = state.maxRecordingDurationMinutes
         self.selectedLanguage = state.selectedLanguage

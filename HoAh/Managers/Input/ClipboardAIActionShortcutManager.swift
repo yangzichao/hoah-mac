@@ -270,7 +270,7 @@ final class ClipboardAIActionShortcutManager {
             )
             // Clipboard Action should be one-shot but keep the AI result in clipboard.
             // We still attempt to paste into the focused input field.
-            await CursorPaster.pasteAtCursorAndWait(result, preserveClipboardOverride: true)
+            await PasteFlow.run(.init(text: result, preserveClipboard: true)).value
             NotificationManager.shared.dismissNotification()
         } catch {
             let message = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
