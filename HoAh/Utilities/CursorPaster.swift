@@ -5,6 +5,10 @@ class CursorPaster {
     private static let pasteTriggerDelay: UInt64 = 50_000_000
     private static let pasteCompletionDelay: UInt64 = 150_000_000
     static let autoSendPasteCompletionDelay: UInt64 = 500_000_000
+    // Extra buffer after the paste is "done" to tolerate apps that debounce
+    // clipboard reads (Slack, some web editors, terminals under load).
+    private static let clipboardRestoreSafetyMargin: UInt64 = 500_000_000
+    private static let minClipboardRestoreDelay: UInt64 = 900_000_000
 
     private typealias SavedPasteboardContents = [(NSPasteboard.PasteboardType, Data)]
 
@@ -18,7 +22,7 @@ class CursorPaster {
             preserveClipboardOverride: preserveClipboardOverride,
             appendTrailingSpaceOverride: appendTrailingSpaceOverride
         )
-        scheduleClipboardRestoreIfNeeded(savedContents)
+        scheduleClipboardRestoreIfNeeded(savedContents, completionDelay: pasteCompletionDelay)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
             pasteUsingCommandV()
@@ -32,16 +36,17 @@ class CursorPaster {
         appendTrailingSpaceOverride: Bool? = nil,
         completionDelayOverride: UInt64? = nil
     ) async {
+        let completionDelay = completionDelayOverride ?? pasteCompletionDelay
         let savedContents = preparePasteboard(
             text,
             preserveClipboardOverride: preserveClipboardOverride,
             appendTrailingSpaceOverride: appendTrailingSpaceOverride
         )
-        scheduleClipboardRestoreIfNeeded(savedContents)
+        scheduleClipboardRestoreIfNeeded(savedContents, completionDelay: completionDelay)
 
         try? await Task.sleep(nanoseconds: pasteTriggerDelay)
         pasteUsingCommandV()
-        try? await Task.sleep(nanoseconds: completionDelayOverride ?? pasteCompletionDelay)
+        try? await Task.sleep(nanoseconds: completionDelay)
     }
 
     private static func pasteUsingCommandV() {
@@ -117,11 +122,21 @@ class CursorPaster {
         return savedContents
     }
 
-    private static func scheduleClipboardRestoreIfNeeded(_ savedContents: SavedPasteboardContents) {
+    private static func scheduleClipboardRestoreIfNeeded(
+        _ savedContents: SavedPasteboardContents,
+        completionDelay: UInt64
+    ) {
         guard !savedContents.isEmpty else { return }
 
+        // Scale restoration delay with the actual paste flow timing so autoSend
+        // (which presses Return after a longer completionDelay) does not lose
+        // its buffer for slow/debouncing apps.
+        let computed = pasteTriggerDelay + completionDelay + clipboardRestoreSafetyMargin
+        let delayNanos = max(computed, minClipboardRestoreDelay)
+        let delaySeconds = Double(delayNanos) / 1_000_000_000.0
+
         let pasteboard = NSPasteboard.general
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delaySeconds) {
             pasteboard.clearContents()
             for (type, data) in savedContents {
                 pasteboard.setData(data, forType: type)

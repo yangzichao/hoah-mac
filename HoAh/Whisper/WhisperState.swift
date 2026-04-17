@@ -418,10 +418,10 @@ class WhisperState: NSObject, ObservableObject {
 
         if let textToPaste = appendOutputText ?? finalPastedText,
            activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
-            enqueuePaste(textToPaste + " ", autoSend: shouldAutoSend)
+            enqueuePaste(textToPaste, autoSend: shouldAutoSend)
         } else if shouldAutoSend, activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
             let textToSend = activeTranscription.copyableEnhancedText ?? activeTranscription.text
-            enqueuePaste(textToSend + " ", autoSend: true)
+            enqueuePaste(textToSend, autoSend: true)
         }
 
         await self.dismissMiniRecorder()
@@ -875,7 +875,7 @@ class WhisperState: NSObject, ObservableObject {
             enqueuePaste(textToPaste, autoSend: shouldAutoSend)
         } else if shouldAutoSend, activeTranscription.transcriptionStatus == TranscriptionStatus.completed.rawValue {
             let textToSend = activeTranscription.copyableEnhancedText ?? activeTranscription.text
-            enqueuePaste(textToSend + " ", autoSend: true)
+            enqueuePaste(textToSend, autoSend: true)
         }
 
         await cleanupRealtimeStreamingSession()

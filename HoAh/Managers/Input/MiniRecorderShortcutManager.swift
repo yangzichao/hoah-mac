@@ -200,11 +200,20 @@ class MiniRecorderShortcutManager: ObservableObject {
     }
 
     deinit {
+        // Task.cancel() is thread-safe; cancel synchronously without self hop.
         visibilityTask?.cancel()
+        escapeTimeoutTask?.cancel()
+
+        // Capture the names array; referencing self inside the Task would be a
+        // use-after-free since self is already being deallocated.
+        let shortcutNames = promptShortcutNames
+
         Task { @MainActor in
-            deactivateEscapeShortcut()
-            deactivateCancelShortcut()
-            removePromptShortcuts()
+            KeyboardShortcuts.setShortcut(nil, for: .escapeRecorder)
+            for name in shortcutNames {
+                KeyboardShortcuts.setShortcut(nil, for: name)
+                KeyboardShortcuts.removeHandler(for: name)
+            }
         }
     }
 }

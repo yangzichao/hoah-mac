@@ -646,9 +646,25 @@ class HotkeyManager: ObservableObject {
     }
     
     deinit {
+        // Capture state synchronously; referencing self in the Task below would
+        // be a use-after-free since self is already being deallocated.
+        let globalMonitor = globalEventMonitor
+        let localMonitor = localEventMonitor
+        let clickMonitors = middleClickMonitors
+
+        // Task.cancel() is thread-safe, so cancel synchronously without self hop.
+        middleClickTask?.cancel()
+        multiPressWindowTask?.cancel()
+        fnDebounceTask?.cancel()
+
         Task { @MainActor in
-            removeAllMonitoring()
-            removeCustomShortcutHandlers()
+            if let monitor = globalMonitor { NSEvent.removeMonitor(monitor) }
+            if let monitor = localMonitor { NSEvent.removeMonitor(monitor) }
+            for case let monitor? in clickMonitors { NSEvent.removeMonitor(monitor) }
+
+            KeyboardShortcuts.removeHandler(for: .toggleMiniRecorder)
+            KeyboardShortcuts.removeHandler(for: .toggleMiniRecorder2)
+            KeyboardShortcuts.removeHandler(for: .toggleMiniRecorderAppend)
         }
     }
 }
