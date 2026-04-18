@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 
+@MainActor
 class LastTranscriptionService: ObservableObject {
     private static let clipboardSourceRawValue = TranscriptionSource.clipboardAction.rawValue
     
@@ -45,15 +46,13 @@ class LastTranscriptionService: ObservableObject {
     
     static func copyLastTranscription(from modelContext: ModelContext) {
         guard let lastTranscription = getLastTranscription(from: modelContext) else {
-            Task { @MainActor in
-                NotificationManager.shared.showNotification(
-                    title: "No transcription available",
-                    type: .error
-                )
-            }
+            NotificationManager.shared.showNotification(
+                title: "No transcription available",
+                type: .error
+            )
             return
         }
-        
+
         // Prefer successful enhanced text; fallback to original text
         let textToCopy: String = {
             if let enhancedText = lastTranscription.copyableEnhancedText {
@@ -62,53 +61,43 @@ class LastTranscriptionService: ObservableObject {
                 return lastTranscription.text
             }
         }()
-        
+
         let success = ClipboardManager.copyToClipboard(textToCopy)
-        
-        Task { @MainActor in
-            if success {
-                NotificationManager.shared.showNotification(
-                    title: "Last transcription copied",
-                    type: .success
-                )
-            } else {
-                NotificationManager.shared.showNotification(
-                    title: "Failed to copy transcription",
-                    type: .error
-                )
-            }
+
+        if success {
+            NotificationManager.shared.showNotification(
+                title: "Last transcription copied",
+                type: .success
+            )
+        } else {
+            NotificationManager.shared.showNotification(
+                title: "Failed to copy transcription",
+                type: .error
+            )
         }
     }
 
     static func pasteLastTranscription(from modelContext: ModelContext) {
         guard let lastTranscription = getLastTranscription(from: modelContext) else {
-            Task { @MainActor in
-                NotificationManager.shared.showNotification(
-                    title: "No transcription available",
-                    type: .error
-                )
-            }
+            NotificationManager.shared.showNotification(
+                title: "No transcription available",
+                type: .error
+            )
             return
         }
-        
-        let textToPaste = lastTranscription.text
 
-        Task { @MainActor in
-            PasteFlow.run(.init(text: textToPaste))
-        }
+        PasteFlow.run(.init(text: lastTranscription.text))
     }
 
     static func pasteLastEnhancement(from modelContext: ModelContext) {
         guard let lastTranscription = getLastTranscription(from: modelContext) else {
-            Task { @MainActor in
-                NotificationManager.shared.showNotification(
-                    title: "No transcription available",
-                    type: .error
-                )
-            }
+            NotificationManager.shared.showNotification(
+                title: "No transcription available",
+                type: .error
+            )
             return
         }
-        
+
         // Prefer successful enhanced text; fallback to original text
         let textToPaste: String = {
             if let enhancedText = lastTranscription.copyableEnhancedText {
@@ -118,13 +107,11 @@ class LastTranscriptionService: ObservableObject {
             }
         }()
 
-        Task { @MainActor in
-            PasteFlow.run(.init(text: textToPaste))
-        }
+        PasteFlow.run(.init(text: textToPaste))
     }
     
     static func retryLastTranscription(from modelContext: ModelContext, whisperState: WhisperState) {
-        Task { @MainActor in
+        Task {
             guard let lastTranscription = getLastTranscription(from: modelContext),
                   let audioURLString = lastTranscription.audioFileURL,
                   let audioURL = URL(string: audioURLString),
