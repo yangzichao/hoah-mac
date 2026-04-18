@@ -84,8 +84,10 @@ class MiniRecorderShortcutManager: ObservableObject {
                         type: .info,
                         duration: self.escSecondPressThreshold
                     )
+                    self.escapeTimeoutTask?.cancel()
                     self.escapeTimeoutTask = Task { [weak self] in
                         try? await Task.sleep(nanoseconds: UInt64((self?.escSecondPressThreshold ?? 1.5) * 1_000_000_000))
+                        if Task.isCancelled { return }
                         await MainActor.run {
                             self?.escFirstPressTime = nil
                         }
