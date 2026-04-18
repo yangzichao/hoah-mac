@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import os
 
 struct ClipboardManager {
     enum ClipboardError: Error {
@@ -9,11 +10,12 @@ struct ClipboardManager {
 
     private static let commandKeyCode: CGKeyCode = 0x37
     private static let cKeyCode: CGKeyCode = 0x08
+    private static let logger = Logger(subsystem: "com.yangzichao.hoah", category: "ClipboardManager")
 
     static func setClipboard(_ text: String, transient: Bool = false) -> Bool {
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
-        pasteboard.setString(text, forType: .string)
+        let didWrite = pasteboard.setString(text, forType: .string)
 
         if let bundleIdentifier = Bundle.main.bundleIdentifier {
             pasteboard.setString(bundleIdentifier, forType: NSPasteboard.PasteboardType("org.nspasteboard.source"))
@@ -23,7 +25,7 @@ struct ClipboardManager {
             pasteboard.setData(Data(), forType: NSPasteboard.PasteboardType("org.nspasteboard.TransientType"))
         }
 
-        return true
+        return didWrite
     }
 
     static func copyToClipboard(_ text: String) -> Bool {
@@ -48,6 +50,11 @@ struct ClipboardManager {
         for _ in 0..<8 {
             try? await Task.sleep(nanoseconds: 50_000_000)
             if pasteboard.changeCount != initialChangeCount {
+                guard pasteboard.types?.contains(.string) == true,
+                      let content = pasteboard.string(forType: .string),
+                      !content.isEmpty else {
+                    return false
+                }
                 return true
             }
         }
@@ -58,19 +65,24 @@ struct ClipboardManager {
     private static func postCommandCopy() {
         let source = CGEventSource(stateID: .hidSystemState)
 
-        let commandDown = CGEvent(keyboardEventSource: source, virtualKey: commandKeyCode, keyDown: true)
-        let cDown = CGEvent(keyboardEventSource: source, virtualKey: cKeyCode, keyDown: true)
-        let cUp = CGEvent(keyboardEventSource: source, virtualKey: cKeyCode, keyDown: false)
-        let commandUp = CGEvent(keyboardEventSource: source, virtualKey: commandKeyCode, keyDown: false)
+        guard
+            let commandDown = CGEvent(keyboardEventSource: source, virtualKey: commandKeyCode, keyDown: true),
+            let cDown = CGEvent(keyboardEventSource: source, virtualKey: cKeyCode, keyDown: true),
+            let cUp = CGEvent(keyboardEventSource: source, virtualKey: cKeyCode, keyDown: false),
+            let commandUp = CGEvent(keyboardEventSource: source, virtualKey: commandKeyCode, keyDown: false)
+        else {
+            logger.error("postCommandCopy: CGEvent construction failed; aborting to avoid stuck Cmd")
+            return
+        }
 
-        commandDown?.flags = .maskCommand
-        cDown?.flags = .maskCommand
-        cUp?.flags = .maskCommand
+        commandDown.flags = .maskCommand
+        cDown.flags = .maskCommand
+        cUp.flags = .maskCommand
 
-        commandDown?.post(tap: .cghidEventTap)
-        cDown?.post(tap: .cghidEventTap)
-        cUp?.post(tap: .cghidEventTap)
-        commandUp?.post(tap: .cghidEventTap)
+        commandDown.post(tap: .cghidEventTap)
+        cDown.post(tap: .cghidEventTap)
+        cUp.post(tap: .cghidEventTap)
+        commandUp.post(tap: .cghidEventTap)
     }
 }
 

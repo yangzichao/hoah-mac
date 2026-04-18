@@ -29,7 +29,7 @@ class LastTranscriptionService: ObservableObject {
             },
             sortBy: [SortDescriptor(\.timestamp, order: .reverse)]
         )
-        descriptor.fetchLimit = max(limit * 3, limit) // over-fetch, then filter
+        descriptor.fetchLimit = limit * 3 // over-fetch, then filter
         
         do {
             let all = try modelContext.fetch(descriptor)
