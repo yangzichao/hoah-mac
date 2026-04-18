@@ -38,7 +38,7 @@ extension WhisperState {
     
     // MARK: - Mini Recorder Management
     
-    func toggleMiniRecorder(mode: RecordingMode = .normal) async {
+    func toggleMiniRecorder() async {
         if isMiniRecorderVisible {
             if recordingState == .recording {
                 await toggleRecord()
@@ -131,7 +131,7 @@ extension WhisperState {
         isTogglingRecorder = true
         Task {
             defer { isTogglingRecorder = false }
-            await toggleMiniRecorder(mode: recordingMode)
+            await toggleMiniRecorder()
         }
     }
 
