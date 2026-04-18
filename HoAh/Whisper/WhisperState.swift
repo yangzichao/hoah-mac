@@ -469,6 +469,8 @@ class WhisperState: NSObject, ObservableObject {
             }
         }
 
+        // Accumulated across all appends; no longer maps to a single audioFileURL
+        // (cleared below). Treat as total spoken duration, not audio-file length.
         previous.duration += newTranscription.duration
 
         let previousAudioFileURL = previous.audioFileURL
