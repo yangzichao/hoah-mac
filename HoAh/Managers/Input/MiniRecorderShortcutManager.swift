@@ -5,7 +5,26 @@ import AppKit
 extension KeyboardShortcuts.Name {
     static let escapeRecorder = Self("escapeRecorder")
     static let cancelRecorder = Self("cancelRecorder")
-    // AI Prompt selection shortcuts
+    // AI Prompt selection shortcuts.
+    //
+    // Two-name pattern mirroring ClipboardAIActionShortcutManager:
+    // - `selectPromptNConfig` persists the user's chosen binding (defaults
+    //   declared here so first-launch users get ⌘1…⌘0 automatically).
+    // - `selectPromptN` is the active runtime name that is toggled on/off as
+    //   the mini-recorder shows/hides.
+    // The old single-name layout wrote the default to UserDefaults on every
+    // show, which clobbered any user override on the next recorder open.
+    static let selectPrompt1Config = Self("selectPrompt1Config", default: .init(.one, modifiers: .command))
+    static let selectPrompt2Config = Self("selectPrompt2Config", default: .init(.two, modifiers: .command))
+    static let selectPrompt3Config = Self("selectPrompt3Config", default: .init(.three, modifiers: .command))
+    static let selectPrompt4Config = Self("selectPrompt4Config", default: .init(.four, modifiers: .command))
+    static let selectPrompt5Config = Self("selectPrompt5Config", default: .init(.five, modifiers: .command))
+    static let selectPrompt6Config = Self("selectPrompt6Config", default: .init(.six, modifiers: .command))
+    static let selectPrompt7Config = Self("selectPrompt7Config", default: .init(.seven, modifiers: .command))
+    static let selectPrompt8Config = Self("selectPrompt8Config", default: .init(.eight, modifiers: .command))
+    static let selectPrompt9Config = Self("selectPrompt9Config", default: .init(.nine, modifiers: .command))
+    static let selectPrompt10Config = Self("selectPrompt10Config", default: .init(.zero, modifiers: .command))
+
     static let selectPrompt1 = Self("selectPrompt1")
     static let selectPrompt2 = Self("selectPrompt2")
     static let selectPrompt3 = Self("selectPrompt3")
@@ -25,6 +44,10 @@ class MiniRecorderShortcutManager: ObservableObject {
     private let promptShortcutNames: [KeyboardShortcuts.Name] = [
         .selectPrompt1, .selectPrompt2, .selectPrompt3, .selectPrompt4, .selectPrompt5,
         .selectPrompt6, .selectPrompt7, .selectPrompt8, .selectPrompt9, .selectPrompt10
+    ]
+    private let promptConfigShortcutNames: [KeyboardShortcuts.Name] = [
+        .selectPrompt1Config, .selectPrompt2Config, .selectPrompt3Config, .selectPrompt4Config, .selectPrompt5Config,
+        .selectPrompt6Config, .selectPrompt7Config, .selectPrompt8Config, .selectPrompt9Config, .selectPrompt10Config
     ]
 
     private var isCancelHandlerSetup = false
@@ -137,28 +160,17 @@ class MiniRecorderShortcutManager: ObservableObject {
     private func setupPromptShortcuts() {
         removePromptHandlers()
 
-        KeyboardShortcuts.setShortcut(.init(.one, modifiers: .command), for: .selectPrompt1)
-        KeyboardShortcuts.setShortcut(.init(.two, modifiers: .command), for: .selectPrompt2)
-        KeyboardShortcuts.setShortcut(.init(.three, modifiers: .command), for: .selectPrompt3)
-        KeyboardShortcuts.setShortcut(.init(.four, modifiers: .command), for: .selectPrompt4)
-        KeyboardShortcuts.setShortcut(.init(.five, modifiers: .command), for: .selectPrompt5)
-        KeyboardShortcuts.setShortcut(.init(.six, modifiers: .command), for: .selectPrompt6)
-        KeyboardShortcuts.setShortcut(.init(.seven, modifiers: .command), for: .selectPrompt7)
-        KeyboardShortcuts.setShortcut(.init(.eight, modifiers: .command), for: .selectPrompt8)
-        KeyboardShortcuts.setShortcut(.init(.nine, modifiers: .command), for: .selectPrompt9)
-        KeyboardShortcuts.setShortcut(.init(.zero, modifiers: .command), for: .selectPrompt10)
+        // Copy from the persisted config names to the active runtime names.
+        // `getShortcut` on a Name declared with `default:` returns the default
+        // on first run and the user's override afterwards, so this preserves
+        // any customization across show/hide cycles.
+        for (configName, activeName) in zip(promptConfigShortcutNames, promptShortcutNames) {
+            KeyboardShortcuts.setShortcut(KeyboardShortcuts.getShortcut(for: configName), for: activeName)
+        }
 
-        // Setup handlers
-        setupPromptHandler(for: .selectPrompt1, index: 0)
-        setupPromptHandler(for: .selectPrompt2, index: 1)
-        setupPromptHandler(for: .selectPrompt3, index: 2)
-        setupPromptHandler(for: .selectPrompt4, index: 3)
-        setupPromptHandler(for: .selectPrompt5, index: 4)
-        setupPromptHandler(for: .selectPrompt6, index: 5)
-        setupPromptHandler(for: .selectPrompt7, index: 6)
-        setupPromptHandler(for: .selectPrompt8, index: 7)
-        setupPromptHandler(for: .selectPrompt9, index: 8)
-        setupPromptHandler(for: .selectPrompt10, index: 9)
+        for (index, activeName) in promptShortcutNames.enumerated() {
+            setupPromptHandler(for: activeName, index: index)
+        }
     }
 
     private func removePromptHandlers() {
@@ -188,16 +200,9 @@ class MiniRecorderShortcutManager: ObservableObject {
     }
 
     private func removePromptShortcuts() {
-        KeyboardShortcuts.setShortcut(nil, for: .selectPrompt1)
-        KeyboardShortcuts.setShortcut(nil, for: .selectPrompt2)
-        KeyboardShortcuts.setShortcut(nil, for: .selectPrompt3)
-        KeyboardShortcuts.setShortcut(nil, for: .selectPrompt4)
-        KeyboardShortcuts.setShortcut(nil, for: .selectPrompt5)
-        KeyboardShortcuts.setShortcut(nil, for: .selectPrompt6)
-        KeyboardShortcuts.setShortcut(nil, for: .selectPrompt7)
-        KeyboardShortcuts.setShortcut(nil, for: .selectPrompt8)
-        KeyboardShortcuts.setShortcut(nil, for: .selectPrompt9)
-        KeyboardShortcuts.setShortcut(nil, for: .selectPrompt10)
+        for name in promptShortcutNames {
+            KeyboardShortcuts.setShortcut(nil, for: name)
+        }
         removePromptHandlers()
     }
 

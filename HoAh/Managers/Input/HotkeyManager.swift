@@ -82,6 +82,12 @@ class HotkeyManager: ObservableObject {
     private var multiPressGesture = MultiPressGestureStateMachine()
     private var multiPressWindowTask: Task<Void, Never>?
     private let multiPressWindow: TimeInterval = 0.5
+
+    // Watchdog that recovers from a lost keyUp (app backgrounded, system sleep,
+    // event-tap hiccup). If the key has supposedly been held this long but the
+    // real modifier flags say otherwise, synthesize a keyUp to unstick state.
+    private var maxHoldWatchdogTask: Task<Void, Never>?
+    private let maxKeyHoldDuration: TimeInterval = 10.0
     
     // Debounce for Fn key
     private var fnDebounceTask: Task<Void, Never>?
@@ -441,6 +447,8 @@ class HotkeyManager: ObservableObject {
         isShortcutHandsFreeMode = false
         multiPressWindowTask?.cancel()
         multiPressWindowTask = nil
+        maxHoldWatchdogTask?.cancel()
+        maxHoldWatchdogTask = nil
         multiPressGesture.reset()
     }
     
@@ -492,7 +500,40 @@ class HotkeyManager: ObservableObject {
     private func processOptionAutoSendKeyPress(isKeyPressed: Bool) async {
         guard isKeyPressed != optionAutoSendKeyState else { return }
         optionAutoSendKeyState = isKeyPressed
+        if isKeyPressed {
+            scheduleMaxHoldWatchdog()
+        } else {
+            cancelMaxHoldWatchdog()
+        }
         await processMultiPressGestureKeyPress(isKeyPressed: isKeyPressed)
+    }
+
+    private func scheduleMaxHoldWatchdog() {
+        cancelMaxHoldWatchdog()
+        maxHoldWatchdogTask = Task { [weak self] in
+            let delay = self?.maxKeyHoldDuration ?? 10.0
+            try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+            guard let self, !Task.isCancelled else { return }
+            await self.recoverFromStuckKeyIfNeeded()
+        }
+    }
+
+    private func cancelMaxHoldWatchdog() {
+        maxHoldWatchdogTask?.cancel()
+        maxHoldWatchdogTask = nil
+    }
+
+    private func recoverFromStuckKeyIfNeeded() async {
+        guard optionAutoSendKeyState else { return }
+        let realFlags = NSEvent.modifierFlags
+        guard !HotkeyOption.rightOption.isPressed(in: realFlags) else {
+            // Key is genuinely still held; rearm the watchdog for another cycle.
+            scheduleMaxHoldWatchdog()
+            return
+        }
+        // Real state says the key is released but we never got the keyUp.
+        // Synthesize a release to unstick the gesture state machine.
+        await processOptionAutoSendKeyPress(isKeyPressed: false)
     }
 
     private func processLegacyKeyPress(isKeyPressed: Bool) async {
@@ -661,6 +702,7 @@ class HotkeyManager: ObservableObject {
         // Task.cancel() is thread-safe, so cancel synchronously without self hop.
         middleClickTask?.cancel()
         multiPressWindowTask?.cancel()
+        maxHoldWatchdogTask?.cancel()
         fnDebounceTask?.cancel()
 
         Task { @MainActor in
