@@ -66,7 +66,7 @@ struct SettingsView: View {
                                 
                                 // Large Prominent Dropdown
                                 Menu {
-                                    ForEach(HotkeyManager.HotkeyOption.allCases, id: \.self) { option in
+                                    ForEach(HotkeyOption.allCases, id: \.self) { option in
                                         Button(action: {
                                             hotkeyManager.selectedHotkey1 = option
                                         }) {

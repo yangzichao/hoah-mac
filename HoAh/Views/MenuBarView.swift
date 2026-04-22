@@ -87,7 +87,7 @@ struct MenuBarView: View {
             }
 
             Menu {
-                ForEach(HotkeyManager.HotkeyOption.allCases.filter { $0 != .custom }, id: \.self) { option in
+                ForEach(HotkeyOption.allCases.filter { $0 != .custom }, id: \.self) { option in
                     Button {
                         hotkeyManager.selectedHotkey1 = option
                     } label: {

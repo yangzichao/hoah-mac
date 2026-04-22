@@ -123,7 +123,7 @@ class SystemInfoService {
 
     private func getPrimaryHotkey() -> String {
         if let hotkeyRaw = UserDefaults.hoah.string(forKey: "selectedHotkey1"),
-           let hotkey = HotkeyManager.HotkeyOption(rawValue: hotkeyRaw) {
+           let hotkey = HotkeyOption(rawValue: hotkeyRaw) {
             return hotkey.displayName
         }
         return "Right Command"
@@ -131,7 +131,7 @@ class SystemInfoService {
 
     private func getSecondaryHotkey() -> String {
         if let hotkeyRaw = UserDefaults.hoah.string(forKey: "selectedHotkey2"),
-           let hotkey = HotkeyManager.HotkeyOption(rawValue: hotkeyRaw) {
+           let hotkey = HotkeyOption(rawValue: hotkeyRaw) {
             return hotkey.displayName
         }
         return "None"

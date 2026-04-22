@@ -117,7 +117,7 @@ struct BasicsStepView: View {
     @State private var transcriptionResult: String = ""
     @State private var hasDetectedHotkey = false
     @State private var isShortcutSheetPresented = false
-    @State private var previousHotkey: HotkeyManager.HotkeyOption?
+    @State private var previousHotkey: HotkeyOption?
     
     var body: some View {
         VStack(spacing: 40) {

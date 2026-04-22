@@ -53,15 +53,7 @@ class HotkeyManager: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private var miniRecorderShortcutManager: MiniRecorderShortcutManager
     private var clipboardAIActionShortcutManager: ClipboardAIActionShortcutManager?
-    
-    // MARK: - Helper Properties
-    private var canProcessHotkeyAction: Bool {
-        whisperState.recordingState != .finishing &&
-        whisperState.recordingState != .transcribing &&
-        whisperState.recordingState != .enhancing &&
-        whisperState.recordingState != .busy
-    }
-    
+
     // NSEvent monitoring for modifier keys
     private var globalEventMonitor: Any?
     private var localEventMonitor: Any?
@@ -72,23 +64,14 @@ class HotkeyManager: ObservableObject {
     
     // Key state tracking
     private var currentKeyState = false
-    private var optionAutoSendKeyState = false
     private var keyPressStartTime: Date?
     private let briefPressThreshold = 1.7
     private var isHandsFreeMode = false
 
     // Multi-press gesture detection (AirPods-style)
     // See docs/specs/MULTI_PRESS_GESTURE.md
-    private var multiPressGesture = MultiPressGestureStateMachine()
-    private var multiPressWindowTask: Task<Void, Never>?
-    private let multiPressWindow: TimeInterval = 0.5
+    private let multiPressGestureCoordinator: MultiPressGestureCoordinator
 
-    // Watchdog that recovers from a lost keyUp (app backgrounded, system sleep,
-    // event-tap hiccup). If the key has supposedly been held this long but the
-    // real modifier flags say otherwise, synthesize a keyUp to unstick state.
-    private var maxHoldWatchdogTask: Task<Void, Never>?
-    private let maxKeyHoldDuration: TimeInterval = 10.0
-    
     // Debounce for Fn key
     private var fnDebounceTask: Task<Void, Never>?
     private var pendingFnKeyState: Bool? = nil
@@ -101,69 +84,6 @@ class HotkeyManager: ObservableObject {
     private var lastAppendShortcutTriggerTime: Date?
     private let shortcutCooldownInterval: TimeInterval = 0.5
     
-    enum HotkeyOption: String, CaseIterable {
-        case none = "none"
-        case rightOption = "rightOption"
-        case leftOption = "leftOption"
-        case leftControl = "leftControl" 
-        case rightControl = "rightControl"
-        case fn = "fn"
-        case rightCommand = "rightCommand"
-        case rightShift = "rightShift"
-        case custom = "custom"
-        
-        var displayName: String {
-            switch self {
-            case .none: return NSLocalizedString("None", comment: "")
-            case .rightOption: return NSLocalizedString("Right Option (⌥)", comment: "")
-            case .leftOption: return NSLocalizedString("Left Option (⌥)", comment: "")
-            case .leftControl: return NSLocalizedString("Left Control (⌃)", comment: "")
-            case .rightControl: return NSLocalizedString("Right Control (⌃)", comment: "")
-            case .fn: return NSLocalizedString("Fn", comment: "")
-            case .rightCommand: return NSLocalizedString("Right Command (⌘)", comment: "")
-            case .rightShift: return NSLocalizedString("Right Shift (⇧)", comment: "")
-            case .custom: return NSLocalizedString("Custom", comment: "")
-            }
-        }
-        
-        var keyCode: CGKeyCode? {
-            switch self {
-            case .rightOption: return 0x3D
-            case .leftOption: return 0x3A
-            case .leftControl: return 0x3B
-            case .rightControl: return 0x3E
-            case .fn: return 0x3F
-            case .rightCommand: return 0x36
-            case .rightShift: return 0x3C
-            case .custom, .none: return nil
-            }
-        }
-        
-        var isModifierKey: Bool {
-            return self != .custom && self != .none
-        }
-
-        // Device-dependent mask for precise left/right distinction.
-        // Bits map to IOKit NX_DEVICE* constants as exposed via NSEvent.modifierFlags.rawValue.
-        var deviceMask: UInt? {
-            switch self {
-            case .leftControl:  return 0x00000001
-            case .rightShift:   return 0x00000004
-            case .rightCommand: return 0x00000010
-            case .leftOption:   return 0x00000020
-            case .rightOption:  return 0x00000040
-            case .rightControl: return 0x00002000
-            case .fn, .custom, .none: return nil
-            }
-        }
-
-        func isPressed(in flags: NSEvent.ModifierFlags) -> Bool {
-            if self == .fn { return flags.contains(.function) }
-            guard let mask = deviceMask else { return false }
-            return (flags.rawValue & mask) != 0
-        }
-    }
-
     // MARK: - Display Helpers
     var primaryHotkeyShortcut: KeyboardShortcuts.Shortcut? {
         guard selectedHotkey1 == .custom else { return nil }
@@ -207,6 +127,9 @@ class HotkeyManager: ObservableObject {
                 modelContext: whisperState.modelContext
             )
         }
+        self.multiPressGestureCoordinator = MultiPressGestureCoordinator(
+            recorderController: whisperState
+        )
 
         KeyboardShortcuts.onKeyUp(for: .pasteLastTranscription) { [weak self] in
             guard let self = self else { return }
@@ -291,8 +214,7 @@ class HotkeyManager: ObservableObject {
             .dropFirst()
             .sink { [weak self] isVisible in
                 guard let self, !isVisible else { return }
-                self.cancelMultiPressWindowTimer()
-                self.multiPressGesture.reset()
+                self.multiPressGestureCoordinator.handleRecorderHidden()
             }
             .store(in: &cancellables)
 
@@ -370,7 +292,7 @@ class HotkeyManager: ObservableObject {
                     guard self.isMiddleClickToggleEnabled, !Task.isCancelled else { return }
                     
                     Task { @MainActor in
-                        guard self.canProcessHotkeyAction else { return }
+                        guard self.whisperState.canProcessHotkeyAction else { return }
                         await self.whisperState.handleToggleMiniRecorder()
                     }
                 } catch {
@@ -439,17 +361,12 @@ class HotkeyManager: ObservableObject {
     
     private func resetKeyStates() {
         currentKeyState = false
-        optionAutoSendKeyState = false
         keyPressStartTime = nil
         isHandsFreeMode = false
         shortcutCurrentKeyState = false
         shortcutKeyPressStartTime = nil
         isShortcutHandsFreeMode = false
-        multiPressWindowTask?.cancel()
-        multiPressWindowTask = nil
-        maxHoldWatchdogTask?.cancel()
-        maxHoldWatchdogTask = nil
-        multiPressGesture.reset()
+        multiPressGestureCoordinator.reset()
     }
     
     private func handleModifierKeyEvent(_ event: NSEvent) async {
@@ -457,7 +374,9 @@ class HotkeyManager: ObservableObject {
         let flags = event.modifierFlags
 
         if appSettings.multiPressGestureAutoSendEnabled, keycode == HotkeyOption.rightOption.keyCode {
-            await processOptionAutoSendKeyPress(isKeyPressed: HotkeyOption.rightOption.isPressed(in: flags))
+            await multiPressGestureCoordinator.handleRightOptionStateChange(
+                isPressed: HotkeyOption.rightOption.isPressed(in: flags)
+            )
         }
 
         // Determine which hotkey (if any) is being triggered
@@ -497,58 +416,19 @@ class HotkeyManager: ObservableObject {
         await processLegacyKeyPress(isKeyPressed: isKeyPressed)
     }
 
-    private func processOptionAutoSendKeyPress(isKeyPressed: Bool) async {
-        guard isKeyPressed != optionAutoSendKeyState else { return }
-        optionAutoSendKeyState = isKeyPressed
-        if isKeyPressed {
-            scheduleMaxHoldWatchdog()
-        } else {
-            cancelMaxHoldWatchdog()
-        }
-        await processMultiPressGestureKeyPress(isKeyPressed: isKeyPressed)
-    }
-
-    private func scheduleMaxHoldWatchdog() {
-        cancelMaxHoldWatchdog()
-        maxHoldWatchdogTask = Task { [weak self] in
-            let delay = self?.maxKeyHoldDuration ?? 10.0
-            try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
-            guard let self, !Task.isCancelled else { return }
-            await self.recoverFromStuckKeyIfNeeded()
-        }
-    }
-
-    private func cancelMaxHoldWatchdog() {
-        maxHoldWatchdogTask?.cancel()
-        maxHoldWatchdogTask = nil
-    }
-
-    private func recoverFromStuckKeyIfNeeded() async {
-        guard optionAutoSendKeyState else { return }
-        let realFlags = NSEvent.modifierFlags
-        guard !HotkeyOption.rightOption.isPressed(in: realFlags) else {
-            // Key is genuinely still held; rearm the watchdog for another cycle.
-            scheduleMaxHoldWatchdog()
-            return
-        }
-        // Real state says the key is released but we never got the keyUp.
-        // Synthesize a release to unstick the gesture state machine.
-        await processOptionAutoSendKeyPress(isKeyPressed: false)
-    }
-
     private func processLegacyKeyPress(isKeyPressed: Bool) async {
         if isKeyPressed {
             keyPressStartTime = Date()
             if isHandsFreeMode {
                 isHandsFreeMode = false
                 keyPressStartTime = nil
-                guard canProcessHotkeyAction else { return }
+                guard whisperState.canProcessHotkeyAction else { return }
                 await whisperState.handleToggleMiniRecorder()
                 return
             }
 
             if !whisperState.isMiniRecorderVisible {
-                guard canProcessHotkeyAction else { return }
+                guard whisperState.canProcessHotkeyAction else { return }
                 await whisperState.handleToggleMiniRecorder()
             }
         } else {
@@ -559,7 +439,7 @@ class HotkeyManager: ObservableObject {
                     isHandsFreeMode = true
                 } else {
                     keyPressStartTime = nil
-                    guard canProcessHotkeyAction else { return }
+                    guard whisperState.canProcessHotkeyAction else { return }
                     await whisperState.handleToggleMiniRecorder()
                     return
                 }
@@ -567,61 +447,6 @@ class HotkeyManager: ObservableObject {
 
             keyPressStartTime = nil
         }
-    }
-
-    private func processMultiPressGestureKeyPress(isKeyPressed: Bool) async {
-        let actions = if isKeyPressed {
-            multiPressGesture.handleKeyDown(isRecorderVisible: whisperState.isMiniRecorderVisible)
-        } else {
-            multiPressGesture.handleKeyUp()
-        }
-
-        await applyMultiPressGestureActions(actions)
-    }
-
-    private func applyMultiPressGestureActions(_ actions: [MultiPressGestureAction]) async {
-        for action in actions {
-            switch action {
-            case .startRecording(let mode):
-                guard canProcessHotkeyAction else {
-                    cancelMultiPressWindowTimer()
-                    multiPressGesture.reset()
-                    return
-                }
-                whisperState.recordingMode = mode
-                await whisperState.handleToggleMiniRecorder()
-            case .updateMode(let mode):
-                whisperState.recordingMode = mode
-            case .restartWindowTimer:
-                resetMultiPressWindowTimer()
-            case .cancelWindowTimer:
-                cancelMultiPressWindowTimer()
-            case .stopRecording:
-                cancelMultiPressWindowTimer()
-                guard canProcessHotkeyAction else {
-                    multiPressGesture.reset()
-                    return
-                }
-                await whisperState.handleToggleMiniRecorder()
-                multiPressGesture.reset()
-            }
-        }
-    }
-
-    private func resetMultiPressWindowTimer() {
-        cancelMultiPressWindowTimer()
-        multiPressWindowTask = Task { [weak self] in
-            let window = self?.multiPressWindow ?? 0.5
-            try? await Task.sleep(nanoseconds: UInt64(window * 1_000_000_000))
-            guard let self, !Task.isCancelled else { return }
-            let actions = self.multiPressGesture.handleWindowExpired()
-            await self.applyMultiPressGestureActions(actions)
-        }
-    }
-
-    private func cancelMultiPressWindowTimer() {
-        multiPressWindowTask?.cancel()
-        multiPressWindowTask = nil
     }
 
     private func handleCustomShortcutKeyDown() async {
@@ -637,13 +462,13 @@ class HotkeyManager: ObservableObject {
         
         if isShortcutHandsFreeMode {
             isShortcutHandsFreeMode = false
-            guard canProcessHotkeyAction else { return }
+            guard whisperState.canProcessHotkeyAction else { return }
             await whisperState.handleToggleMiniRecorder()
             return
         }
         
         if !whisperState.isMiniRecorderVisible {
-            guard canProcessHotkeyAction else { return }
+            guard whisperState.canProcessHotkeyAction else { return }
             await whisperState.handleToggleMiniRecorder()
         }
     }
@@ -660,7 +485,7 @@ class HotkeyManager: ObservableObject {
             if pressDuration < briefPressThreshold {
                 isShortcutHandsFreeMode = true
             } else {
-                guard canProcessHotkeyAction else { return }
+                guard whisperState.canProcessHotkeyAction else { return }
                 await whisperState.handleToggleMiniRecorder()
             }
         }
@@ -675,7 +500,7 @@ class HotkeyManager: ObservableObject {
         }
 
         lastAppendShortcutTriggerTime = Date()
-        guard canProcessHotkeyAction else { return }
+        guard whisperState.canProcessHotkeyAction else { return }
         whisperState.recordingMode = .append
         await whisperState.handleToggleMiniRecorder()
     }
@@ -700,9 +525,8 @@ class HotkeyManager: ObservableObject {
         let clickMonitors = middleClickMonitors
 
         // Task.cancel() is thread-safe, so cancel synchronously without self hop.
+        // The coordinator's own deinit will cancel its tasks when it's released.
         middleClickTask?.cancel()
-        multiPressWindowTask?.cancel()
-        maxHoldWatchdogTask?.cancel()
         fnDebounceTask?.cancel()
 
         Task { @MainActor in
