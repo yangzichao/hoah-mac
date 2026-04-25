@@ -109,12 +109,11 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
         
         hasDetectedAudioInCurrentSession = false
 
-        let deviceID = deviceManager.getCurrentDevice()
-        if deviceID != 0 {
+        if currentDeviceID != 0 {
             do {
-                try await configureAudioSession(with: deviceID)
+                try await configureAudioSession(with: currentDeviceID)
             } catch {
-                logger.warning("⚠️ Failed to configure audio session for device \(deviceID), attempting to continue: \(error.localizedDescription)")
+                logger.warning("⚠️ Failed to configure audio session for device \(currentDeviceID), attempting to continue: \(error.localizedDescription)")
             }
         }
         
@@ -209,12 +208,11 @@ class Recorder: NSObject, ObservableObject, AVAudioRecorderDelegate {
 
         hasDetectedAudioInCurrentSession = false
 
-        let deviceID = deviceManager.getCurrentDevice()
-        if deviceID != 0 {
+        if currentDeviceID != 0 {
             do {
-                try await configureAudioSession(with: deviceID)
+                try await configureAudioSession(with: currentDeviceID)
             } catch {
-                logger.warning("⚠️ Failed to configure audio session for device \(deviceID), attempting to continue: \(error.localizedDescription)")
+                logger.warning("⚠️ Failed to configure audio session for device \(currentDeviceID), attempting to continue: \(error.localizedDescription)")
             }
         }
 

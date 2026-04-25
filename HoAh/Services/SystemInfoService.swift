@@ -106,7 +106,8 @@ class SystemInfoService {
 
     private func getCurrentAudioDevice() -> String {
         let audioManager = AudioDeviceManager.shared
-        if let deviceID = audioManager.selectedDeviceID ?? audioManager.fallbackDeviceID,
+        let deviceID = audioManager.getCurrentDevice()
+        if deviceID != 0,
            let deviceName = audioManager.getDeviceName(deviceID: deviceID) {
             return deviceName
         }

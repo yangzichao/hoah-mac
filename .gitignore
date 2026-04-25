@@ -113,6 +113,8 @@ developerID_application.cer
 
 # Temporary documentation
 .cleanup-summary.md
+docs/assets/
+docs/architecture/
 scripts/packaging/.env
 *.log
 
